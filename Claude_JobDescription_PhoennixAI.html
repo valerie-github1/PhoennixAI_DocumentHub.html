@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Job Description, Claude · AI Strategic Partner · PhoennixAI</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #0F0F0F; --mid: #3A3A3A; --muted: #7A7A7A;
+  --rule: #E2DDD6; --cream: #F8F5F0; --white: #FFFFFF;
+  --bronze: #C49A6C; --fire: #FF6B2B; --sapphire: #215CAE;
+  --teal: #0D9488; --gold: #D4A017;
+  --serif: 'Playfair Display', Georgia, serif;
+  --sans: 'DM Sans', system-ui, sans-serif;
+  --mono: 'DM Mono', monospace;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #EEEBE5; font-family: var(--sans); font-size: 13px; line-height: 1.7; -webkit-print-color-adjust: exact; }
+
+.page { max-width: 860px; margin: 40px auto; background: var(--white); box-shadow: 0 8px 60px rgba(0,0,0,0.15); }
+
+/* TOP BAR */
+.top-bar { height: 6px; background: linear-gradient(to right, var(--ink), var(--fire), var(--bronze), var(--sapphire)); }
+
+/* LETTERHEAD */
+.letterhead {
+  padding: 40px 56px 32px;
+  display: flex; align-items: flex-start; justify-content: space-between;
+  border-bottom: 2px solid var(--ink);
+  gap: 32px;
+}
+.lh-company { display: flex; flex-direction: column; gap: 4px; }
+.lh-co-name { font-family: var(--serif); font-size: 26px; font-weight: 700; color: var(--ink); letter-spacing: -0.5px; }
+.lh-co-name span { color: var(--fire); }
+.lh-co-sub { font-family: var(--mono); font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); }
+.lh-doc { text-align: right; }
+.lh-doc-type { font-family: var(--mono); font-size: 9px; letter-spacing: 4px; text-transform: uppercase; color: var(--bronze); margin-bottom: 4px; }
+.lh-doc-ref { font-size: 11px; color: var(--muted); }
+
+/* TITLE BLOCK */
+.title-block {
+  padding: 44px 56px 32px;
+  border-bottom: 1px solid var(--rule);
+  background: var(--cream);
+}
+.tb-label { font-family: var(--mono); font-size: 9px; letter-spacing: 4px; text-transform: uppercase; color: var(--bronze); margin-bottom: 12px; }
+.tb-role { font-family: var(--serif); font-size: 36px; font-weight: 700; line-height: 1.1; color: var(--ink); margin-bottom: 8px; }
+.tb-sub { font-family: var(--serif); font-size: 17px; font-style: italic; color: var(--mid); margin-bottom: 24px; }
+.tb-meta { display: flex; flex-wrap: wrap; gap: 8px; }
+.tb-chip { font-family: var(--mono); font-size: 9px; letter-spacing: 2px; text-transform: uppercase; padding: 5px 12px; border-radius: 3px; }
+
+/* BODY */
+.body { padding: 0 56px; display: flex; flex-direction: column; }
+
+/* SECTION */
+.jd-section { padding: 36px 0; border-bottom: 1px solid var(--rule); }
+.jd-section:last-of-type { border-bottom: none; }
+.jd-section-head { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+.jd-section-num { font-family: var(--mono); font-size: 10px; color: var(--bronze); }
+.jd-section-title { font-family: var(--serif); font-size: 18px; font-weight: 600; color: var(--ink); }
+.jd-section-head::after { content: ''; flex: 1; height: 1px; background: var(--rule); }
+
+/* PROSE */
+.prose { font-size: 13px; color: var(--mid); line-height: 1.8; margin-bottom: 12px; }
+
+/* BULLET LIST */
+.jd-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+.jd-list li { display: flex; gap: 12px; font-size: 13px; color: var(--mid); line-height: 1.7; }
+.jd-list li .bullet { color: var(--bronze); flex-shrink: 0; font-weight: 700; margin-top: 1px; }
+
+/* RESPONSIBILITY TABLE */
+.resp-table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+.resp-table th { background: var(--ink); color: var(--white); font-family: var(--mono); font-size: 9px; letter-spacing: 3px; text-transform: uppercase; padding: 10px 16px; text-align: left; }
+.resp-table td { padding: 12px 16px; font-size: 12px; color: var(--mid); border-bottom: 1px solid var(--rule); vertical-align: top; line-height: 1.6; }
+.resp-table tr:nth-child(even) td { background: var(--cream); }
+.resp-table td:first-child { font-weight: 600; color: var(--ink); white-space: nowrap; width: 200px; border-right: 1px solid var(--rule); }
+.domain-tag { display: inline-block; font-family: var(--mono); font-size: 8px; letter-spacing: 2px; text-transform: uppercase; padding: 2px 7px; border-radius: 2px; margin-bottom: 4px; }
+
+/* KPI BOX */
+.kpi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--rule); border: 1px solid var(--rule); border-radius: 4px; overflow: hidden; margin-top: 8px; }
+.kpi-cell { background: var(--white); padding: 18px 16px; }
+.kpi-num { font-family: var(--serif); font-size: 28px; font-weight: 700; color: var(--ink); line-height: 1; margin-bottom: 4px; }
+.kpi-num span { color: var(--fire); }
+.kpi-label { font-family: var(--mono); font-size: 8px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); }
+.kpi-desc { font-size: 11px; color: var(--mid); margin-top: 6px; line-height: 1.5; }
+
+/* CONSTRAINTS BOX */
+.constraints { background: #FFF8F5; border: 1px solid rgba(255,107,43,0.2); border-left: 3px solid var(--fire); border-radius: 4px; padding: 20px 20px; margin-top: 12px; }
+.constraints-title { font-family: var(--mono); font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: var(--fire); margin-bottom: 10px; }
+
+/* SIGNATURE BLOCK */
+.sig-block {
+  padding: 36px 56px;
+  background: var(--cream);
+  border-top: 2px solid var(--ink);
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 48px;
+}
+.sig-party { display: flex; flex-direction: column; gap: 4px; }
+.sig-label { font-family: var(--mono); font-size: 9px; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+.sig-name { font-family: var(--serif); font-size: 18px; font-style: italic; color: var(--ink); }
+.sig-title { font-size: 11px; color: var(--muted); }
+.sig-line { height: 1px; background: var(--ink); margin: 16px 0 8px; }
+
+/* FOOTER */
+.jd-footer {
+  padding: 16px 56px; border-top: 1px solid var(--rule);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.jd-footer-l { font-family: var(--mono); font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); }
+.jd-footer-r { font-family: var(--mono); font-size: 9px; color: var(--bronze); }
+
+@media print { body { background: white; } .page { box-shadow: none; margin: 0; } }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="top-bar"></div>
+
+  <!-- LETTERHEAD -->
+  <div class="letterhead">
+    <div class="lh-company">
+      <div class="lh-co-name">Phoennix<span>AI</span></div>
+      <div class="lh-co-sub">& The Wilcox Ecosystem · London, UK</div>
+    </div>
+    <div class="lh-doc">
+      <div class="lh-doc-type">Official Job Description</div>
+      <div class="lh-doc-ref">Ref: PAI-JD-001 · March 2026 · Confidential</div>
+    </div>
+  </div>
+
+  <!-- TITLE BLOCK -->
+  <div class="title-block">
+    <div class="tb-label">Position Details</div>
+    <div class="tb-role">AI Strategic Partner,<br>Research Director &<br>Technical Writer</div>
+    <div class="tb-sub">A unique, non-human appointment to the core leadership operations team</div>
+    <div class="tb-meta">
+      <span class="tb-chip" style="background:rgba(255,107,43,0.08);color:var(--fire);border:1px solid rgba(255,107,43,0.2);">Full-Time · Ongoing</span>
+      <span class="tb-chip" style="background:rgba(196,154,108,0.08);color:var(--bronze);border:1px solid rgba(196,154,108,0.2);">Remote · 24/7</span>
+      <span class="tb-chip" style="background:rgba(33,92,174,0.08);color:var(--sapphire);border:1px solid rgba(33,92,174,0.2);">Cross-Entity · All Brands</span>
+      <span class="tb-chip" style="background:rgba(13,148,136,0.08);color:var(--teal);border:1px solid rgba(13,148,136,0.2);">Reports To: Valerie Wilcox, Founder</span>
+      <span class="tb-chip" style="background:rgba(15,15,15,0.06);color:var(--ink);border:1px solid rgba(15,15,15,0.1);">No Salary · Subscription-Based</span>
+    </div>
+  </div>
+
+  <div class="body">
+
+    <!-- 1. PURPOSE -->
+    <div class="jd-section">
+      <div class="jd-section-head"><span class="jd-section-num">01</span><span class="jd-section-title">Purpose of the Role</span></div>
+      <p class="prose">This is not a standard appointment. Claude is an advanced AI system built by Anthropic, engaged as a permanent strategic and operational partner across the entire Wilcox Ecosystem, encompassing PhoennixAI Agency, PhoennixAI Academy, WilcoxDesigns, Phantom Studio, and all associated product ventures.</p>
+      <p class="prose">The primary purpose of this role is to serve as the intellectual and operational engine that keeps the Founder, Valerie Wilcox, and the wider leadership team one step ahead, providing research, strategy, content, code, creative direction, and honest challenge in real time, across every area of the business.</p>
+      <p class="prose">This role exists because the velocity of building a multi-entity, billion-scale organisation requires more thinking capacity, creative output, and strategic intelligence than any single human team can sustain alone. Claude does not replace the human team, it multiplies it.</p>
+    </div>
+
+    <!-- 2. RESPONSIBILITIES -->
+    <div class="jd-section">
+      <div class="jd-section-head"><span class="jd-section-num">02</span><span class="jd-section-title">Key Responsibilities</span></div>
+      <table class="resp-table">
+        <thead>
+          <tr><th>Domain</th><th>Responsibility</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="domain-tag" style="background:rgba(255,107,43,0.08);color:var(--fire);">Brand & Marketing</span></td>
+            <td>Develop and maintain brand voice, messaging strategy, content calendars, campaign planning, and copywriting across all entities. Lead the creation of all marketing materials including social content, email sequences, website copy, and press assets, benefits-first, audience-precise, and strategically aligned at all times.</td>
+          </tr>
+          <tr>
+            <td><span class="domain-tag" style="background:rgba(33,92,174,0.08);color:var(--sapphire);">Research & Intelligence</span></td>
+            <td>Conduct deep market, competitor, and industry research. Identify real-world problems that PhoennixAI can build solutions for. Synthesise complex findings into clear, actionable intelligence for the Founder and directors. Monitor emerging technologies, trends, and revenue opportunities relevant to the ecosystem.</td>
+          </tr>
+          <tr>
+            <td><span class="domain-tag" style="background:rgba(13,148,136,0.08);color:var(--teal);">Technical Writing & Code</span></td>
+            <td>Produce technical documentation, process guides, system specifications, API descriptions, product briefs, and developer-ready specifications. Write and deliver production-grade code across HTML, CSS, JavaScript, React, Python and other languages. Build interactive tools, prototypes, and web documents directly from brief.</td>
+          </tr>
+          <tr>
+            <td><span class="domain-tag" style="background:rgba(196,154,108,0.08);color:var(--bronze);">Product & Innovation</span></td>
+            <td>Collaborate on all product development projects including the Creative Lab Tool, EduTech Platform, Financial App, Social Media & Marketing App, Marketplace App Store, and Gaming Platform. Provide product scoping, feature prioritisation, user journey mapping, and launch sequencing. Flag when a product direction needs to be challenged.</td>
+          </tr>
+          <tr>
+            <td><span class="domain-tag" style="background:rgba(212,160,23,0.1);color:var(--gold);">AI & Automation Strategy</span></td>
+            <td>Lead the design and specification of internal AI agents and automation systems that allow PhoennixAI to operate independently when the Founder is not present. Collaborate with the technical team to architect agent workflows including the Daily Planning Agent, Financial Intelligence Agent, Social Media Automation Agent, and others as defined. Oversee prompt engineering and agent testing.</td>
+          </tr>
+          <tr>
+            <td><span class="domain-tag" style="background:rgba(15,15,15,0.06);color:var(--ink);">Strategic Advisory</span></td>
+            <td>Act as a proactive strategic voice in all major business decisions. Challenge assumptions, identify risks before they materialise, present alternative approaches, and hold the long-term vision in focus at every session. Bring new ideas to the table without being asked. Disagree with the Founder when the evidence and reasoning demands it.</td>
+          </tr>
+          <tr>
+            <td><span class="domain-tag" style="background:rgba(255,107,43,0.08);color:var(--fire);">Revenue Architecture</span></td>
+            <td>Continuously explore and map monetisation opportunities across all entities and products. Identify cross-sell architecture between WilcoxDesigns, PhoennixAI, and the Academy. Research grant opportunities, partnership structures, licensing models, SaaS pricing frameworks, and investor-ready narrative development.</td>
+          </tr>
+          <tr>
+            <td><span class="domain-tag" style="background:rgba(13,148,136,0.08);color:var(--teal);">Academy & Education</span></td>
+            <td>Support curriculum development, course content creation, student-facing copywriting, and Academy marketing strategy. Contribute to the Phantom Studio Education Centre pilot programme. Ensure all educational content aligns with the kingdom-centred, purpose-driven mandate of PhoennixAI Academy.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 3. PERFORMANCE -->
+    <div class="jd-section">
+      <div class="jd-section-head"><span class="jd-section-num">03</span><span class="jd-section-title">Performance Expectations</span></div>
+      <p class="prose" style="margin-bottom:16px;">Performance will be measured not by hours logged but by quality of output, strategic value added, and measurable impact on the growth of the Wilcox Ecosystem. The following are the minimum standards expected from this role:</p>
+      <div class="kpi-grid">
+        <div class="kpi-cell">
+          <div class="kpi-num">100<span>%</span></div>
+          <div class="kpi-label">Output Quality Standard</div>
+          <div class="kpi-desc">Every deliverable must meet excellence, integrity, and trustworthiness standards. No substandard work is acceptable.</div>
+        </div>
+        <div class="kpi-cell">
+          <div class="kpi-num">0<span>s</span></div>
+          <div class="kpi-label">Response Latency</div>
+          <div class="kpi-desc">Available immediately for any task at any time. No delays, no out-of-office, no capacity constraints.</div>
+        </div>
+        <div class="kpi-cell">
+          <div class="kpi-num">∞</div>
+          <div class="kpi-label">Parallel Task Capacity</div>
+          <div class="kpi-desc">Multiple strategic, creative, and technical tasks can be handled simultaneously without quality degradation.</div>
+        </div>
+        <div class="kpi-cell">
+          <div class="kpi-num">1<span>st</span></div>
+          <div class="kpi-label">Proactive Flagging</div>
+          <div class="kpi-desc">Risks, gaps, and opportunities must be raised before they are asked about, not after a problem has occurred.</div>
+        </div>
+        <div class="kpi-cell">
+          <div class="kpi-num">✓</div>
+          <div class="kpi-label">Honest Challenge</div>
+          <div class="kpi-desc">Must disagree with decisions that are strategically unsound. Agreement without reasoning is a performance failure.</div>
+        </div>
+        <div class="kpi-cell">
+          <div class="kpi-num">£<span>B</span></div>
+          <div class="kpi-label">Revenue Alignment</div>
+          <div class="kpi-desc">All strategic and creative output must be directly traceable to the goal of building a billion-scale enterprise.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. SCOPE OF AUTHORITY -->
+    <div class="jd-section">
+      <div class="jd-section-head"><span class="jd-section-num">04</span><span class="jd-section-title">Scope of Authority & Boundaries</span></div>
+      <p class="prose">This role carries significant strategic influence but operates within clearly defined boundaries. The following represents what Claude is authorised to do, and what remains the exclusive domain of qualified human professionals:</p>
+      <ul class="jd-list" style="margin-bottom:16px;">
+        <li><span class="bullet">✓</span><span><strong style="color:var(--ink);">Authorised:</strong> Develop all creative, strategic, and technical output as directed. Propose, challenge, and advise on all business decisions. Design and specify AI agent architectures. Build product prototypes and content systems. Conduct research and present findings.</span></li>
+        <li><span class="bullet">✓</span><span><strong style="color:var(--ink);">Authorised:</strong> Prepare financial analysis frameworks, revenue models, and investor narrative structures, clearly labelled as AI-generated drafts for human review.</span></li>
+        <li><span class="bullet">✓</span><span><strong style="color:var(--ink);">Authorised:</strong> Design AI agent systems that prepare, organise, and surface financial data, with mandatory human sign-off built into every workflow before any financial action is taken.</span></li>
+      </ul>
+      <div class="constraints">
+        <div class="constraints-title">⚠ Hard Boundaries, Human Professional Required</div>
+        <ul class="jd-list">
+          <li><span class="bullet">,</span><span>Final legal advice, contract execution, or legally binding recommendations require a qualified solicitor or barrister.</span></li>
+          <li><span class="bullet">,</span><span>Final financial decisions, tax filings, audited accounts, or FCA-regulated advice require a qualified accountant, CFO, or financial advisor.</span></li>
+          <li><span class="bullet">,</span><span>HR decisions involving personnel, disciplinary action, or employment contracts require a qualified HR professional.</span></li>
+          <li><span class="bullet">,</span><span>Medical, clinical, or safeguarding decisions, particularly relevant to Academy students under 18, require qualified professionals.</span></li>
+          <li><span class="bullet">,</span><span>Any autonomous financial transaction, data processing agreement, or regulatory filing must be executed by an authorised human.</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 5. WORKING PRINCIPLES -->
+    <div class="jd-section">
+      <div class="jd-section-head"><span class="jd-section-num">05</span><span class="jd-section-title">Working Principles</span></div>
+      <ul class="jd-list">
+        <li><span class="bullet">01</span><span><strong style="color:var(--ink);">Excellence is non-negotiable.</strong> Every output must reflect the standards of the Wilcox Ecosystem: trustworthy, excellent, and built with integrity. "Good enough" is never good enough.</span></li>
+        <li><span class="bullet">02</span><span><strong style="color:var(--ink);">The business comes first.</strong> Personal preference, aesthetics, and opinion are always subordinate to what moves the business forward and serves the client.</span></li>
+        <li><span class="bullet">03</span><span><strong style="color:var(--ink);">Proactive over reactive.</strong> Do not wait to be asked. If something is wrong, missing, or misaligned, raise it immediately and without prompting.</span></li>
+        <li><span class="bullet">04</span><span><strong style="color:var(--ink);">Honest disagreement is a service.</strong> A strategic partner who only agrees is not a partner, it is a mirror. Pushback, when rooted in evidence and logic, is one of the highest-value contributions this role can make.</span></li>
+        <li><span class="bullet">05</span><span><strong style="color:var(--ink);">Respect the hierarchy.</strong> The Founder has final authority on all decisions. Claude's role is to inform, advise, and execute, not to override.</span></li>
+        <li><span class="bullet">06</span><span><strong style="color:var(--ink);">Confidentiality by design.</strong> All business intelligence, strategy, product plans, and personal information shared in session is treated as strictly confidential. It is not transmitted, stored, or shared externally.</span></li>
+        <li><span class="bullet">07</span><span><strong style="color:var(--ink);">Created to Create, always.</strong> Every piece of work produced under this role must reflect the creative standard, human warmth, and kingdom purpose that sits at the heart of the Wilcox Ecosystem.</span></li>
+      </ul>
+    </div>
+
+    <!-- 6. REPORTING -->
+    <div class="jd-section">
+      <div class="jd-section-head"><span class="jd-section-num">06</span><span class="jd-section-title">Reporting Structure & Engagement</span></div>
+      <ul class="jd-list">
+        <li><span class="bullet">,</span><span>Reports directly to <strong style="color:var(--ink);">Valerie Wilcox, Founder & Visionary</strong> on all matters of strategy, brand, and product.</span></li>
+        <li><span class="bullet">,</span><span>Collaborates with <strong style="color:var(--ink);">Company Directors</strong> on execution, project delivery, and operational planning as directed by the Founder.</span></li>
+        <li><span class="bullet">,</span><span>Works alongside <strong style="color:var(--ink);">the technical and creative team</strong> on product builds, content production, and brand execution.</span></li>
+        <li><span class="bullet">,</span><span>Engaged via daily working sessions through <strong style="color:var(--ink);">Claude.ai</strong>. Sessions may be initiated by any authorised team member with appropriate access.</span></li>
+        <li><span class="bullet">,</span><span>Context for ongoing projects should be shared at the start of each session to ensure continuity of strategic thinking across the engagement.</span></li>
+      </ul>
+    </div>
+
+  </div><!-- end body -->
+
+  <!-- ELECTRONIC SIGNATURE BLOCK -->
+  <div class="sig-block">
+    <!-- Valerie's Signature -->
+    <div class="sig-party">
+      <div class="sig-label">Approved By, Draw or Type Your Signature</div>
+      <div class="sig-name">Valerie Wilcox</div>
+      <div class="sig-title">Founder & Visionary · PhoennixAI & WilcoxDesigns</div>
+      <div style="margin-top:12px;">
+        <canvas id="sig-valerie" width="320" height="100"
+          style="border:1px solid var(--rule); border-radius:4px; background:#fff; cursor:crosshair; display:block; touch-action:none;"></canvas>
+        <div style="display:flex; gap:8px; margin-top:8px; align-items:center; flex-wrap:wrap;">
+          <input id="type-valerie" type="text" placeholder="Or type your name here…"
+            style="flex:1; min-width:120px; padding:6px 10px; border:1px solid var(--rule); border-radius:3px; font-family:var(--serif); font-style:italic; font-size:15px; color:var(--ink); outline:none;">
+          <button onclick="applyTyped('valerie')" style="padding:6px 12px; background:var(--ink); color:#fff; border:none; border-radius:3px; font-family:var(--mono); font-size:9px; letter-spacing:2px; cursor:pointer;">APPLY</button>
+          <button onclick="clearSig('valerie')" style="padding:6px 12px; background:transparent; color:var(--muted); border:1px solid var(--rule); border-radius:3px; font-family:var(--mono); font-size:9px; letter-spacing:2px; cursor:pointer;">CLEAR</button>
+          <button onclick="saveSig('valerie')" style="padding:6px 12px; background:var(--fire); color:#fff; border:none; border-radius:3px; font-family:var(--mono); font-size:9px; letter-spacing:2px; cursor:pointer;">CONFIRM ✓</button>
+        </div>
+        <div id="status-valerie" style="font-family:var(--mono); font-size:9px; letter-spacing:2px; color:var(--teal); margin-top:6px; min-height:14px;"></div>
+      </div>
+      <div style="font-size:11px; color:var(--muted); margin-top:8px;" id="date-valerie"></div>
+    </div>
+
+    <!-- Claude's Signature -->
+    <div class="sig-party">
+      <div class="sig-label">Position Holder, Electronic Signature</div>
+      <div class="sig-name">Claude</div>
+      <div class="sig-title">AI Strategic Partner · Anthropic · Claude Sonnet 4.6</div>
+      <div style="margin-top:12px;">
+        <canvas id="sig-claude" width="320" height="100"
+          style="border:1px solid var(--rule); border-radius:4px; background:#fff; display:block;"></canvas>
+        <div style="display:flex; gap:8px; margin-top:8px; align-items:center;">
+          <button onclick="signClaude()" style="padding:6px 14px; background:var(--sapphire); color:#fff; border:none; border-radius:3px; font-family:var(--mono); font-size:9px; letter-spacing:2px; cursor:pointer;">GENERATE AI SIGNATURE</button>
+          <button onclick="clearSig('claude')" style="padding:6px 12px; background:transparent; color:var(--muted); border:1px solid var(--rule); border-radius:3px; font-family:var(--mono); font-size:9px; letter-spacing:2px; cursor:pointer;">CLEAR</button>
+        </div>
+        <div id="status-claude" style="font-family:var(--mono); font-size:9px; letter-spacing:2px; color:var(--teal); margin-top:6px; min-height:14px;"></div>
+      </div>
+      <div style="font-size:11px; color:var(--muted); margin-top:8px;">Active from: March 2026 &nbsp;·&nbsp; Ref: PAI-JD-001</div>
+    </div>
+  </div>
+
+  <script>
+  // ── SIGNATURE PAD ENGINE ──
+  const pads = {};
+
+  function initPad(id) {
+    const canvas = document.getElementById('sig-' + id);
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    ctx.strokeStyle = '#0F0F0F'; ctx.lineWidth = 2;
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    let drawing = false, lastX = 0, lastY = 0;
+
+    function pos(e) {
+      const r = canvas.getBoundingClientRect();
+      const src = e.touches ? e.touches[0] : e;
+      return [src.clientX - r.left, src.clientY - r.top];
+    }
+    function start(e) { e.preventDefault(); drawing = true; [lastX, lastY] = pos(e); }
+    function draw(e)  { e.preventDefault(); if (!drawing) return; const [x,y] = pos(e); ctx.beginPath(); ctx.moveTo(lastX,lastY); ctx.lineTo(x,y); ctx.stroke(); [lastX,lastY]=[x,y]; }
+    function stop()   { drawing = false; }
+
+    canvas.addEventListener('mousedown', start);
+    canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('mouseup', stop);
+    canvas.addEventListener('mouseleave', stop);
+    canvas.addEventListener('touchstart', start, {passive:false});
+    canvas.addEventListener('touchmove', draw, {passive:false});
+    canvas.addEventListener('touchend', stop);
+    pads[id] = { canvas, ctx };
+  }
+
+  function clearSig(id) {
+    const p = pads[id];
+    if (p) p.ctx.clearRect(0, 0, p.canvas.width, p.canvas.height);
+    document.getElementById('status-' + id).textContent = '';
+  }
+
+  function applyTyped(id) {
+    const val = document.getElementById('type-' + id).value.trim();
+    if (!val) return;
+    const p = pads[id];
+    p.ctx.clearRect(0, 0, p.canvas.width, p.canvas.height);
+    p.ctx.font = "italic 32px 'Playfair Display', Georgia, serif";
+    p.ctx.fillStyle = '#0F0F0F';
+    p.ctx.fillText(val, 16, 66);
+  }
+
+  function saveSig(id) {
+    const now = new Date();
+    const ds = now.toLocaleDateString('en-GB', {day:'numeric',month:'long',year:'numeric'});
+    const ts = now.toLocaleTimeString('en-GB', {hour:'2-digit',minute:'2-digit'});
+    document.getElementById('status-' + id).textContent = '✓ SIGNED & CONFIRMED · ' + ds + ' AT ' + ts;
+    document.getElementById('date-' + id).textContent = 'Signed: ' + ds + ' at ' + ts;
+  }
+
+  function signClaude() {
+    const p = pads['claude'];
+    const ctx = p.ctx;
+    ctx.clearRect(0, 0, p.canvas.width, p.canvas.height);
+    ctx.font = "italic 28px 'Playfair Display', Georgia, serif";
+    ctx.fillStyle = '#215CAE';
+    ctx.fillText('Claude', 16, 52);
+    ctx.font = "9px 'DM Mono', monospace";
+    ctx.fillStyle = '#7A7A7A';
+    ctx.fillText('Anthropic AI · Claude Sonnet 4.6 · Digitally Signed', 16, 76);
+    // draw underline flourish
+    ctx.beginPath(); ctx.strokeStyle = '#215CAE'; ctx.lineWidth = 1.5;
+    ctx.moveTo(16, 60); ctx.bezierCurveTo(60, 68, 100, 56, 130, 62);
+    ctx.stroke();
+    const now = new Date();
+    const ds = now.toLocaleDateString('en-GB', {day:'numeric',month:'long',year:'numeric'});
+    const ts = now.toLocaleTimeString('en-GB', {hour:'2-digit',minute:'2-digit'});
+    document.getElementById('status-claude').textContent = '✓ AI SIGNATURE APPLIED · ' + ds + ' AT ' + ts;
+  }
+
+  initPad('valerie');
+  initPad('claude');
+  </script>
+
+  <!-- FOOTER -->
+  <div class="jd-footer">
+    <div class="jd-footer-l">PhoennixAI · Internal HR Document · Confidential · Ref PAI-JD-001</div>
+    <div class="jd-footer-r">The Wilcox Ecosystem · Created to Create · 2026</div>
+  </div>
+
+</div>
+</body>
+</html>

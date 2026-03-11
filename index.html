@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PhoennixAI Mission Control v2</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+/* ══ THEME SYSTEM ══ */
+:root[data-theme="dark"] {
+  --bg: #050507; --surface: #0E0E12; --panel: #141418; --card: #1C1C22;
+  --border: rgba(255,255,255,0.06); --border2: rgba(255,255,255,0.1);
+  --text: rgba(255,255,255,0.85); --text2: rgba(255,255,255,0.5);
+  --text3: rgba(255,255,255,0.25); --topbar: rgba(5,5,7,0.96);
+  --input: #0E0E12; --shadow: rgba(0,0,0,0.4);
+}
+:root[data-theme="light"] {
+  --bg: #F2EFE9; --surface: #FFFFFF; --panel: #F8F5F0; --card: #FFFFFF;
+  --border: rgba(0,0,0,0.08); --border2: rgba(0,0,0,0.15);
+  --text: #1A1A1A; --text2: #5A5A5A; --text3: #AAAAAA; --topbar: rgba(255,255,255,0.96);
+  --input: #F2EFE9; --shadow: rgba(0,0,0,0.1);
+}
+:root {
+  --bronze:#C49A6C; --ivory:#F5F0E8; --fire:#FF6B2B; --gold:#FFB830;
+  --sapphire:#46ABD7; --teal:#0D9488; --violet:#7B2FFF; --neon:#B8FF00;
+  --electric:#00E5FF; --green:#22c55e; --red:#ef4444; --amber:#f59e0b;
+  --serif:'Playfair Display',Georgia,serif;
+  --sans:'DM Sans',system-ui,sans-serif;
+  --mono:'DM Mono',monospace;
+  --display:'Bebas Neue',Impact,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:13px;line-height:1.7;overflow-x:hidden;transition:background 0.3s,color 0.3s}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--bronze)}
+
+/* ══ TOPBAR ══ */
+.topbar{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  background:var(--topbar);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  padding:0 24px;height:52px;
+  display:flex;align-items:center;justify-content:space-between;
+  box-shadow:0 2px 20px var(--shadow);
+}
+.tb-logo{font-family:var(--display);font-size:20px;letter-spacing:3px;color:var(--fire)}
+.tb-logo span{color:var(--bronze)}
+.tb-tabs{display:flex;gap:0;overflow-x:auto}
+.tb-tab{
+  padding:0 14px;height:52px;display:flex;align-items:center;
+  font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--text3);cursor:pointer;border-bottom:2px solid transparent;
+  transition:all 0.2s;user-select:none;white-space:nowrap;
+}
+.tb-tab:hover{color:var(--text2)}
+.tb-tab.active{color:var(--bronze);border-bottom-color:var(--bronze)}
+.tb-controls{display:flex;align-items:center;gap:12px;flex-shrink:0}
+.tb-date{font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--text3)}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite;flex-shrink:0}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.6;transform:scale(1.3)}}
+
+/* Theme toggle */
+.theme-toggle{
+  width:44px;height:24px;border-radius:12px;border:1px solid var(--border2);
+  background:var(--panel);cursor:pointer;position:relative;transition:background 0.3s;flex-shrink:0;
+}
+.theme-toggle::after{
+  content:'';position:absolute;top:3px;left:3px;width:16px;height:16px;
+  border-radius:50%;background:var(--bronze);transition:transform 0.3s;
+}
+[data-theme="light"] .theme-toggle::after{transform:translateX(20px)}
+.theme-icon{font-size:12px;margin-right:4px}
+
+/* ══ PAGES ══ */
+.page{display:none;padding-top:68px;min-height:100vh}
+.page.active{display:block}
+
+/* ══ SHARED ══ */
+.wrap{max-width:1240px;margin:0 auto;padding:36px 28px}
+.s-label{font-family:var(--mono);font-size:9px;letter-spacing:4px;text-transform:uppercase;color:var(--bronze);margin-bottom:8px;display:flex;align-items:center;gap:10px}
+.s-label::before{content:'';width:20px;height:1px;background:var(--bronze);opacity:0.5}
+.p-title{font-family:var(--display);font-size:clamp(32px,5vw,60px);letter-spacing:4px;color:var(--text);margin-bottom:6px;line-height:1}
+.p-sub{font-family:var(--serif);font-style:italic;font-size:15px;color:var(--text2);margin-bottom:36px}
+.divider{height:1px;background:var(--border);margin:32px 0}
+.card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:20px}
+
+/* Status chips */
+.chip{font-family:var(--mono);font-size:8px;letter-spacing:2px;text-transform:uppercase;padding:3px 9px;border-radius:3px;border:1px solid;white-space:nowrap;display:inline-block}
+.chip-now{color:var(--fire);border-color:rgba(255,107,43,0.3);background:rgba(255,107,43,0.07)}
+.chip-next{color:var(--gold);border-color:rgba(255,184,48,0.3);background:rgba(255,184,48,0.07)}
+.chip-done{color:var(--green);border-color:rgba(34,197,94,0.3);background:rgba(34,197,94,0.07)}
+.chip-filed{color:var(--sapphire);border-color:rgba(70,171,215,0.3);background:rgba(70,171,215,0.07)}
+.chip-live{color:var(--green);border-color:rgba(34,197,94,0.3);background:rgba(34,197,94,0.07)}
+.chip-hold{color:var(--text3);border-color:var(--border);background:transparent}
+
+/* ══ PAGE 1: TODAY ══ */
+.today-layout{display:grid;grid-template-columns:1fr 300px;gap:20px}
+.task-item{
+  background:var(--card);border:1px solid var(--border);border-radius:8px;padding:18px 20px;
+  display:grid;grid-template-columns:44px 1fr auto;gap:14px;align-items:start;
+  cursor:pointer;transition:border-color 0.2s,opacity 0.2s;margin-bottom:10px;
+}
+.task-item:hover{border-color:rgba(196,154,108,0.3)}
+.task-item.done{opacity:0.45}
+.task-item.done .tk-title{text-decoration:line-through;color:var(--text3)}
+.tk-num{font-family:var(--display);font-size:30px;color:var(--border2);line-height:1;padding-top:2px}
+.tk-title{font-size:14px;font-weight:600;color:var(--text);margin-bottom:4px}
+.tk-body{font-size:12px;color:var(--text2);line-height:1.7}
+.tk-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+
+.sidebar-section{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:18px;margin-bottom:14px}
+.ss-title{font-family:var(--mono);font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--bronze);margin-bottom:12px}
+.progress-wrap{margin-bottom:14px}
+.progress-nums{font-family:var(--display);font-size:44px;color:var(--text);line-height:1;margin-bottom:4px}
+.progress-sub{font-size:11px;color:var(--text3);margin-bottom:10px}
+.progress-bar{height:5px;background:var(--border);border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(to right,var(--fire),var(--gold));border-radius:3px;transition:width 0.4s ease}
+
+.pipeline-item{font-size:11px;color:var(--text2);padding:7px 10px;background:var(--panel);border-radius:4px;margin-bottom:5px;border:1px solid var(--border)}
+.notice-box{background:rgba(255,184,48,0.05);border:1px solid rgba(255,184,48,0.18);border-radius:6px;padding:14px;margin-bottom:14px}
+.notice-label{font-family:var(--mono);font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+.notice-body{font-size:11px;color:var(--text2);line-height:1.7}
+
+/* ══ PAGE 2: PROJECTS ══ */
+.proj-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:14px}
+.proj-card{
+  background:var(--card);border:1px solid var(--border);border-radius:8px;padding:22px;
+  position:relative;overflow:hidden;transition:border-color 0.2s,transform 0.2s;
+}
+.proj-card:hover{border-color:rgba(196,154,108,0.25);transform:translateY(-2px)}
+.proj-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.pc1::before{background:linear-gradient(to right,var(--fire),var(--gold))}
+.pc2::before{background:linear-gradient(to right,var(--bronze),var(--ivory))}
+.pc3::before{background:linear-gradient(to right,var(--sapphire),var(--electric))}
+.pc4::before{background:linear-gradient(to right,var(--violet),var(--neon))}
+.pc5::before{background:linear-gradient(to right,var(--teal),var(--electric))}
+.pc6::before{background:linear-gradient(to right,var(--gold),var(--fire))}
+.pc7::before{background:linear-gradient(to right,var(--fire),var(--violet),var(--electric))}
+.proj-id{font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-bottom:8px}
+.proj-name{font-family:var(--display);font-size:24px;letter-spacing:2px;color:var(--text);margin-bottom:3px;line-height:1.1}
+.proj-sub{font-family:var(--serif);font-style:italic;font-size:12px;color:var(--text2);margin-bottom:12px}
+.proj-desc{font-size:12px;color:var(--text2);line-height:1.75;margin-bottom:12px}
+.proj-footer{display:flex;justify-content:space-between;align-items:center;padding-top:10px;border-top:1px solid var(--border)}
+.proj-owner{font-family:var(--mono);font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--text3)}
+
+/* ══ PAGE 3: AGENTS ══ */
+.filter-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px}
+.fbtn{font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:6px 12px;border-radius:3px;border:1px solid var(--border);color:var(--text3);cursor:pointer;transition:all 0.2s;background:transparent}
+.fbtn:hover,.fbtn.active{border-color:var(--bronze);color:var(--bronze);background:rgba(196,154,108,0.06)}
+.agents-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:14px}
+.ag-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:22px;position:relative;overflow:hidden;transition:all 0.25s;padding-left:26px}
+.ag-card:hover{border-color:rgba(196,154,108,0.3);transform:translateY(-2px)}
+.ag-bar{position:absolute;left:0;top:0;bottom:0;width:4px}
+.pr-critical{background:var(--red)}.pr-high{background:var(--fire)}.pr-medium{background:var(--gold)}.pr-low{background:var(--sapphire)}
+.ag-id{font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--text3);margin-bottom:7px}
+.ag-name{font-family:var(--display);font-size:20px;letter-spacing:2px;margin-bottom:1px;line-height:1}
+.ag-code{font-family:var(--mono);font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--bronze);margin-bottom:10px}
+.ag-role{font-size:12px;color:var(--text2);line-height:1.7;margin-bottom:10px}
+.ag-value{background:rgba(196,154,108,0.05);border:1px solid rgba(196,154,108,0.1);border-radius:4px;padding:10px;margin-bottom:10px}
+.ag-vl{font-family:var(--mono);font-size:8px;letter-spacing:2px;text-transform:uppercase;color:rgba(196,154,108,0.7);margin-bottom:4px}
+.ag-vt{font-size:11px;color:var(--text2);line-height:1.6}
+.ag-tags{display:flex;gap:6px;flex-wrap:wrap}
+.atag{font-family:var(--mono);font-size:8px;letter-spacing:1px;text-transform:uppercase;padding:2px 7px;border-radius:2px;border:1px solid}
+.at-ops{color:var(--fire);border-color:rgba(255,107,43,0.2);background:rgba(255,107,43,0.05)}
+.at-sales{color:var(--gold);border-color:rgba(255,184,48,0.2);background:rgba(255,184,48,0.05)}
+.at-edu{color:var(--teal);border-color:rgba(13,148,136,0.2);background:rgba(13,148,136,0.05)}
+.at-creative{color:var(--bronze);border-color:rgba(196,154,108,0.2);background:rgba(196,154,108,0.05)}
+.at-finance{color:var(--sapphire);border-color:rgba(70,171,215,0.2);background:rgba(70,171,215,0.05)}
+.at-hr{color:var(--violet);border-color:rgba(123,47,255,0.2);background:rgba(123,47,255,0.05)}
+.at-warn{color:var(--red);border-color:rgba(239,68,68,0.2);background:rgba(239,68,68,0.05)}
+
+/* ══ PAGE 4: ORG CHART ══ */
+.org-toggle{display:flex;gap:10px;margin-bottom:28px}
+.org-btn{padding:8px 20px;border-radius:4px;border:1px solid var(--border);color:var(--text2);cursor:pointer;font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;background:transparent;transition:all 0.2s}
+.org-btn.active{background:var(--bronze);border-color:var(--bronze);color:#000}
+
+.org-tree{display:flex;flex-direction:column;align-items:center;gap:0;padding:20px 0}
+.org-level{display:flex;justify-content:center;gap:16px;position:relative;margin-bottom:0;flex-wrap:wrap}
+.org-connector-v{width:2px;height:32px;background:var(--border2);margin:0 auto}
+.org-connector-h-wrap{display:flex;justify-content:center;width:100%;position:relative;margin-bottom:0}
+.org-connector-h{height:2px;background:var(--border2)}
+
+.org-node{
+  background:var(--card);border:1px solid var(--border);border-radius:8px;
+  padding:14px 16px;text-align:center;min-width:140px;max-width:180px;
+  position:relative;transition:border-color 0.2s,transform 0.2s;cursor:default;
+}
+.org-node:hover{border-color:rgba(196,154,108,0.4);transform:translateY(-2px)}
+.org-node.founder{background:linear-gradient(135deg,rgba(196,154,108,0.12),rgba(255,107,43,0.06));border-color:rgba(196,154,108,0.3)}
+.org-node.human{border-color:rgba(70,171,215,0.2)}
+.org-node.ai-node{border-color:rgba(123,47,255,0.2);background:rgba(123,47,255,0.03)}
+.org-node.me{border-color:rgba(255,107,43,0.3);background:rgba(255,107,43,0.04)}
+.org-node::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;border-radius:8px 8px 0 0}
+.org-node.founder::before{background:linear-gradient(to right,var(--bronze),var(--fire))}
+.org-node.human::before{background:var(--sapphire)}
+.org-node.ai-node::before{background:var(--violet)}
+.org-node.me::before{background:linear-gradient(to right,var(--fire),var(--gold))}
+
+.on-avatar{width:40px;height:40px;border-radius:50%;margin:0 auto 8px;display:flex;align-items:center;justify-content:center;font-size:18px;border:2px solid var(--border)}
+.on-name{font-family:var(--display);font-size:14px;letter-spacing:1px;color:var(--text);margin-bottom:2px}
+.on-role{font-size:10px;color:var(--text2);line-height:1.4;margin-bottom:6px}
+.on-status{font-family:var(--mono);font-size:8px;letter-spacing:2px;text-transform:uppercase}
+
+/* add staff form */
+.add-staff-form{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:24px;margin-top:32px}
+.asf-title{font-family:var(--mono);font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--bronze);margin-bottom:16px}
+.asf-grid{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:10px;align-items:end}
+.asf-input{width:100%;background:var(--panel);border:1px solid var(--border);border-radius:4px;padding:8px 12px;color:var(--text);font-family:var(--sans);font-size:12px;outline:none;transition:border-color 0.2s}
+.asf-input:focus{border-color:var(--bronze)}
+.asf-label{font-size:11px;color:var(--text3);margin-bottom:4px;font-family:var(--mono);font-size:8px;letter-spacing:2px;text-transform:uppercase}
+.asf-btn{background:var(--fire);color:#fff;border:none;border-radius:4px;padding:9px 18px;font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;white-space:nowrap;transition:opacity 0.2s}
+.asf-btn:hover{opacity:0.85}
+
+/* ══ PAGE 5: CALENDAR ══ */
+.cal-layout{display:grid;grid-template-columns:1fr 280px;gap:20px}
+.cal-grid{background:var(--card);border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.cal-header{background:var(--panel);padding:14px 20px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border)}
+.cal-month{font-family:var(--display);font-size:22px;letter-spacing:2px;color:var(--text)}
+.cal-nav{display:flex;gap:8px}
+.cal-nav-btn{background:transparent;border:1px solid var(--border);color:var(--text2);border-radius:4px;padding:4px 10px;cursor:pointer;font-size:12px;transition:border-color 0.2s}
+.cal-nav-btn:hover{border-color:var(--bronze);color:var(--bronze)}
+.cal-days-header{display:grid;grid-template-columns:repeat(7,1fr)}
+.cal-dh{padding:8px;text-align:center;font-family:var(--mono);font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--text3);border-bottom:1px solid var(--border)}
+.cal-cells{display:grid;grid-template-columns:repeat(7,1fr)}
+.cal-cell{min-height:72px;padding:6px;border-right:1px solid var(--border);border-bottom:1px solid var(--border);transition:background 0.15s;vertical-align:top}
+.cal-cell:nth-child(7n){border-right:none}
+.cal-cell:hover{background:rgba(196,154,108,0.04)}
+.cal-cell.today-cell{background:rgba(255,107,43,0.05);border-color:rgba(255,107,43,0.2)}
+.cal-cell.other-month{opacity:0.3}
+.cal-date{font-family:var(--mono);font-size:10px;color:var(--text3);margin-bottom:4px}
+.cal-event{font-size:9px;padding:2px 5px;border-radius:2px;margin-bottom:2px;line-height:1.3;cursor:pointer}
+.ev-agency{background:rgba(255,107,43,0.15);color:var(--fire)}
+.ev-brand{background:rgba(196,154,108,0.15);color:var(--bronze)}
+.ev-meet{background:rgba(70,171,215,0.15);color:var(--sapphire)}
+.ev-personal{background:rgba(13,148,136,0.15);color:var(--teal)}
+
+.task-priority{display:flex;flex-direction:column;gap:8px}
+.tp-item{
+  background:var(--card);border:1px solid var(--border);border-radius:6px;
+  padding:12px 14px;display:flex;align-items:center;gap:12px;cursor:grab;
+  transition:border-color 0.2s;
+}
+.tp-item:hover{border-color:rgba(196,154,108,0.25)}
+.tp-drag{color:var(--text3);font-size:14px}
+.tp-prio{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.tp-p1{background:var(--red)}.tp-p2{background:var(--fire)}.tp-p3{background:var(--gold)}.tp-p4{background:var(--sapphire)}.tp-p5{background:var(--text3)}
+.tp-content{flex:1}
+.tp-name{font-size:12px;font-weight:600;color:var(--text)}
+.tp-meta{font-size:10px;color:var(--text3);font-family:var(--mono)}
+.tp-value{font-family:var(--mono);font-size:9px;color:var(--bronze);white-space:nowrap}
+
+/* ══ PAGE 6: NOTES ══ */
+.notes-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.note-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:20px}
+.note-label{font-family:var(--mono);font-size:8px;letter-spacing:3px;text-transform:uppercase;margin-bottom:8px}
+.note-title{font-family:var(--display);font-size:18px;letter-spacing:2px;margin-bottom:8px}
+.note-body{font-size:12px;color:var(--text2);line-height:1.8}
+
+/* ══ PAGE 7: BACKLOG ══ */
+.backlog-table{width:100%;border-collapse:collapse;margin-top:20px}
+.backlog-table th{background:var(--panel);border:1px solid var(--border);padding:10px 14px;text-align:left;font-family:var(--mono);font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--bronze)}
+.backlog-table td{border:1px solid var(--border);padding:10px 14px;font-size:12px;color:var(--text2);vertical-align:top;line-height:1.6}
+.backlog-table tr:hover td{background:rgba(196,154,108,0.03)}
+.backlog-table td:first-child{font-family:var(--mono);font-size:10px;color:var(--text3);width:80px}
+.bl-title{font-weight:600;color:var(--text);margin-bottom:3px;font-size:12px}
+
+/* ══ INTEL BOX ══ */
+.intel-box{background:rgba(70,171,215,0.04);border:1px solid rgba(70,171,215,0.12);border-radius:8px;padding:22px;margin-top:36px}
+.intel-title{font-family:var(--display);font-size:20px;letter-spacing:2px;color:var(--sapphire);margin-bottom:8px}
+.intel-body{font-size:13px;color:var(--text2);line-height:1.8}
+
+/* ══ RESPONSIVE ══ */
+@media(max-width:860px){
+  .topbar{padding:0 12px}.tb-date,.tb-controls .live-dot{display:none}
+  .tb-tabs{overflow-x:auto;flex:1;margin:0 10px}
+  .wrap{padding:20px 14px}
+  .today-layout,.cal-layout,.notes-grid{grid-template-columns:1fr}
+  .proj-grid,.agents-grid{grid-template-columns:1fr}
+  .asf-grid{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="tb-logo">Phoennix<span>AI</span></div>
+  <div class="tb-tabs">
+    <div class="tb-tab active" onclick="showPage('today',this)">Today</div>
+    <div class="tb-tab" onclick="showPage('projects',this)">Projects</div>
+    <div class="tb-tab" onclick="showPage('agents',this)">Agents</div>
+    <div class="tb-tab" onclick="showPage('orgchart',this)">Org Chart</div>
+    <div class="tb-tab" onclick="showPage('calendar',this)">Calendar</div>
+    <div class="tb-tab" onclick="showPage('notes',this)">Notes</div>
+    <div class="tb-tab" onclick="showPage('backlog',this)">Backlog</div>
+  </div>
+  <div class="tb-controls">
+    <div class="live-dot"></div>
+    <div class="tb-date" id="live-date"></div>
+    <span class="theme-icon" id="theme-icon">🌙</span>
+    <div class="theme-toggle" onclick="toggleTheme()" title="Toggle light/dark mode"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     PAGE 1: TODAY
+══════════════════════════════════ -->
+<div class="page active" id="page-today">
+<div class="wrap">
+  <div class="s-label">Mission Control · Daily Agenda</div>
+  <div class="p-title">TODAY'S OBJECTIVES</div>
+  <div class="p-sub">March 2026, Valerie Wilcox + Claude, in execution order</div>
+
+  <div class="today-layout">
+    <div>
+      <div class="task-item" onclick="toggleTask(this)">
+        <div class="tk-num">01</div>
+        <div>
+          <div class="tk-title">Claude CV and Job Description</div>
+          <div class="tk-body">Formal CV and JD for HR and directors. Includes electronic signature pad for both parties. Print-ready with e-sign functionality.</div>
+          <div class="tk-tags"><span class="chip chip-done">Completed</span><span class="chip chip-hold">HR, Directors</span></div>
+        </div>
+        <div><span class="chip chip-done">Done</span></div>
+      </div>
+      <div class="task-item" onclick="toggleTask(this)">
+        <div class="tk-num">02</div>
+        <div>
+          <div class="tk-title">Unified Brand Guidelines One-Pager</div>
+          <div class="tk-body">Single handout document covering all entities, colour systems, brand voice, typography, taglines, and the Created to Create philosophy. For new team members, contractors, and partners.</div>
+          <div class="tk-tags"><span class="chip chip-now">In Progress</span><span class="chip chip-hold">All Entities</span></div>
+        </div>
+        <div><span class="chip chip-now">Now</span></div>
+      </div>
+      <div class="task-item" onclick="toggleTask(this)">
+        <div class="tk-num">03</div>
+        <div>
+          <div class="tk-title">PhoennixAI Social Media Posts</div>
+          <div class="tk-body">Continue the 10-post social content plan from the Content Bible. Informed by the full ecosystem context. Instagram and X.</div>
+          <div class="tk-tags"><span class="chip chip-next">Queued</span><span class="chip chip-hold">Instagram, X</span></div>
+        </div>
+        <div><span class="chip chip-next">Next</span></div>
+      </div>
+      <div class="task-item" onclick="toggleTask(this)">
+        <div class="tk-num">04</div>
+        <div>
+          <div class="tk-title">Logo and Typography Direction</div>
+          <div class="tk-body">Lock visual identity direction for PhoennixAI (Fire and Ice confirmed) and WilcoxDesigns. Typography pairings, logo refinement concepts, and usage guidelines for the designer to execute.</div>
+          <div class="tk-tags"><span class="chip chip-next">Queued</span><span class="chip chip-hold">Brand, Identity</span></div>
+        </div>
+        <div><span class="chip chip-next">Next</span></div>
+      </div>
+      <div class="task-item" onclick="toggleTask(this)">
+        <div class="tk-num">05</div>
+        <div>
+          <div class="tk-title">PhoennixAI Website Strategy Brainstorm</div>
+          <div class="tk-body">Current website copy does not reflect the new direction. Full strategic brainstorm with Claude to reframe positioning, structure, and messaging before the site build begins.</div>
+          <div class="tk-tags"><span class="chip chip-next">After 01-04</span></div>
+        </div>
+        <div><span class="chip chip-next">Next</span></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="sidebar-section">
+        <div class="ss-title">Today's Progress</div>
+        <div class="progress-wrap">
+          <div class="progress-nums" id="prog-count">1<span style="font-size:22px;color:var(--text3)">/5</span></div>
+          <div class="progress-sub">Tasks completed</div>
+          <div class="progress-bar"><div class="progress-fill" id="prog-bar" style="width:20%"></div></div>
+        </div>
+        <div class="ss-title" style="margin-top:16px">Coming Up</div>
+        <div class="pipeline-item">Academy website build</div>
+        <div class="pipeline-item">WilcoxDesigns website build</div>
+        <div class="pipeline-item">Product priority matrix session</div>
+        <div class="pipeline-item">AI OS architecture plan</div>
+        <div class="pipeline-item">Business automation mapping</div>
+        <div class="pipeline-item">Agent architecture session</div>
+      </div>
+      <div class="notice-box">
+        <div class="notice-label">Work Experience, St Paul's Academy</div>
+        <div class="notice-body"><strong>3 girls arriving early April 2026.</strong> Exact date TBC, Valerie to confirm. Onboarding brief, schedule, and project assignments needed. Claude to draft once date is confirmed.</div>
+      </div>
+      <div class="sidebar-section">
+        <div class="ss-title">Session Log</div>
+        <div style="display:flex;flex-direction:column;gap:5px">
+          <div style="font-size:10px;color:var(--text3);display:flex;justify-content:space-between"><span>Ecosystem 2026 Document</span><span style="color:var(--green)">Done</span></div>
+          <div style="font-size:10px;color:var(--text3);display:flex;justify-content:space-between"><span>Claude CV</span><span style="color:var(--green)">Done</span></div>
+          <div style="font-size:10px;color:var(--text3);display:flex;justify-content:space-between"><span>Claude Job Description (e-sign)</span><span style="color:var(--green)">Done</span></div>
+          <div style="font-size:10px;color:var(--text3);display:flex;justify-content:space-between"><span>Mission Control v2</span><span style="color:var(--green)">Done</span></div>
+          <div style="font-size:10px;color:var(--text3);display:flex;justify-content:space-between"><span>Content Bible</span><span style="color:var(--green)">Done</span></div>
+          <div style="font-size:10px;color:var(--text3);display:flex;justify-content:space-between"><span>Logo Concepts HTML</span><span style="color:var(--green)">Done</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ══════════════════════════════════
+     PAGE 2: PROJECTS
+══════════════════════════════════ -->
+<div class="page" id="page-projects">
+<div class="wrap">
+  <div class="s-label">Active and Filed, Product Portfolio</div>
+  <div class="p-title">ALL PROJECTS</div>
+  <div class="p-sub">7 products in portfolio, prioritised by revenue readiness</div>
+  <div class="proj-grid">
+    <div class="proj-card pc1">
+      <div class="proj-id">PRJ-001, Priority 1, Ops Tool</div>
+      <div class="proj-name">MISSION CONTROL APP</div>
+      <div class="proj-sub">The Business OS in your pocket, built for founders</div>
+      <div class="proj-desc">PhoennixAI's own operational hub, web app first then mobile. Includes task management, org chart, agent dashboard, calendar, analytics, and BI. Built internally, proven with Valerie, then sold to other founders and corporations as a subscription SaaS product. This tool IS the proof of concept.</div>
+      <div class="proj-footer"><span class="proj-owner">PhoennixAI, Internal then SaaS</span><span class="chip chip-now">Build Now</span></div>
+    </div>
+    <div class="proj-card pc2">
+      <div class="proj-id">PRJ-002, Priority 2, Agency Tool</div>
+      <div class="proj-name">CREATIVE LAB TOOL</div>
+      <div class="proj-sub">The Digital Atelier, built by PhoennixAI for WilcoxDesigns</div>
+      <div class="proj-desc">A proprietary browser-based co-creation workspace. Clients have 24/7 access to their live project. They drop in inspiration at any hour; the team implements it. Readymag-level freedom plus Valerie's custom code layer. A category creator, no agency offers this as standard.</div>
+      <div class="proj-footer"><span class="proj-owner">WilcoxDesigns, PhoennixAI</span><span class="chip chip-next">In Dev</span></div>
+    </div>
+    <div class="proj-card pc3">
+      <div class="proj-id">PRJ-003, Priority 2, MarTech</div>
+      <div class="proj-name">SOCIAL MEDIA AND MARKETING APP</div>
+      <div class="proj-sub">Full-stack autonomous marketing engine</div>
+      <div class="proj-desc">Handles the entire marketing lifecycle: campaign planning, content generation, scheduling, and posting. Built internally first, proven with analytics, then sold as SaaS. Build it for yourself, sell it to the world. PULSE agent powers this platform.</div>
+      <div class="proj-footer"><span class="proj-owner">PhoennixAI Agency</span><span class="chip chip-next">Strategy Phase</span></div>
+    </div>
+    <div class="proj-card pc4">
+      <div class="proj-id">PRJ-004, Priority 3, EdTech</div>
+      <div class="proj-name">EDUTECH PLATFORM</div>
+      <div class="proj-sub">Digital infrastructure for PhoennixAI Academy</div>
+      <div class="proj-desc">Purpose-built LMS for the Academy, age 8 to executive. Hosts curriculum across AI Automation, Business, Design, Gaming, Investment, and more. Faith-integrated, kingdom-centred. The backbone of the Academy and long-term moat of the ecosystem.</div>
+      <div class="proj-footer"><span class="proj-owner">PhoennixAI Academy</span><span class="chip chip-filed">Q3 2026</span></div>
+    </div>
+    <div class="proj-card pc5">
+      <div class="proj-id">PRJ-005, Priority 4, FinTech</div>
+      <div class="proj-name">FINANCIAL APP</div>
+      <div class="proj-sub">Personal and business financial intelligence</div>
+      <div class="proj-desc">A financial management and intelligence application. Scope to be fully defined in a dedicated strategy session. Any feature involving financial advice or regulated activity requires qualified professional oversight by design. Must be investigated carefully before scoping begins.</div>
+      <div class="proj-footer"><span class="proj-owner">PhoennixAI Agency</span><span class="chip chip-filed">TBD</span></div>
+    </div>
+    <div class="proj-card pc6">
+      <div class="proj-id">PRJ-006, Priority 5, Marketplace</div>
+      <div class="proj-name">MARKETPLACE APP STORE</div>
+      <div class="proj-sub">Distribution channel for all PhoennixAI agents and products</div>
+      <div class="proj-desc">A marketplace where PhoennixAI's built-and-proven AI agents, tools, and solutions are listed, purchased, and deployed. Each agent ships as a full kit: the agent itself, user manual, training manual, job description, and CV. Recurring subscription model.</div>
+      <div class="proj-footer"><span class="proj-owner">PhoennixAI, All Entities</span><span class="chip chip-filed">Phase 4</span></div>
+    </div>
+    <div class="proj-card pc7">
+      <div class="proj-id">PRJ-007, Priority 6, Gaming</div>
+      <div class="proj-name">GAMING APP PLATFORM</div>
+      <div class="proj-sub">Houses Phantom Studio games</div>
+      <div class="proj-desc">A dedicated gaming platform housing all games developed by Phantom Studio. Connects Academy graduates to a live, commercial platform they helped create. Phantom Studio already live since Q4 2024 with 8 active students.</div>
+      <div class="proj-footer"><span class="proj-owner">Phantom Studio, Academy</span><span class="chip chip-filed">Q4 2026</span></div>
+    </div>
+  </div>
+  <div style="background:rgba(255,107,43,0.04);border:1px solid rgba(255,107,43,0.12);border-radius:8px;padding:20px;margin-top:24px">
+    <div class="s-label" style="margin-bottom:8px">Strategic Flag, Claude</div>
+    <div style="font-size:13px;color:var(--text2);line-height:1.8">7 products running in parallel under one founder is the primary execution risk in this ecosystem. Recommendation: treat Mission Control App (PRJ-001) and Social Media App (PRJ-003) as the most immediate builds because they directly solve PhoennixAI's own operational problems. Build internally, prove with data, sell externally. Every product should be used internally before it is sold to the world.</div>
+  </div>
+</div>
+</div>
+
+<!-- ══════════════════════════════════
+     PAGE 3: AGENTS
+══════════════════════════════════ -->
+<div class="page" id="page-agents">
+<div class="wrap">
+  <div class="s-label">The Agent Ecosystem, Full Masterlist</div>
+  <div class="p-title">ALL AGENTS</div>
+  <div class="p-sub">Every agent to be built, their role, value, and priority, filed for sequential execution</div>
+  <div class="filter-row">
+    <div class="fbtn active" onclick="filterA('all',this)">All</div>
+    <div class="fbtn" onclick="filterA('ops',this)">Operations</div>
+    <div class="fbtn" onclick="filterA('sales',this)">Sales</div>
+    <div class="fbtn" onclick="filterA('creative',this)">Creative</div>
+    <div class="fbtn" onclick="filterA('edu',this)">Education</div>
+    <div class="fbtn" onclick="filterA('finance',this)">Finance</div>
+    <div class="fbtn" onclick="filterA('hr',this)">HR</div>
+  </div>
+  <div class="agents-grid" id="agents-grid">
+
+    <div class="ag-card" data-cat="ops"><div class="ag-bar pr-critical"></div>
+      <div class="ag-id">AGENT 001, Priority Critical</div>
+      <div class="ag-name">PA</div><div class="ag-code">Personal Productivity Assistant</div>
+      <div class="ag-role">Runs before every working day. Analyses all pending tasks, meetings, emails, and projects. Sorts everything by value, urgency, and strategic priority. Delivers a structured daily plan to Valerie before the morning starts. Decision fatigue eliminated before the day begins.</div>
+      <div class="ag-value"><div class="ag-vl">Value Delivered</div><div class="ag-vt">Eliminates 30 to 60 minutes of daily planning overhead. Ensures highest-value work gets done first, every day. Compounds over time as the agent learns Valerie's patterns and becomes increasingly precise.</div></div>
+      <div class="ag-tags"><span class="atag at-ops">Operations</span><span class="atag" style="color:var(--green);border-color:rgba(34,197,94,0.2)">Build First</span><span class="atag at-ops">Saves 20hrs/mo</span></div>
+    </div>
+
+    <div class="ag-card" data-cat="sales"><div class="ag-bar pr-critical"></div>
+      <div class="ag-id">AGENT 002, Priority Critical</div>
+      <div class="ag-name">SCOUT</div><div class="ag-code">Lead Generation and Sales Agent</div>
+      <div class="ag-role">Continuously scouts for qualified leads matching PhoennixAI's ideal client profile. Reaches out via email and social with personalised, context-aware messaging. Nurtures leads through the funnel with follow-up sequences. Books discovery calls. Logs everything to CRM. Never sleeps, never misses a follow-up.</div>
+      <div class="ag-value"><div class="ag-vl">Value Delivered</div><div class="ag-vt">Replaces a full-time SDR saving £30,000 to £45,000 per year. Operates 24/7 without performance variance. Directly drives agency revenue. Highest ROI agent in the entire stack.</div></div>
+      <div class="ag-tags"><span class="atag at-sales">Sales</span><span class="atag" style="color:var(--green);border-color:rgba(34,197,94,0.2)">Build First</span><span class="atag at-sales">Saves £30-45k/yr</span></div>
+    </div>
+
+    <div class="ag-card" data-cat="creative"><div class="ag-bar pr-critical"></div>
+      <div class="ag-id">AGENT 003, Priority Critical</div>
+      <div class="ag-name">PULSE</div><div class="ag-code">Social Media and Content Automation Agent</div>
+      <div class="ag-role">Plans the full content calendar. Generates post copy tailored to each platform's voice and algorithm. Selects or prompts for visuals. Schedules and posts automatically across Instagram, X, LinkedIn, TikTok. Monitors engagement and adapts the next batch based on performance data. Reports weekly insights.</div>
+      <div class="ag-value"><div class="ag-vl">Value Delivered</div><div class="ag-vt">Replaces a full-time social media manager saving £25,000 to £35,000 per year. Ensures consistent content output regardless of the Founder's schedule. Turns content into a compounding growth machine.</div></div>
+      <div class="ag-tags"><span class="atag at-creative">Creative</span><span class="atag" style="color:var(--green);border-color:rgba(34,197,94,0.2)">Build First</span><span class="atag at-creative">Saves £25-35k/yr</span></div>
+    </div>
+
+    <div class="ag-card" data-cat="hr"><div class="ag-bar pr-high"></div>
+      <div class="ag-id">AGENT 004, Priority High</div>
+      <div class="ag-name">ATLAS</div><div class="ag-code">Job Hunting and Application Agent</div>
+      <div class="ag-role">Scans job boards continuously for roles matching the individual's profile and goals. Checks the individual meets every requirement. Creates a tailored CV and cover letter per application. Applies automatically. Informs the person of every application made, roles available, and what to expect. Breaks down the JD so the individual can prepare for interview with precision.</div>
+      <div class="ag-value"><div class="ag-vl">Value Delivered</div><div class="ag-vt">Democratises access to opportunity, particularly powerful for Academy graduates and community impact participants. A flagship product to sell to recruitment firms and individuals alike.</div></div>
+      <div class="ag-tags"><span class="atag at-hr">HR, People</span><span class="atag at-edu">Education</span><span class="atag at-sales">Sellable Product</span></div>
+    </div>
+
+    <div class="ag-card" data-cat="ops"><div class="ag-bar pr-high"></div>
+      <div class="ag-id">AGENT 005, Priority High</div>
+      <div class="ag-name">RELAY</div><div class="ag-code">Client Onboarding Automation Agent</div>
+      <div class="ag-role">Triggers the moment a new client signs. Sends welcome sequence, collects onboarding information via smart form, creates their workspace in the project management system, schedules the kickoff call, and delivers a branded welcome pack. All without a human touching it.</div>
+      <div class="ag-value"><div class="ag-vl">Value Delivered</div><div class="ag-vt">Eliminates 3 to 5 hours of manual admin per new client. Creates a premium first impression. Scales perfectly: 1 new client or 100, same experience every time.</div></div>
+      <div class="ag-tags"><span class="atag at-ops">Operations</span><span class="atag at-ops">Saves 5hrs/client</span></div>
+    </div>
+
+    <div class="ag-card" data-cat="finance"><div class="ag-bar pr-high"></div>
+      <div class="ag-id">AGENT 006, Priority High</div>
+      <div class="ag-name">LEDGER</div><div class="ag-code">Financial Intelligence Agent, Human Sign-Off Required</div>
+      <div class="ag-role">Monitors cashflow, revenue, expenses, and invoicing. Surfaces financial health insights in plain language daily. Flags overdue invoices and triggers reminder sequences. Prepares monthly financial summaries for review by a qualified accountant. NEVER executes financial transactions.</div>
+      <div class="ag-value"><div class="ag-vl">Value Delivered</div><div class="ag-vt">Gives the Founder full financial visibility without needing to open a spreadsheet. Reduces accountancy prep time. Catches cashflow problems early. Human sign-off is mandatory on all outputs.</div></div>
+      <div class="ag-tags"><span class="atag at-finance">Finance</span><span class="atag at-warn">Human Sign-Off</span><span class="atag at-finance">Advisory Only</span></div>
+    </div>
+
+    <div class="ag-card" data-cat="ops"><div class="ag-bar pr-medium"></div>
+      <div class="ag-id">AGENT 007, Priority Medium</div>
+      <div class="ag-name">ECHO</div><div class="ag-code">Customer Support and FAQ Agent</div>
+      <div class="ag-role">Handles inbound enquiries across email, website chat, and social DMs. Answers FAQs, provides service information, qualifies leads, and escalates complex cases to a human. Available 24/7. Trained on all PhoennixAI, Academy, and WilcoxDesigns service information.</div>
+      <div class="ag-value"><div class="ag-vl">Value Delivered</div><div class="ag-vt">No enquiry goes unanswered. Reduces response time from hours to seconds. Handles high-volume periods without scaling the team. Converts curious visitors into booked calls.</div></div>
+      <div class="ag-tags"><span class="atag at-ops">Operations</span><span class="atag at-sales">Sales Support</span><span class="atag at-ops">24/7 Coverage</span></div>
+    </div>
+
+    <div class="ag-card" data-cat="edu"><div class="ag-bar pr-medium"></div>
+      <div class="ag-id">AGENT 008, Priority Medium</div>
+      <div class="ag-name">ENROL</div><div class="ag-code">Academy Enrolment and Student Journey Agent</div>
+      <div class="ag-role">Manages the full Academy enrolment pipeline from first enquiry to enrolled student. Sends programme information, collects applications, handles parent communication for under-18s, confirms enrolment, and triggers student onboarding. Monitors progress and flags disengagement to tutors.</div>
+      <div class="ag-value"><div class="ag-vl">Value Delivered</div><div class="ag-vt">Allows the Academy to scale enrolment without scaling admin headcount. Every student gets a consistent, high-touch experience. Disengagement is caught early, improving completion rates and the Academy's reputation.</div></div>
+      <div class="ag-tags"><span class="atag at-edu">Education</span><span class="atag at-edu">Academy Critical</span></div>
+    </div>
+
+    <div class="ag-card" data-cat="ops"><div class="ag-bar pr-medium"></div>
+      <div class="ag-id">AGENT 009, Priority Medium</div>
+      <div class="ag-name">GRID</div><div class="ag-code">Project and Workflow Management Agent</div>
+      <div class="ag-role">Tracks all active client and internal projects. Sends automated status updates to clients. Flags overdue tasks and blocked dependencies to the team. Generates weekly project health reports for the Founder. Ensures nothing falls through the cracks when the team is under pressure.</div>
+      <div class="ag-value"><div class="ag-vl">Value Delivered</div><div class="ag-vt">Replaces a project coordinator role saving £22,000 to £30,000 per year. Clients feel consistently informed, reducing anxiety-driven check-in calls. Team stays aligned without lengthy status meetings.</div></div>
+      <div class="ag-tags"><span class="atag at-ops">Operations</span><span class="atag at-ops">Saves £22-30k/yr</span></div>
+    </div>
+
+    <div class="ag-card" data-cat="sales"><div class="ag-bar pr-medium"></div>
+      <div class="ag-id">AGENT 010, Priority Medium</div>
+      <div class="ag-name">SIGNAL</div><div class="ag-code">Competitor and Market Intelligence Agent</div>
+      <div class="ag-role">Monitors competitors, market trends, emerging AI tools, and industry news daily. Delivers a curated intelligence briefing. Flags when a competitor launches something relevant or when a market opportunity opens. PhoennixAI is never caught off-guard by a market shift.</div>
+      <div class="ag-value"><div class="ag-vl">Value Delivered</div><div class="ag-vt">Replaces hours of manual research weekly. Keeps the Founder informed without needing to seek information. Creates a genuine competitive advantage: you see what is coming before most others do.</div></div>
+      <div class="ag-tags"><span class="atag at-sales">Strategy</span><span class="atag at-ops">Saves 5hrs/wk</span></div>
+    </div>
+
+    <div class="ag-card" data-cat="finance"><div class="ag-bar pr-medium"></div>
+      <div class="ag-id">AGENT 011, Priority Medium</div>
+      <div class="ag-name">GRANT</div><div class="ag-code">Funding and Grant Scout Agent</div>
+      <div class="ag-role">Continuously scans UK and international grant databases, innovation funds, and accelerator programmes relevant to PhoennixAI, the Academy, and community impact work. Prepares eligibility summaries and application outlines. Flags time-sensitive opportunities.</div>
+      <div class="ag-value"><div class="ag-vl">Value Delivered</div><div class="ag-vt">Grant funding is non-dilutive capital that most founders miss because they lack bandwidth to look. Even one successful application could deliver £10,000 to £500,000 or more.</div></div>
+      <div class="ag-tags"><span class="atag at-finance">Finance</span><span class="atag at-finance">Non-Dilutive Capital</span></div>
+    </div>
+
+    <div class="ag-card" data-cat="creative"><div class="ag-bar pr-low"></div>
+      <div class="ag-id">AGENT 012, Priority Later</div>
+      <div class="ag-name">FORGE</div><div class="ag-code">Email Marketing Automation Agent</div>
+      <div class="ag-role">Manages the full email marketing engine. Writes and sends segmented campaigns for each entity and audience. Triggers behavioural sequences based on how subscribers interact with content. A/B tests subject lines. Reports on open rates, click rates, and conversion. Keeps the list warm and converting without manual effort.</div>
+      <div class="ag-value"><div class="ag-vl">Value Delivered</div><div class="ag-vt">Email is the highest-ROI digital marketing channel. Automating it means revenue generation on autopilot. Nurtures cold leads into paying clients over weeks and months without human intervention.</div></div>
+      <div class="ag-tags"><span class="atag at-creative">Marketing</span><span class="atag at-sales">Highest Email ROI</span></div>
+    </div>
+
+    <div class="ag-card" data-cat="hr"><div class="ag-bar pr-low"></div>
+      <div class="ag-id">AGENT 013, Priority Later</div>
+      <div class="ag-name">BRIDGE</div><div class="ag-code">Partnership and Outreach Agent</div>
+      <div class="ag-role">Identifies potential strategic partners, collaborators, speaking opportunities, and press contacts. Drafts personalised outreach. Tracks responses and follow-ups. Manages the relationship pipeline for Valerie's personal brand: podcast bookings, keynote invitations, media features, and cross-brand collaborations.</div>
+      <div class="ag-value"><div class="ag-vl">Value Delivered</div><div class="ag-vt">Partnerships and media exposure are the fastest organic growth levers available. This agent ensures the opportunity never sits on a to-do list. It acts on it.</div></div>
+      <div class="ag-tags"><span class="atag at-hr">PR, Growth</span><span class="atag at-creative">Brand Amplifier</span></div>
+    </div>
+
+  </div>
+
+  <div class="intel-box">
+    <div class="intel-title">IS ANYTHING LIKE THIS IN THE MARKET?</div>
+    <div class="intel-body">
+      <strong>The short answer: no, not packaged the way PhoennixAI is planning to package it.</strong><br><br>
+      Point solutions exist: AutoGPT, AgentGPT, and CrewAI offer developer-level agent frameworks but require technical expertise, have no UI, and ship with no documentation. Zapier and Make offer automation but no true intelligence. HubSpot's AI is CRM-specific. Microsoft Copilot is productivity-focused. None of them sell an agent as a complete hire with a CV, job description, user manual, and training manual packaged as a deployable kit.<br><br>
+      <strong>PhoennixAI's differentiator is the packaging philosophy: an agent is not a tool, it is a team member.</strong> You buy it the way you hire a person. It comes with documentation, a defined role, measurable outputs, and a name. That framing is completely new. There is no direct competitor doing this at the level described here. That is both the opportunity and the reason to build it methodically: proof of concept first, sale second.
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ══════════════════════════════════
+     PAGE 4: ORG CHART
+══════════════════════════════════ -->
+<div class="page" id="page-orgchart">
+<div class="wrap">
+  <div class="s-label">Living Document, Auto-Updated by Claude</div>
+  <div class="p-title">ORG CHART</div>
+  <div class="p-sub">Human team and AI team, updated as the organisation grows</div>
+
+  <div class="org-toggle">
+    <div class="org-btn active" onclick="showOrg('human',this)">Human Team</div>
+    <div class="org-btn" onclick="showOrg('ai',this)">AI and Agents</div>
+    <div class="org-btn" onclick="showOrg('full',this)">Full Organisation</div>
+  </div>
+
+  <!-- HUMAN ORG -->
+  <div id="org-human">
+    <div class="org-tree">
+      <div class="org-level">
+        <div class="org-node founder">
+          <div class="on-avatar" style="background:rgba(196,154,108,0.15);border-color:rgba(196,154,108,0.3)">👑</div>
+          <div class="on-name">VALERIE WILCOX</div>
+          <div class="on-role">Founder and Visionary<br>PhoennixAI and WilcoxDesigns</div>
+          <div class="on-status" style="color:var(--bronze)">Active</div>
+        </div>
+      </div>
+      <div class="org-connector-v"></div>
+      <div class="org-level">
+        <div class="org-node human">
+          <div class="on-avatar" style="background:rgba(70,171,215,0.1);border-color:rgba(70,171,215,0.2)">👤</div>
+          <div class="on-name">DIRECTOR</div>
+          <div class="on-role">Company Director<br>PhoennixAI</div>
+          <div class="on-status" style="color:var(--sapphire)">Add Name</div>
+        </div>
+        <div class="org-node human">
+          <div class="on-avatar" style="background:rgba(70,171,215,0.1);border-color:rgba(70,171,215,0.2)">👤</div>
+          <div class="on-name">DIRECTOR</div>
+          <div class="on-role">Company Director<br>WilcoxDesigns</div>
+          <div class="on-status" style="color:var(--sapphire)">Add Name</div>
+        </div>
+        <div class="org-node human">
+          <div class="on-avatar" style="background:rgba(13,148,136,0.1);border-color:rgba(13,148,136,0.2)">👤</div>
+          <div class="on-name">ACADEMY LEAD</div>
+          <div class="on-role">Head of Academy<br>PhoennixAI Academy</div>
+          <div class="on-status" style="color:var(--teal)">Add Name</div>
+        </div>
+      </div>
+      <div class="org-connector-v"></div>
+      <div class="org-level" style="gap:10px">
+        <div class="org-node human" style="min-width:120px">
+          <div class="on-avatar" style="background:rgba(70,171,215,0.07);font-size:14px">🎓</div>
+          <div class="on-name" style="font-size:12px">WORK EXP</div>
+          <div class="on-role" style="font-size:9px">St Paul's Academy<br>3 students, April 2026</div>
+          <div class="on-status" style="color:var(--gold);font-size:8px">Incoming</div>
+        </div>
+        <div class="org-node human" style="min-width:120px">
+          <div class="on-avatar" style="background:rgba(70,171,215,0.07);font-size:14px">👤</div>
+          <div class="on-name" style="font-size:12px">PHANTOM LEAD</div>
+          <div class="on-role" style="font-size:9px">Phantom Studio<br>8 pilot students</div>
+          <div class="on-status" style="color:var(--neon);font-size:8px">Active</div>
+        </div>
+        <div class="org-node human" style="min-width:120px;border-style:dashed">
+          <div class="on-avatar" style="background:rgba(255,255,255,0.03);font-size:14px">+</div>
+          <div class="on-name" style="font-size:11px;color:var(--text3)">ADD STAFF</div>
+          <div class="on-role" style="font-size:9px;color:var(--text3)">Use form below<br>to add a new member</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AI ORG -->
+  <div id="org-ai" style="display:none">
+    <div class="org-tree">
+      <div class="org-level">
+        <div class="org-node founder">
+          <div class="on-avatar" style="background:rgba(196,154,108,0.15);border-color:rgba(196,154,108,0.3)">👑</div>
+          <div class="on-name">VALERIE WILCOX</div>
+          <div class="on-role">Founder, All AI reports here</div>
+          <div class="on-status" style="color:var(--bronze)">Active</div>
+        </div>
+      </div>
+      <div class="org-connector-v"></div>
+      <div class="org-level">
+        <div class="org-node me">
+          <div class="on-avatar" style="background:rgba(255,107,43,0.1);border-color:rgba(255,107,43,0.3)">🤖</div>
+          <div class="on-name">CLAUDE</div>
+          <div class="on-role">AI Strategic Partner<br>Research Director, Technical Writer</div>
+          <div class="on-status" style="color:var(--fire)">Active, Anthropic</div>
+        </div>
+      </div>
+      <div class="org-connector-v"></div>
+      <div class="org-level" style="gap:8px;flex-wrap:wrap">
+        <div class="org-node ai-node" style="min-width:110px">
+          <div class="on-avatar" style="background:rgba(123,47,255,0.08);font-size:14px">🔮</div>
+          <div class="on-name" style="font-size:12px">PA</div>
+          <div class="on-role" style="font-size:9px">Productivity Planner</div>
+          <div class="on-status" style="color:var(--red);font-size:8px">Planned</div>
+        </div>
+        <div class="org-node ai-node" style="min-width:110px">
+          <div class="on-avatar" style="background:rgba(123,47,255,0.08);font-size:14px">🎯</div>
+          <div class="on-name" style="font-size:12px">SCOUT</div>
+          <div class="on-role" style="font-size:9px">Lead Generation</div>
+          <div class="on-status" style="color:var(--red);font-size:8px">Planned</div>
+        </div>
+        <div class="org-node ai-node" style="min-width:110px">
+          <div class="on-avatar" style="background:rgba(123,47,255,0.08);font-size:14px">📱</div>
+          <div class="on-name" style="font-size:12px">PULSE</div>
+          <div class="on-role" style="font-size:9px">Social Media</div>
+          <div class="on-status" style="color:var(--red);font-size:8px">Planned</div>
+        </div>
+        <div class="org-node ai-node" style="min-width:110px">
+          <div class="on-avatar" style="background:rgba(123,47,255,0.08);font-size:14px">💼</div>
+          <div class="on-name" style="font-size:12px">ATLAS</div>
+          <div class="on-role" style="font-size:9px">Job Hunting</div>
+          <div class="on-status" style="color:var(--red);font-size:8px">Planned</div>
+        </div>
+        <div class="org-node ai-node" style="min-width:110px">
+          <div class="on-avatar" style="background:rgba(123,47,255,0.08);font-size:14px">🚀</div>
+          <div class="on-name" style="font-size:12px">RELAY</div>
+          <div class="on-role" style="font-size:9px">Client Onboarding</div>
+          <div class="on-status" style="color:var(--red);font-size:8px">Planned</div>
+        </div>
+        <div class="org-node ai-node" style="min-width:110px">
+          <div class="on-avatar" style="background:rgba(123,47,255,0.08);font-size:14px">📊</div>
+          <div class="on-name" style="font-size:12px">LEDGER</div>
+          <div class="on-role" style="font-size:9px">Finance Intel</div>
+          <div class="on-status" style="color:var(--red);font-size:8px">Planned</div>
+        </div>
+        <div class="org-node ai-node" style="min-width:110px">
+          <div class="on-avatar" style="background:rgba(123,47,255,0.08);font-size:14px">💬</div>
+          <div class="on-name" style="font-size:12px">ECHO</div>
+          <div class="on-role" style="font-size:9px">Customer Support</div>
+          <div class="on-status" style="color:var(--amber);font-size:8px">Next</div>
+        </div>
+        <div class="org-node ai-node" style="min-width:110px">
+          <div class="on-avatar" style="background:rgba(123,47,255,0.08);font-size:14px">🎓</div>
+          <div class="on-name" style="font-size:12px">ENROL</div>
+          <div class="on-role" style="font-size:9px">Academy Enrolment</div>
+          <div class="on-status" style="color:var(--amber);font-size:8px">Next</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADD STAFF FORM -->
+  <div class="add-staff-form" id="add-staff-form">
+    <div class="asf-title">Add New Team Member, Updated by Claude When Informed by Valerie</div>
+    <div class="asf-grid">
+      <div>
+        <div class="asf-label">Full Name</div>
+        <input class="asf-input" id="new-name" placeholder="e.g. Sarah Johnson" type="text">
+      </div>
+      <div>
+        <div class="asf-label">Role/Title</div>
+        <input class="asf-input" id="new-role" placeholder="e.g. Marketing Manager" type="text">
+      </div>
+      <div>
+        <div class="asf-label">Entity</div>
+        <select class="asf-input" id="new-entity">
+          <option>PhoennixAI Agency</option>
+          <option>PhoennixAI Academy</option>
+          <option>WilcoxDesigns</option>
+          <option>Phantom Studio</option>
+          <option>AI Team</option>
+        </select>
+      </div>
+      <button class="asf-btn" onclick="addStaff()">Add Member</button>
+    </div>
+    <div id="staff-added" style="margin-top:10px;font-family:var(--mono);font-size:9px;color:var(--green);letter-spacing:2px"></div>
+  </div>
+</div>
+</div>
+
+<!-- ══════════════════════════════════
+     PAGE 5: CALENDAR
+══════════════════════════════════ -->
+<div class="page" id="page-calendar">
+<div class="wrap">
+  <div class="s-label">Smart Calendar, Priority-Based Planning</div>
+  <div class="p-title">CALENDAR</div>
+  <div class="p-sub">Like Motion AI, your tasks ranked by value, urgency, and strategic priority</div>
+  <div class="cal-layout">
+    <div>
+      <div class="cal-grid">
+        <div class="cal-header">
+          <div class="cal-month" id="cal-month-title">March 2026</div>
+          <div class="cal-nav">
+            <button class="cal-nav-btn" onclick="changeMonth(-1)">prev</button>
+            <button class="cal-nav-btn" onclick="changeMonth(1)">next</button>
+          </div>
+        </div>
+        <div class="cal-days-header">
+          <div class="cal-dh">Mon</div><div class="cal-dh">Tue</div><div class="cal-dh">Wed</div>
+          <div class="cal-dh">Thu</div><div class="cal-dh">Fri</div><div class="cal-dh">Sat</div><div class="cal-dh">Sun</div>
+        </div>
+        <div class="cal-cells" id="cal-cells"></div>
+      </div>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:14px">
+        <div class="ss-title">Priority Stack, Today</div>
+        <div style="font-size:10px;color:var(--text3);margin-bottom:12px;font-family:var(--mono)">Ranked by value, urgency, and strategic impact</div>
+        <div class="task-priority" id="priority-stack">
+          <div class="tp-item"><span class="tp-drag">⠿</span><span class="tp-prio tp-p1"></span><div class="tp-content"><div class="tp-name">Brand Guidelines One-Pager</div><div class="tp-meta">Today, High Value</div></div><span class="tp-value">Critical</span></div>
+          <div class="tp-item"><span class="tp-drag">⠿</span><span class="tp-prio tp-p2"></span><div class="tp-content"><div class="tp-name">Social Media Posts (10-post plan)</div><div class="tp-meta">Today, Revenue</div></div><span class="tp-value">High</span></div>
+          <div class="tp-item"><span class="tp-drag">⠿</span><span class="tp-prio tp-p2"></span><div class="tp-content"><div class="tp-name">Logo and Typography Direction</div><div class="tp-meta">Today, Brand</div></div><span class="tp-value">High</span></div>
+          <div class="tp-item"><span class="tp-drag">⠿</span><span class="tp-prio tp-p3"></span><div class="tp-content"><div class="tp-name">Website Strategy Brainstorm</div><div class="tp-meta">Today, Foundation</div></div><span class="tp-value">Medium</span></div>
+          <div class="tp-item"><span class="tp-drag">⠿</span><span class="tp-prio tp-p3"></span><div class="tp-content"><div class="tp-name">St Paul's Onboarding Prep</div><div class="tp-meta">Next week, People</div></div><span class="tp-value">Medium</span></div>
+          <div class="tp-item"><span class="tp-drag">⠿</span><span class="tp-prio tp-p4"></span><div class="tp-content"><div class="tp-name">Ecosystem Document Annual Review</div><div class="tp-meta">Next week, Strategy</div></div><span class="tp-value">Filed</span></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="ss-title">Upcoming Deadlines</div>
+        <div style="display:flex;flex-direction:column;gap:7px">
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 10px;background:var(--panel);border-radius:4px;border:1px solid var(--border)">
+            <span style="font-size:11px;color:var(--text)">St Paul's Work Experience</span>
+            <span class="chip chip-next" style="font-size:8px">Early Apr</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 10px;background:var(--panel);border-radius:4px;border:1px solid var(--border)">
+            <span style="font-size:11px;color:var(--text)">Academy Website Build</span>
+            <span class="chip chip-next" style="font-size:8px">Apr 2026</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 10px;background:var(--panel);border-radius:4px;border:1px solid var(--border)">
+            <span style="font-size:11px;color:var(--text)">Phantom Studio Scale Review</span>
+            <span class="chip chip-filed" style="font-size:8px">Q2 2026</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ══════════════════════════════════
+     PAGE 6: NOTES
+══════════════════════════════════ -->
+<div class="page" id="page-notes">
+<div class="wrap">
+  <div class="s-label">Flagged Items, Intelligence, Reminders</div>
+  <div class="p-title">NOTES AND FLAGS</div>
+  <div class="p-sub">Everything filed here until it has a dedicated session</div>
+  <div class="notes-grid">
+    <div class="note-card">
+      <div class="note-label" style="color:var(--gold)">Work Experience, April 2026</div>
+      <div class="note-title" style="color:var(--gold)">ST PAUL'S ACADEMY</div>
+      <div class="note-body">Three girls from St Paul's Academy arriving for work experience in early April 2026. Exact date TBC. Valerie to confirm tomorrow.<br><br><strong>Action:</strong> Claude to draft onboarding brief, weekly schedule, project assignments, mentor allocation, and feedback framework once date is confirmed.</div>
+    </div>
+    <div class="note-card">
+      <div class="note-label" style="color:var(--sapphire)">Investigation, Not Yet Active</div>
+      <div class="note-title" style="color:var(--sapphire)">PRISON REFORMATION PROGRAMME</div>
+      <div class="note-body">Valerie is investigating the feasibility of a prisoner reformation programme under the PhoennixAI community impact arm. Application form received from a contact. Not yet a priority.<br><br><strong>Next step:</strong> Valerie to share the application form with Claude when ready for full strategic assessment.</div>
+    </div>
+    <div class="note-card">
+      <div class="note-label" style="color:var(--fire)">AI OS Project, Major Initiative</div>
+      <div class="note-title" style="color:var(--fire)">SUPER BUSINESS OS</div>
+      <div class="note-body">Vision: a proprietary AGI business operating system integrating Claude, Kimi, social media manager app, creative design tools, manga and anime generator, and a gaming and graphics studio platform. It takes over the founder's desktop and phone as one unified AI suite. This is the biggest long-term project in the portfolio. Architecture session needed.</div>
+    </div>
+    <div class="note-card">
+      <div class="note-label" style="color:var(--teal)">Pending, Website Strategy</div>
+      <div class="note-title" style="color:var(--teal)">THREE WEBSITE BUILDS</div>
+      <div class="note-body"><strong>1. PhoennixAI.com:</strong> Current site does not reflect new direction. Brainstorm with Claude first, then build.<br><br><strong>2. PhoennixAI Academy:</strong> Dedicated site. Benefits-first copy. Enrolment funnel built in.<br><br><strong>3. WilcoxDesigns:</strong> Digital Atelier positioning. Creative Lab as signature product.</div>
+    </div>
+    <div class="note-card">
+      <div class="note-label" style="color:var(--bronze)">Storage and Backup, Critical</div>
+      <div class="note-title" style="color:var(--bronze)">DOCUMENT BACKUP STRATEGY</div>
+      <div class="note-body">All HTML files need a permanent, accessible home. Recommended solution: GitHub Pages (free, version-controlled, accessible on any device via URL). Valerie to set up a GitHub repo and upload all documents. Claude cannot deploy externally but will provide the exact setup steps in a dedicated session next week.</div>
+    </div>
+    <div class="note-card">
+      <div class="note-label" style="color:var(--violet)">Ecosystem Review, Annual</div>
+      <div class="note-title" style="color:var(--violet)">ECOSYSTEM 2026 LIVING DOCUMENT</div>
+      <div class="note-body">The Wilcox Complete Ecosystem 2026 document must be reviewed at minimum once per year. Version control to be applied to all changes. A version log with dates and change descriptions will be maintained by Claude. Task: implement version control system in next week's session.</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ══════════════════════════════════
+     PAGE 7: BACKLOG
+══════════════════════════════════ -->
+<div class="page" id="page-backlog">
+<div class="wrap">
+  <div class="s-label">Feature and Idea Backlog, Reviewed Each Upgrade Cycle</div>
+  <div class="p-title">BACKLOG</div>
+  <div class="p-sub">All future features, ideas, and improvements logged here for future versions</div>
+  <table class="backlog-table">
+    <thead>
+      <tr><th>ID</th><th>Feature or Idea</th><th>Category</th><th>Priority</th><th>Notes</th></tr>
+    </thead>
+    <tbody id="backlog-body">
+      <tr><td>BL-001</td><td><div class="bl-title">GitHub Pages Deployment</div>Make all HTML documents live on a permanent URL accessible on any device</td><td><span class="chip chip-now" style="font-size:8px">Infrastructure</span></td><td><span class="chip chip-now" style="font-size:8px">Critical</span></td><td>Free, version-controlled. Needed for backup and mobile access.</td></tr>
+      <tr><td>BL-002</td><td><div class="bl-title">Mobile App (PWA)</div>Convert Mission Control to a Progressive Web App installable on any phone</td><td><span class="chip chip-next" style="font-size:8px">Mobile</span></td><td><span class="chip chip-now" style="font-size:8px">High</span></td><td>PWA approach: no app store needed, works offline, installable on iOS and Android.</td></tr>
+      <tr><td>BL-003</td><td><div class="bl-title">Version Control for Ecosystem Doc</div>Add version numbering, change log, and date-stamped update history to the Ecosystem 2026 document</td><td><span class="chip chip-next" style="font-size:8px">Documents</span></td><td><span class="chip chip-now" style="font-size:8px">High</span></td><td>Annual review minimum. Claude maintains the log when Valerie informs of updates.</td></tr>
+      <tr><td>BL-004</td><td><div class="bl-title">Data Analytics and BI Dashboard</div>Integrate revenue, social media, website traffic, and Academy enrolment analytics into Mission Control</td><td><span class="chip chip-filed" style="font-size:8px">Analytics</span></td><td><span class="chip chip-next" style="font-size:8px">Medium</span></td><td>Connects to Google Analytics, Meta Business Suite, Stripe, and other data sources.</td></tr>
+      <tr><td>BL-005</td><td><div class="bl-title">Backend Database</div>Replace localStorage with a real backend database so data persists across devices and sessions</td><td><span class="chip chip-filed" style="font-size:8px">Infrastructure</span></td><td><span class="chip chip-next" style="font-size:8px">Medium</span></td><td>Supabase or Firebase recommended. Enables multi-device sync and true persistence.</td></tr>
+      <tr><td>BL-006</td><td><div class="bl-title">Motion-Style Auto-Scheduling</div>Full AI-powered calendar that automatically schedules tasks based on deadlines, value, and time available</td><td><span class="chip chip-filed" style="font-size:8px">Calendar</span></td><td><span class="chip chip-next" style="font-size:8px">Medium</span></td><td>Requires integration with Google Calendar API. Claude designs the prioritisation logic.</td></tr>
+      <tr><td>BL-007</td><td><div class="bl-title">Super Business OS Integration</div>Integrate Claude, Kimi, social media manager, creative tools, manga and anime generator, gaming studio into one unified AI operating system</td><td><span class="chip chip-filed" style="font-size:8px">AI OS</span></td><td><span class="chip chip-filed" style="font-size:8px">Phase 3</span></td><td>The biggest and most ambitious product in the portfolio. Architecture session needed first.</td></tr>
+      <tr><td>BL-008</td><td><div class="bl-title">Prison Reformation Programme Assessment</div>Full strategic and legal assessment of the prisoner reformation programme feasibility</td><td><span class="chip chip-hold" style="font-size:8px">Community</span></td><td><span class="chip chip-hold" style="font-size:8px">Filed</span></td><td>Awaiting application form from Valerie. Not a current priority.</td></tr>
+      <tr><td>BL-009</td><td><div class="bl-title">Marketplace App Store Build</div>Platform where all PhoennixAI agents and tools are listed, purchased, and deployed with full kit</td><td><span class="chip chip-filed" style="font-size:8px">Product</span></td><td><span class="chip chip-filed" style="font-size:8px">Phase 4</span></td><td>Built after agents are proven with analytics. Each agent ships with CV, JD, user manual, training manual.</td></tr>
+      <tr><td>BL-010</td><td><div class="bl-title">Investor-Ready Brand Deck</div>Full pitch deck for PhoennixAI covering the entire ecosystem, revenue projections, market opportunity, and founding story</td><td><span class="chip chip-filed" style="font-size:8px">Investment</span></td><td><span class="chip chip-filed" style="font-size:8px">Phase 4</span></td><td>Claude to build once the core products have proof of concept and analytics to support the narrative.</td></tr>
+    </tbody>
+  </table>
+
+  <div style="margin-top:20px;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:18px">
+    <div class="ss-title">Add to Backlog</div>
+    <div style="display:grid;grid-template-columns:1fr 160px 120px auto;gap:10px;align-items:end">
+      <div><div class="asf-label">Feature or Idea</div><input class="asf-input" id="bl-idea" placeholder="Describe the feature or idea..." type="text"></div>
+      <div><div class="asf-label">Category</div><input class="asf-input" id="bl-cat" placeholder="e.g. Mobile" type="text"></div>
+      <div><div class="asf-label">Priority</div>
+        <select class="asf-input" id="bl-prio">
+          <option>Critical</option><option>High</option><option>Medium</option><option>Filed</option>
+        </select>
+      </div>
+      <button class="asf-btn" onclick="addBacklog()">Log It</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+// ══ THEME ══
+function toggleTheme() {
+  const h = document.documentElement;
+  const isDark = h.getAttribute('data-theme') === 'dark';
+  h.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  document.getElementById('theme-icon').textContent = isDark ? '☀️' : '🌙';
+}
+
+// ══ PAGES ══
+function showPage(id, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tb-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  if (el) el.classList.add('active');
+}
+
+// ══ TASKS ══
+let doneCount = 1;
+function toggleTask(el) {
+  const wasDone = el.classList.contains('done');
+  el.classList.toggle('done');
+  doneCount = wasDone ? Math.max(0, doneCount - 1) : Math.min(5, doneCount + 1);
+  document.getElementById('prog-count').innerHTML = doneCount + '<span style="font-size:22px;color:var(--text3)">/5</span>';
+  document.getElementById('prog-bar').style.width = (doneCount / 5 * 100) + '%';
+}
+
+// ══ ORG CHART ══
+function showOrg(type, btn) {
+  document.querySelectorAll('.org-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('org-human').style.display = (type === 'human' || type === 'full') ? 'block' : 'none';
+  document.getElementById('org-ai').style.display = (type === 'ai' || type === 'full') ? 'block' : 'none';
+}
+
+function addStaff() {
+  const name = document.getElementById('new-name').value.trim();
+  const role = document.getElementById('new-role').value.trim();
+  const entity = document.getElementById('new-entity').value;
+  if (!name || !role) return;
+  document.getElementById('staff-added').textContent = name.toUpperCase() + ' added to ' + entity + '. Claude will update the org chart in the next session when informed.';
+  document.getElementById('new-name').value = '';
+  document.getElementById('new-role').value = '';
+}
+
+// ══ AGENTS FILTER ══
+function filterA(cat, btn) {
+  document.querySelectorAll('.fbtn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.ag-card').forEach(c => {
+    c.style.display = (cat === 'all' || c.dataset.cat === cat) ? 'block' : 'none';
+  });
+}
+
+// ══ CALENDAR ══
+let calYear = 2026, calMonth = 2; // 0-indexed, March = 2
+
+const calEvents = {
+  '2026-03-10': [{text:'Brand Guidelines', cls:'ev-brand'},{text:'Social Posts', cls:'ev-agency'}],
+  '2026-04-01': [{text:'St Paul\'s Work Exp', cls:'ev-meet'}],
+};
+
+function renderCal() {
+  const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  document.getElementById('cal-month-title').textContent = months[calMonth] + ' ' + calYear;
+  const cells = document.getElementById('cal-cells');
+  cells.innerHTML = '';
+  const firstDay = new Date(calYear, calMonth, 1).getDay();
+  const offset = firstDay === 0 ? 6 : firstDay - 1;
+  const daysInMonth = new Date(calYear, calMonth + 1, 0).getDate();
+  const prevDays = new Date(calYear, calMonth, 0).getDate();
+  const today = new Date();
+
+  for (let i = offset - 1; i >= 0; i--) {
+    const c = document.createElement('div');
+    c.className = 'cal-cell other-month';
+    c.innerHTML = '<div class="cal-date">' + (prevDays - i) + '</div>';
+    cells.appendChild(c);
+  }
+  for (let d = 1; d <= daysInMonth; d++) {
+    const c = document.createElement('div');
+    const isToday = d === today.getDate() && calMonth === today.getMonth() && calYear === today.getFullYear();
+    c.className = 'cal-cell' + (isToday ? ' today-cell' : '');
+    const key = calYear + '-' + String(calMonth+1).padStart(2,'0') + '-' + String(d).padStart(2,'0');
+    const evs = calEvents[key] || [];
+    c.innerHTML = '<div class="cal-date">' + d + '</div>' + evs.map(e => `<div class="cal-event ${e.cls}">${e.text}</div>`).join('');
+    cells.appendChild(c);
+  }
+  const remaining = 42 - offset - daysInMonth;
+  for (let d = 1; d <= remaining && remaining < 42; d++) {
+    const c = document.createElement('div');
+    c.className = 'cal-cell other-month';
+    c.innerHTML = '<div class="cal-date">' + d + '</div>';
+    cells.appendChild(c);
+  }
+}
+
+function changeMonth(dir) { calMonth += dir; if (calMonth > 11) { calMonth = 0; calYear++; } if (calMonth < 0) { calMonth = 11; calYear--; } renderCal(); }
+renderCal();
+
+// ══ BACKLOG ══
+let blId = 11;
+function addBacklog() {
+  const idea = document.getElementById('bl-idea').value.trim();
+  const cat = document.getElementById('bl-cat').value.trim() || 'General';
+  const prio = document.getElementById('bl-prio').value;
+  if (!idea) return;
+  const chipClass = prio === 'Critical' ? 'chip-now' : prio === 'High' ? 'chip-next' : prio === 'Medium' ? 'chip-next' : 'chip-hold';
+  const row = document.createElement('tr');
+  row.innerHTML = `<td>BL-0${blId++}</td><td><div class="bl-title">${idea}</div></td><td><span class="chip ${chipClass}" style="font-size:8px">${cat}</span></td><td><span class="chip ${chipClass}" style="font-size:8px">${prio}</span></td><td>Added ${new Date().toLocaleDateString('en-GB')}</td>`;
+  document.getElementById('backlog-body').appendChild(row);
+  document.getElementById('bl-idea').value = '';
+  document.getElementById('bl-cat').value = '';
+}
+
+// ══ DATE ══
+function updateDate() {
+  const now = new Date();
+  document.getElementById('live-date').textContent = now.toLocaleDateString('en-GB', {day:'numeric',month:'short',year:'numeric'}) + ' ' + now.toLocaleTimeString('en-GB', {hour:'2-digit',minute:'2-digit'});
+}
+updateDate(); setInterval(updateDate, 30000);
+</script>
+</body>
+</html>
