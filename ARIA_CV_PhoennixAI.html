@@ -2,7 +2,8 @@
 <html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23060A18' rx='6'/%3E%3Cpath d='M16 3 C11 3 7 8 9 13 C11 17 10 19 8 21 C12 20 14 17 13 14 C15 18 14 22 11 25 C15 24 20 20 19 15 C21 18 21 23 18 26 C22 23 25 17 22 12 C24 14 25 17 24 20 C26 15 24 8 19 5 C18 4 17 3 16 3Z' fill='%23FF6B2B'/%3E%3Cpath d='M13 14 C15 18 14 22 11 25 C12 23 13 21 13 19 C13 17 12 16 13 14Z' fill='%23FFB830'/%3E%3Cpath d='M8 21 C6 24 8 28 11 29 C9 27 9 24 11 22' fill='%2300E5FF' opacity='0.85'/%3E%3Cpath d='M18 26 C19 28 22 29 24 28 C22 26 20 25 18 26Z' fill='%2300E5FF' opacity='0.85'/%3E%3C/svg%3E">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>ARIA, CV, PhoennixAI</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 <style>
@@ -61,6 +62,26 @@ p{color:var(--text2);margin-bottom:10px;line-height:1.85}
 .chip-bronze{color:var(--bronze);border-color:rgba(196,154,108,0.3);background:rgba(196,154,108,0.06)}
 .chip-green{color:var(--green);border-color:rgba(34,197,94,0.3);background:rgba(34,197,94,0.06)}
 @media(max-width:600px){.meta-grid{grid-template-columns:1fr 1fr}.skill-grid{grid-template-columns:1fr}}
+
+@media(max-width:768px){
+  .page{margin:0;box-shadow:none;}
+  .letterhead,.title-block,.body,.sig-block,.jd-footer{padding-left:18px!important;padding-right:18px!important;}
+  .header{padding:24px 18px!important;flex-direction:column!important;}
+  .header-right{min-width:unset!important;width:100%!important;}
+  .tb-role,.header-name{font-size:26px!important;}
+  .body-grid{grid-template-columns:1fr!important;}
+  .main-col{padding:24px 18px!important;border-right:none!important;}
+  .side-col{padding:24px 18px!important;}
+  .cap-grid{grid-template-columns:1fr!important;}
+  canvas{width:100%!important;}
+  .sig-block{flex-direction:column!important;gap:24px!important;}
+  .sig-party{width:100%!important;}
+  .numbers-row{grid-template-columns:repeat(2,1fr)!important;}
+  .cv-footer{flex-direction:column!important;gap:8px!important;padding:16px 18px!important;}
+}
+@supports(padding-bottom:env(safe-area-inset-bottom)){
+  body{padding-bottom:env(safe-area-inset-bottom);}
+}
 </style>
 </head>
 <body>
@@ -99,9 +120,9 @@ p{color:var(--text2);margin-bottom:10px;line-height:1.85}
   <div class="section">
     <div class="s-head">Performance at a Glance</div>
     <div class="stat-row">
-      <div class="stat-card"><div class="stat-val">30s</div><div class="stat-label">Briefing Refresh</div></div>
+      <div class="stat-card"><div class="stat-val">30 SEC</div><div class="stat-label">Briefing Refresh</div></div>
       <div class="stat-card"><div class="stat-val">100%</div><div class="stat-label">Event Capture</div></div>
-      <div class="stat-card"><div class="stat-val">15m</div><div class="stat-label">Reminder Lead</div></div>
+      <div class="stat-card"><div class="stat-val">15 MIN</div><div class="stat-label">Reminder Lead Time</div></div>
       <div class="stat-card"><div class="stat-val">24/7</div><div class="stat-label">Always Active</div></div>
     </div>
   </div>
