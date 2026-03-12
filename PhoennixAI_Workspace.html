@@ -175,29 +175,31 @@ textarea.form-input{resize:vertical;min-height:85px;font-family:var(--sans)}
 .modal-actions{display:flex;gap:9px;margin-top:16px;justify-content:flex-end}
 .modal-group{margin-bottom:11px}
 #toast{position:fixed;bottom:68px;left:50%;transform:translateX(-50%);background:var(--green);color:#fff;font-family:var(--mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;padding:9px 18px;border-radius:6px;z-index:9999;opacity:0;transition:opacity 0.3s;pointer-events:none;white-space:nowrap}
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:300;background:var(--topbar);backdrop-filter:blur(20px);border-top:1px solid var(--border2);height:57px;align-items:center;justify-content:space-around;display:flex}
+/* ── SIDE RAIL ── */
 .tabs{display:none}
-.bn-item{display:flex;flex-direction:column;align-items:center;gap:1px;cursor:pointer;flex:1;font-family:var(--mono);font-size:7px;letter-spacing:1px;text-transform:uppercase;color:var(--text3);transition:color 0.2s;padding:5px 2px}
-.bn-item.active{color:var(--bronze)}
-.bn-item.bn-aria.active{color:var(--aria)}
-.bn-icon{font-size:19px;line-height:1}
-/* ── DESKTOP ONLY ── */
-@media(min-width:901px){
-  .tabs{display:flex}
-  .bottom-nav{display:none}
-  .page{padding:91px 0 20px}
-}
-/* ── TABLET AND MOBILE ── */
+.side-rail{position:fixed;top:54px;left:0;bottom:0;width:62px;z-index:290;background:var(--topbar);border-right:1px solid var(--border);display:flex;flex-direction:column;align-items:center;padding:10px 0;gap:2px;overflow:hidden}
+.sr-item{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;width:54px;padding:9px 4px;border-radius:8px;font-family:var(--mono);font-size:6px;letter-spacing:1px;text-transform:uppercase;color:var(--text3);transition:all 0.18s;text-align:center;border:1px solid transparent}
+.sr-item:hover{color:var(--text2);background:rgba(255,255,255,0.04)}
+.sr-item.active{color:var(--bronze);background:rgba(196,154,108,0.08);border-color:rgba(196,154,108,0.15)}
+.sr-item.sr-aria.active{color:var(--aria);background:rgba(0,229,255,0.06);border-color:rgba(0,229,255,0.15)}
+.sr-icon{font-size:18px;line-height:1}
+.page{padding:74px 0 20px;margin-left:62px}
+.wrap{max-width:1000px;margin:0 auto;padding:0 18px}
+/* ── RESPONSIVE ── */
 @media(max-width:900px){
-  .wrap{padding:0 14px}.page{padding:99px 0 75px}
+  .wrap{padding:0 14px}
   .form-row{grid-template-columns:1fr}.cal-cell{min-height:52px;padding:4px}.notes-grid{grid-template-columns:1fr 1fr}.bm-grid{grid-template-columns:1fr 1fr}
   .stat-grid{grid-template-columns:repeat(2,1fr)}
   .task-item{grid-template-columns:26px 1fr auto}
   .s-title{font-size:clamp(26px,6vw,40px)}
 }
-/* ── MOBILE ── */
 @media(max-width:600px){
-  .wrap{padding:0 12px}.page{padding:99px 0 75px}
+  .wrap{padding:0 10px}
+  .side-rail{width:52px}
+  .page{margin-left:52px}
+  .sr-item{width:44px;padding:8px 2px}
+  .sr-icon{font-size:16px}
+  .sr-item span:last-child{font-size:5px}
   .notes-grid{grid-template-columns:1fr}.bm-grid{grid-template-columns:1fr}
   .modal-actions{flex-direction:column}
   .del-table{font-size:10px}
@@ -205,27 +207,20 @@ textarea.form-input{resize:vertical;min-height:85px;font-family:var(--sans)}
   .stat-card{padding:10px 8px}
   .stat-val{font-size:22px}
   .btn{padding:10px 14px}
-  .bn-item{min-width:0;padding:6px 2px}
-  .topbar{padding:0 12px;gap:7px}
-  .tb-logo{font-size:16px;letter-spacing:2px}
+  .topbar{padding:0 10px;gap:6px}
+  .tb-logo{font-size:15px;letter-spacing:2px}
   .modal{width:96%;padding:18px}
   .s-title{font-size:clamp(22px,7vw,32px)}
   .cal-cell{min-height:44px;padding:3px}
   .table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
   table{min-width:420px}
-  .bottom-nav{display:flex !important}
-  .tabs{display:none !important}
 }
-/* ── SMALL PHONE ── */
 @media(max-width:390px){
-  .stat-grid{grid-template-columns:repeat(2,1fr)}
-  .bn-item span:last-child{font-size:6px}
+  .side-rail{width:46px}
+  .page{margin-left:46px}
+  .sr-item{width:40px}
+  .sr-item span:last-child{display:none}
   .wrap{padding:0 8px}
-  .btn{padding:8px 10px;font-size:9px}
-}
-@supports(padding-bottom:env(safe-area-inset-bottom)){
-  .bottom-nav{padding-bottom:env(safe-area-inset-bottom);height:calc(57px + env(safe-area-inset-bottom))}
-  @media(max-width:900px){.page{padding-bottom:calc(75px + env(safe-area-inset-bottom))}}
 }
 </style>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='6' fill='%23060A18'/><text y='24' x='4' font-size='22'>🔥</text></svg>">
@@ -244,16 +239,16 @@ textarea.form-input{resize:vertical;min-height:85px;font-family:var(--sans)}
   <div class="theme-toggle" onclick="toggleTheme()"></div>
 </div>
 
-<div class="tabs">
-  <div class="tab active" id="tab-home" onclick="showPage('home')">Home</div>
-  <div class="tab tab-aria" id="tab-aria" onclick="showPage('aria')">ARIA Agent</div>
-  <div class="tab" id="tab-planner" onclick="showPage('planner')">Planner</div>
-  <div class="tab" id="tab-notes" onclick="showPage('notes')">Notes</div>
-  <div class="tab" id="tab-deliverables" onclick="showPage('deliverables')">Deliverables</div>
-  <div class="tab" id="tab-github" onclick="showPage('github')">GitHub</div>
-  <div class="tab" id="tab-tasks" onclick="showPage('tasks')">Tasks</div>
-  <div class="tab" id="tab-bookmarks" onclick="showPage('bookmarks')">Bookmarks</div>
-</div>
+<nav class="side-rail" id="side-rail">
+  <div class="sr-item active" id="sr-home" onclick="showPage('home')"><span class="sr-icon">🏠</span><span>Home</span></div>
+  <div class="sr-item sr-aria" id="sr-aria" onclick="showPage('aria')"><span class="sr-icon">✦</span><span>ARIA</span></div>
+  <div class="sr-item" id="sr-planner" onclick="showPage('planner')"><span class="sr-icon">📅</span><span>Plan</span></div>
+  <div class="sr-item" id="sr-notes" onclick="showPage('notes')"><span class="sr-icon">📝</span><span>Notes</span></div>
+  <div class="sr-item" id="sr-deliverables" onclick="showPage('deliverables')"><span class="sr-icon">📋</span><span>Deliver</span></div>
+  <div class="sr-item" id="sr-github" onclick="showPage('github')"><span class="sr-icon">⚙︎</span><span>GitHub</span></div>
+  <div class="sr-item" id="sr-tasks" onclick="showPage('tasks')"><span class="sr-icon">✅</span><span>Tasks</span></div>
+  <div class="sr-item" id="sr-bookmarks" onclick="showPage('bookmarks')"><span class="sr-icon">🔖</span><span>Links</span></div>
+</nav>
 
 <!-- HOME -->
 <div class="page active" id="page-home">
@@ -496,15 +491,6 @@ textarea.form-input{resize:vertical;min-height:85px;font-family:var(--sans)}
   </div>
 </div>
 
-<!-- BOTTOM NAV -->
-<nav class="bottom-nav" id="bottom-nav" style="display:flex!important;visibility:visible!important;opacity:1!important">
-  <div class="bn-item active" id="bn-home" onclick="showPage('home')"><span class="bn-icon">🏠</span><span>Home</span></div>
-  <div class="bn-item bn-aria" id="bn-aria" onclick="showPage('aria')"><span class="bn-icon">🤖</span><span>ARIA</span></div>
-  <div class="bn-item" id="bn-planner" onclick="showPage('planner')"><span class="bn-icon">📅</span><span>Planner</span></div>
-  <div class="bn-item" id="bn-notes" onclick="showPage('notes')"><span class="bn-icon">📝</span><span>Notes</span></div>
-  <div class="bn-item" id="bn-tasks" onclick="showPage('tasks')"><span class="bn-icon">✅</span><span>Tasks</span></div>
-  <div class="bn-item" id="bn-bookmarks" onclick="showPage('bookmarks')"><span class="bn-icon">🔗</span><span>Links</span></div>
-</nav>
 
 <script>
 const K={ev:'pai_events',notes:'pai_notes',tasks:'pai_ws_tasks'};
@@ -515,10 +501,9 @@ function updateClock(){const n=new Date();document.getElementById('live-clock').
 setInterval(updateClock,1000);updateClock();
 function showPage(id){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.tab,.bn-item').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.sr-item').forEach(t=>t.classList.remove('active'));
   const pg=document.getElementById('page-'+id);if(pg)pg.classList.add('active');
-  const tab=document.getElementById('tab-'+id);if(tab)tab.classList.add('active');
-  const bn=document.getElementById('bn-'+id);if(bn)bn.classList.add('active');
+  const sr=document.getElementById('sr-'+id);if(sr)sr.classList.add('active');
   if(id==='planner')renderCal();
   if(id==='notes')renderNotes();
   if(id==='aria'){renderARIA();}
