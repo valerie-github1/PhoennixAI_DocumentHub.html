@@ -175,7 +175,7 @@ textarea.form-input{resize:vertical;min-height:85px;font-family:var(--sans)}
 .modal-actions{display:flex;gap:9px;margin-top:16px;justify-content:flex-end}
 .modal-group{margin-bottom:11px}
 #toast{position:fixed;bottom:68px;left:50%;transform:translateX(-50%);background:var(--green);color:#fff;font-family:var(--mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;padding:9px 18px;border-radius:6px;z-index:9999;opacity:0;transition:opacity 0.3s;pointer-events:none;white-space:nowrap}
-.bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;z-index:300;background:var(--topbar);backdrop-filter:blur(20px);border-top:1px solid var(--border2);height:57px;align-items:center;justify-content:space-around}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:300;background:var(--topbar);backdrop-filter:blur(20px);border-top:1px solid var(--border2);height:57px;align-items:center;justify-content:space-around;display:none}
 .bn-item{display:flex;flex-direction:column;align-items:center;gap:1px;cursor:pointer;flex:1;font-family:var(--mono);font-size:7px;letter-spacing:1px;text-transform:uppercase;color:var(--text3);transition:color 0.2s;padding:5px 2px}
 .bn-item.active{color:var(--bronze)}
 .bn-item.bn-aria.active{color:var(--aria)}
@@ -184,7 +184,7 @@ textarea.form-input{resize:vertical;min-height:85px;font-family:var(--sans)}
 @media(max-width:900px){
   .wrap{padding:0 14px}.page{padding:99px 0 75px}.bottom-nav{display:flex}.tabs{display:none}
   .form-row{grid-template-columns:1fr}.cal-cell{min-height:52px;padding:4px}.notes-grid{grid-template-columns:1fr 1fr}.bm-grid{grid-template-columns:1fr 1fr}
-  .stat-grid{grid-template-columns:repeat(3,1fr)}
+  .stat-grid{grid-template-columns:repeat(2,1fr)}
   .task-item{grid-template-columns:26px 1fr auto}
   .s-title{font-size:clamp(26px,6vw,40px)}
 }
@@ -194,7 +194,9 @@ textarea.form-input{resize:vertical;min-height:85px;font-family:var(--sans)}
   .notes-grid{grid-template-columns:1fr}.bm-grid{grid-template-columns:1fr}
   .modal-actions{flex-direction:column}
   .del-table{font-size:10px}
-  .stat-grid{grid-template-columns:repeat(2,1fr)}
+  .stat-grid{grid-template-columns:repeat(2,1fr);gap:7px}
+  .stat-card{padding:10px 8px}
+  .stat-val{font-size:22px}
   .btn{padding:10px 14px}
   .bn-item{min-width:0;padding:6px 2px}
   .topbar{padding:0 12px;gap:7px}
@@ -204,6 +206,8 @@ textarea.form-input{resize:vertical;min-height:85px;font-family:var(--sans)}
   .cal-cell{min-height:44px;padding:3px}
   .table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
   table{min-width:420px}
+  .bottom-nav{display:flex !important}
+  .tabs{display:none !important}
 }
 /* ── SMALL PHONE ── */
 @media(max-width:390px){
@@ -741,6 +745,16 @@ Use plain text only. No markdown. No symbols. Professional and clean.`;
 function renderTasks(){const done=ld(K.tasks).filter(t=>t.done).map(t=>t.id);const dc=document.getElementById('task-progress');if(dc)dc.textContent=done.length+' of '+TASKS.length+' completed';const c=document.getElementById('task-container');if(!c)return;c.innerHTML=TASKS.map(t=>'<div class="task-item'+(done.includes(t.n)?' done':'')+'" onclick="toggleTask(\''+t.n+'\')"><div class="tk-num">'+t.n+'</div><div><div class="tk-title">'+t.t+'</div><div class="tk-body">'+t.b+'</div><div class="tk-tags"><span class="chip chip-'+t.p+'">'+t.tag+'</span></div></div><span style="font-size:18px">'+(done.includes(t.n)?'✅':'⬜')+'</span></div>').join('');}
 function toggleTask(id){const tasks=ld(K.tasks);const ex=tasks.find(t=>t.id===id);if(ex)ex.done=!ex.done;else tasks.push({id,done:true});sv(K.tasks,tasks);renderTasks();renderARIA();renderHome()}
 document.addEventListener('DOMContentLoaded',()=>{
+  // Force bottom nav on mobile - bypasses browser media query inconsistencies
+  function checkMobile(){
+    const isMobile=window.innerWidth<=900||('ontouchstart' in window)||navigator.maxTouchPoints>0;
+    const nav=document.querySelector('.bottom-nav');
+    const tabs=document.querySelector('.tabs');
+    if(nav){nav.style.display=isMobile?'flex':'none';}
+    if(tabs){tabs.style.display=isMobile?'none':'flex';}
+  }
+  checkMobile();
+  window.addEventListener('resize',checkMobile);
   renderHome();renderARIA();renderCal();renderTasks();renderPendingBanner();
   // Init reminder button state
   if(Notification.permission==='granted')updateReminderBtns(true);
