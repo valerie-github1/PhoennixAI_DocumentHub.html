@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PhoennixAI — Beta Launch Kit</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: #060A18;
+  color: #E8E8E8;
+  font-family: 'DM Sans', sans-serif;
+  line-height: 1.8;
+  padding: 60px 24px;
+}
+.container { max-width: 960px; margin: 0 auto; }
+.header {
+  text-align: center;
+  margin-bottom: 60px;
+  padding-bottom: 40px;
+  border-bottom: 1px solid rgba(0,229,255,0.2);
+}
+.title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(40px, 8vw, 72px);
+  letter-spacing: 0.06em;
+  line-height: 1;
+  margin-bottom: 12px;
+}
+.title-phoennix { color: #FFFFFF; }
+.title-ai { color: #00E5FF; }
+.subtitle {
+  font-size: 18px;
+  color: #46ABD7;
+  margin-top: 16px;
+  font-weight: 300;
+}
+.tabs {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  padding-bottom: 16px;
+}
+.tab {
+  padding: 8px 16px;
+  border-radius: 6px;
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.1);
+  color: #6B7280;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: 'DM Sans', sans-serif;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+.tab:hover { border-color: #00E5FF; color: #00E5FF; }
+.tab.active { background: #00E5FF; color: #060A18; border-color: #00E5FF; }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+.section {
+  margin-bottom: 48px;
+}
+.section-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: #00E5FF;
+  margin-bottom: 16px;
+  text-transform: uppercase;
+}
+.section-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 32px;
+  letter-spacing: 0.04em;
+  color: #FFFFFF;
+  margin-bottom: 20px;
+}
+.section-content p {
+  margin-bottom: 16px;
+  font-size: 15px;
+  color: #D1D5DB;
+}
+.section-content p strong {
+  color: #FFFFFF;
+  font-weight: 500;
+}
+.spreadsheet-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 24px 0;
+  font-size: 14px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.spreadsheet-table th {
+  background: rgba(0,229,255,0.1);
+  padding: 14px 16px;
+  text-align: left;
+  font-family: 'DM Mono', monospace;
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #00E5FF;
+  border-bottom: 1px solid rgba(0,229,255,0.2);
+}
+.spreadsheet-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  color: #9CA3AF;
+  font-size: 13px;
+}
+.spreadsheet-table tr:last-child td {
+  border-bottom: none;
+}
+.message-box {
+  background: rgba(0,229,255,0.04);
+  border: 1px solid rgba(0,229,255,0.2);
+  border-radius: 12px;
+  padding: 24px;
+  margin: 24px 0;
+}
+.message-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #00E5FF;
+  margin-bottom: 16px;
+}
+.message-text {
+  font-size: 14px;
+  line-height: 1.8;
+  color: #B0E5F5;
+  white-space: pre-line;
+}
+.schedule-card {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-left: 4px solid #00E5FF;
+  border-radius: 12px;
+  padding: 24px;
+  margin: 16px 0;
+}
+.schedule-date {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 20px;
+  letter-spacing: 0.06em;
+  color: #00E5FF;
+  margin-bottom: 8px;
+}
+.schedule-flyer {
+  font-size: 16px;
+  color: #FFFFFF;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+.schedule-desc {
+  font-size: 13px;
+  color: #9CA3AF;
+  line-height: 1.7;
+}
+.callout {
+  background: rgba(255,107,43,0.06);
+  border-left: 4px solid #FF6B2B;
+  padding: 24px;
+  margin: 32px 0;
+  border-radius: 4px;
+}
+.callout-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 18px;
+  letter-spacing: 0.06em;
+  color: #FF6B2B;
+  margin-bottom: 12px;
+}
+.callout p {
+  font-size: 14px;
+  line-height: 1.8;
+  color: #D1D5DB;
+}
+.task-list {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 24px;
+  margin: 24px 0;
+}
+.task-item {
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  font-size: 14px;
+  color: #D1D5DB;
+}
+.task-item:last-child {
+  border-bottom: none;
+}
+.task-status {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-family: 'DM Mono', monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-left: 12px;
+}
+.status-urgent { background: rgba(255,107,43,0.2); color: #FF6B2B; }
+.status-today { background: rgba(0,229,255,0.2); color: #00E5FF; }
+.status-thisweek { background: rgba(70,171,215,0.2); color: #46ABD7; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+  <div class="title">
+    <span class="title-phoennix">PHOENNIX</span><span class="title-ai">AI</span>
+  </div>
+  <div class="subtitle">Beta Launch Kit — Ready to Go</div>
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="showTab('spreadsheet')">Waitlist Spreadsheet</button>
+  <button class="tab" onclick="showTab('external')">External Welcome DM</button>
+  <button class="tab" onclick="showTab('internal')">Internal Team Message</button>
+  <button class="tab" onclick="showTab('schedule')">Flyer Schedule</button>
+  <button class="tab" onclick="showTab('links')">About Links</button>
+  <button class="tab" onclick="showTab('tasks')">Updated Tasks</button>
+</div>
+
+<!-- TAB 1: SPREADSHEET -->
+<div id="spreadsheet" class="tab-content active">
+  <div class="section">
+    <div class="section-label">01 — Beta Waitlist Spreadsheet</div>
+    <div class="section-title">Copy This Template to Google Sheets or Excel</div>
+    
+    <div class="section-content">
+      <p><strong>Instructions:</strong> Create a new Google Sheet or Excel file titled "PhoennixAI Beta Waitlist". Copy the column headers below exactly. When someone responds to your flyers, fill in their details immediately.</p>
+    </div>
+
+    <table class="spreadsheet-table">
+      <thead>
+        <tr>
+          <th>Date Added</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Business Type</th>
+          <th>What They Want to Automate</th>
+          <th>Source</th>
+          <th>Status</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>18 March 2026</td>
+          <td>Example Name</td>
+          <td>example@email.com</td>
+          <td>Solo founder, digital marketing</td>
+          <td>Social media posting, client emails</td>
+          <td>Instagram Flyer 5</td>
+          <td>Waitlist</td>
+          <td>Very enthusiastic, asked about pricing</td>
+        </tr>
+        <tr>
+          <td colspan="8" style="text-align:center; color:#6B7280; font-style:italic;">Add your beta testers below this row</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="section-content">
+      <p><strong>Column Explanations:</strong></p>
+      <ul style="margin-left:24px; color:#D1D5DB; line-height:2; font-size:14px;">
+        <li><strong>Date Added:</strong> When they joined the waitlist</li>
+        <li><strong>Name:</strong> Their full name</li>
+        <li><strong>Email:</strong> Their primary email address</li>
+        <li><strong>Business Type:</strong> Solo founder, small business, freelancer, consultant, etc.</li>
+        <li><strong>What They Want to Automate:</strong> Their biggest pain point in their own words</li>
+        <li><strong>Source:</strong> Which flyer or platform they came from (Instagram Flyer 5, LinkedIn, X, etc.)</li>
+        <li><strong>Status:</strong> Waitlist, Contacted, Onboarded, Active Beta, etc.</li>
+        <li><strong>Notes:</strong> Any additional context that will help you serve them better</li>
+      </ul>
+    </div>
+
+    <div class="callout">
+      <div class="callout-title">Important: Only Take 10</div>
+      <p>Once you have 10 names on this spreadsheet, stop taking new waitlist signups. The 11th person who reaches out gets this message: "We have reached our 10 beta tester limit for this round. I have added you to the priority waitlist for our next cohort in May. You will be the first to know when we open spots."</p>
+      <p>This creates urgency for the next round and ensures you do not overcommit in beta.</p>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 2: EXTERNAL WELCOME DM -->
+<div id="external" class="tab-content">
+  <div class="section">
+    <div class="section-label">02 — Welcome DM for External Beta Testers</div>
+    <div class="section-title">Send This Immediately When Someone Responds</div>
+    
+    <div class="section-content">
+      <p><strong>Platform: Instagram DM, LinkedIn Message, or Email</strong></p>
+      <p>Copy and paste this message. Personalize the [NAME] field.</p>
+    </div>
+
+    <div class="message-box">
+      <div class="message-label">External Beta Tester Welcome Message</div>
+      <div class="message-text">Hi [NAME],
+
+You are on the list. 🔥
+
+Beta opens Monday 30 March. Only 10 spots total and yours is reserved.
+
+Here is what happens next:
+
+1. I will send you your personal portal link on 30 March
+2. We will book a 30-minute onboarding call to get you set up
+3. You get 30 days of full access to test Mission Control, the Workspace, and ARIA morning briefings
+4. Beta access is £497 one-time (no monthly fees, no hidden costs)
+
+What you are getting early access to:
+• Mission Control Centre (GRID) — your command dashboard
+• Workspace with ARIA morning briefings — your second brain
+• Document Hub with SCRIBE version control — single source of truth
+• Email support throughout the beta period
+
+The product is in Phase 0 right now. That means it works, but it is not perfect yet. Your feedback will directly shape what we build in Phase 2. You are helping us build something extraordinary.
+
+Welcome to PhoennixAI. Rise. Automate. Dominate.
+
+Valerie
+Founder, PhoennixAI Agency
+www.phoennixai.com</div>
+    </div>
+
+    <div class="section-content">
+      <p><strong>Why this message works:</strong></p>
+      <ul style="margin-left:24px; color:#D1D5DB; line-height:2; font-size:14px;">
+        <li>Confirms their spot immediately (removes anxiety)</li>
+        <li>Sets clear expectations (30 March, 30 days, £497)</li>
+        <li>Lists exactly what they are getting</li>
+        <li>Frames beta honestly (Phase 0, not perfect, their feedback shapes Phase 2)</li>
+        <li>Ends with the mission statement (Rise. Automate. Dominate.)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 3: INTERNAL TEAM MESSAGE -->
+<div id="internal" class="tab-content">
+  <div class="section">
+    <div class="section-label">03 — Internal Team Alpha Test Message</div>
+    <div class="section-title">Send This to Your Internal Team Today</div>
+    
+    <div class="section-content">
+      <p><strong>Your team is busy. This message respects that and makes their role clear.</strong></p>
+    </div>
+
+    <div class="message-box">
+      <div class="message-label">Internal Alpha Test Message</div>
+      <div class="message-text">Team,
+
+We are launching the PhoennixAI beta on 30 March with 10 external testers. Before that happens, I need you to alpha test the apps this week (18-24 March).
+
+Your job: use the apps in your normal workflow and tell me what breaks.
+
+Here are the three apps:
+• Mission Control: [insert link]
+• Workspace: [insert link]
+• Document Hub: [insert link]
+
+What to test:
+• Does everything load properly?
+• Can you add tasks, notes, and events?
+• Does ARIA morning briefing make sense?
+• Is anything confusing or broken?
+
+How to give feedback:
+Drop your feedback in our group chat or DM me directly. No formal reports needed. Just: "this broke" or "this is unclear" or "this feature is brilliant."
+
+Timeline:
+• Today (18 March): Start testing
+• Friday 21 March: Final feedback due
+• Monday 24 March: I post the first public flyer
+• Monday 30 March: Beta launches
+
+You are not being asked to build. You are being asked to break things before customers see them. That is the most valuable thing you can do right now.
+
+Thanks for helping me get this right.
+
+Valerie</div>
+    </div>
+
+    <div class="callout">
+      <div class="callout-title">Why This Approach Works for Busy Teams</div>
+      <p>Your team members are busy. This message gives them exactly what they need to know: what to test, how to give feedback, why it matters, and when it is due. No ambiguity. No pressure to write formal reports. Just use it and tell you what breaks. That is something they can do in 10 minutes a day while doing their normal work.</p>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 4: SCHEDULE -->
+<div id="schedule" class="tab-content">
+  <div class="section">
+    <div class="section-label">04 — Flyer Posting Schedule</div>
+    <div class="section-title">When to Post Each Flyer</div>
+    
+    <div class="section-content">
+      <p><strong>This is your complete posting timeline from today through beta launch.</strong></p>
+    </div>
+
+    <div class="schedule-card">
+      <div class="schedule-date">Monday 24 March — 12pm</div>
+      <div class="schedule-flyer">Post 1: Flyer 5 (Fear + Founder Story)</div>
+      <div class="schedule-desc">"AI is not here to replace your team." Your 17 years NHS story. The most emotionally powerful post. Leads with humanity, not features. Post on Instagram and LinkedIn.</div>
+    </div>
+
+    <div class="schedule-card">
+      <div class="schedule-date">Monday 24 March — 6pm</div>
+      <div class="schedule-flyer">Post 2: Instagram 2nd Daily Post</div>
+      <div class="schedule-desc">You already have this for X. Create the Instagram version today. Could be an agent reveal (ARIA or CLAUDE card), a behind-the-scenes photo, or a teaser for the beta. Keep momentum going.</div>
+    </div>
+
+    <div class="schedule-card">
+      <div class="schedule-date">Tuesday 25 March — 12pm</div>
+      <div class="schedule-flyer">Post 3: Flyer 1 (General Beta Call)</div>
+      <div class="schedule-desc">"We are opening 10 beta spots. First come, first served." Creates urgency. Post on Instagram, LinkedIn, and X.</div>
+    </div>
+
+    <div class="schedule-card">
+      <div class="schedule-date">Wednesday 26 March — 12pm</div>
+      <div class="schedule-flyer">Post 4: Flyer 3 (Founder-Specific)</div>
+      <div class="schedule-desc">"Stop running your business. Let it run itself." Speaks directly to Audience 1 and 2 (solo founders and small business owners). Post on all platforms.</div>
+    </div>
+
+    <div class="schedule-card">
+      <div class="schedule-date">Thursday 27 March — 12pm</div>
+      <div class="schedule-flyer">Post 5: Flyer 2 (Social Media Automation)</div>
+      <div class="schedule-desc">"Drowning in content creation? PULSE does it for you." Post on all platforms.</div>
+    </div>
+
+    <div class="schedule-card">
+      <div class="schedule-date">Friday 28 March — 12pm</div>
+      <div class="schedule-flyer">Post 6: Flyer 4 (30-Day Free Trial for Teams)</div>
+      <div class="schedule-desc">"Small business owners: 30-day trial for your team." Final push before beta opens. Post on all platforms.</div>
+    </div>
+
+    <div class="schedule-card">
+      <div class="schedule-date">Monday 30 March — 9am</div>
+      <div class="schedule-flyer">Beta Launch Announcement</div>
+      <div class="schedule-desc">"Beta is live. Portal links going out to our 10 founding testers now. Next cohort opens May." Post on all platforms to celebrate the launch and build FOMO for those who missed it.</div>
+    </div>
+
+    <div class="callout">
+      <div class="callout-title">Why This Schedule Works</div>
+      <p>You are posting Monday to Friday only. No weekend posts. Each flyer has 24 hours to breathe before the next one drops. The sequence builds trust (Flyer 5), then urgency (Flyer 1), then specificity (Flyers 3, 2, 4). By the time you launch on 30 March, your audience knows who you are, what you are building, and why it matters.</p>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 5: ABOUT LINKS -->
+<div id="links" class="tab-content">
+  <div class="section">
+    <div class="section-label">05 — About Flyer Links</div>
+    <div class="section-title">Do the Flyers Need Clickable Links?</div>
+    
+    <div class="section-content">
+      <p><strong>Short answer: No, do not add clickable links to the flyer images themselves.</strong></p>
+      
+      <p><strong>Here is why:</strong></p>
+      
+      <p>Social media platforms (especially Instagram) suppress posts with external links in the image or caption because they want to keep users on their platform. If you put a link in the flyer or caption, the algorithm will show it to fewer people. Your reach drops immediately.</p>
+      
+      <p><strong>What to do instead:</strong></p>
+      
+      <p>Post the flyer as an image with this caption structure:</p>
+    </div>
+
+    <div class="message-box">
+      <div class="message-label">Example Instagram Caption for Flyer 5</div>
+      <div class="message-text">AI is not here to replace your team.
+
+I spent 17 years in the NHS as a Senior Biomedical Scientist. Quality Manager across three hospitals. At 40, Lupus forced me to step back. I could not sustain the demands anymore.
+
+So I made a decision. I pivoted into tech. Within two years I became a Business Analyst, a Software Engineer, an AI Engineer, a UX and UI Designer, and a founder. I am also a single mum of three.
+
+I built PhoennixAI because I needed it. I was drowning. Now I am not.
+
+Beta opens 30 March. Only 10 spots.
+
+Drop your name and email in the comments or DM us and we will add you to the waitlist.
+
+Rise. Automate. Dominate.
+
+#AI #Automation #Founders #SmallBusiness #PhoennixAI</div>
+    </div>
+
+    <div class="section-content">
+      <p><strong>Where the "link" actually is:</strong></p>
+      <ul style="margin-left:24px; color:#D1D5DB; line-height:2; font-size:14px;">
+        <li>In your Instagram bio: www.phoennixai.com (already there)</li>
+        <li>People who are interested will click your profile and find the link</li>
+        <li>Or they will DM you directly (which is better because you can start a conversation)</li>
+      </ul>
+
+      <p><strong>For LinkedIn and X:</strong> You can include the website link in the caption on those platforms because their algorithms are more link-friendly. But on Instagram, rely on "link in bio" and DMs.</p>
+    </div>
+
+    <div class="callout">
+      <div class="callout-title">Best Practice for Beta Signups</div>
+      <p>The goal is not to send people to a signup form. The goal is to start a conversation. When someone DMs you or comments their email, you capture their details in the spreadsheet AND you send them the welcome message. This builds a relationship before they ever see the product. That is how you turn beta testers into advocates.</p>
+    </div>
+  </div>
+</div>
+
+<!-- TAB 6: TASKS -->
+<div id="tasks" class="tab-content">
+  <div class="section">
+    <div class="section-label">06 — Updated Task List</div>
+    <div class="section-title">What You Need to Do This Week</div>
+    
+    <div class="task-list">
+      <div class="task-item">
+        <strong>Create Google Sheet for beta waitlist</strong>
+        <span class="task-status status-today">Today</span>
+      </div>
+      <div class="task-item">
+        <strong>Send internal alpha test message to your team</strong>
+        <span class="task-status status-today">Today</span>
+      </div>
+      <div class="task-item">
+        <strong>Create 2nd Instagram post for today (6pm)</strong>
+        <span class="task-status status-urgent">Urgent</span>
+      </div>
+      <div class="task-item">
+        <strong>Save welcome DM template to Notes app for quick access</strong>
+        <span class="task-status status-today">Today</span>
+      </div>
+      <div class="task-item">
+        <strong>Test all three app links yourself (Mission Control, Workspace, Document Hub)</strong>
+        <span class="task-status status-today">Today</span>
+      </div>
+      <div class="task-item">
+        <strong>Post Flyer 5 on Instagram and LinkedIn</strong>
+        <span class="task-status status-thisweek">Monday 24 March, 12pm</span>
+      </div>
+      <div class="task-item">
+        <strong>Monitor DMs and comments for beta signup responses</strong>
+        <span class="task-status status-thisweek">Monday 24 March onwards</span>
+      </div>
+      <div class="task-item">
+        <strong>Add beta signups to spreadsheet as they come in</strong>
+        <span class="task-status status-thisweek">Ongoing</span>
+      </div>
+      <div class="task-item">
+        <strong>Send welcome DM to each new signup within 2 hours</strong>
+        <span class="task-status status-thisweek">Ongoing</span>
+      </div>
+      <div class="task-item">
+        <strong>Collect internal team alpha feedback</strong>
+        <span class="task-status status-thisweek">By Friday 21 March</span>
+      </div>
+      <div class="task-item">
+        <strong>Fix any critical issues flagged by internal team</strong>
+        <span class="task-status status-thisweek">By Friday 21 March</span>
+      </div>
+      <div class="task-item">
+        <strong>Prepare onboarding call script for beta testers</strong>
+        <span class="task-status status-thisweek">By Friday 28 March</span>
+      </div>
+      <div class="task-item">
+        <strong>Send portal links to all 10 beta testers</strong>
+        <span class="task-status status-thisweek">Monday 30 March, 9am</span>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="callout-title">The Most Important Task Today</div>
+      <p><strong>Create the 2nd Instagram post for 6pm today.</strong> You already have it for X. Now build the Instagram version. This could be an agent card (ARIA or CLAUDE), a behind-the-scenes photo of you working on the apps, or a teaser that says "Something is coming Monday. 10 spots. Are you ready?" Keep the momentum building.</p>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<script>
+function showTab(tabName) {
+  const tabs = document.querySelectorAll('.tab');
+  const contents = document.querySelectorAll('.tab-content');
+  
+  tabs.forEach(tab => tab.classList.remove('active'));
+  contents.forEach(content => content.classList.remove('active'));
+  
+  event.target.classList.add('active');
+  document.getElementById(tabName).classList.add('active');
+  
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+</script>
+
+</body>
+</html>
