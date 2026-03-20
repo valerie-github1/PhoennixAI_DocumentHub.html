@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PhoennixAI Session 11 Log</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--fire:#FF6B2B;--gold:#FFB830;--sapphire:#46ABD7;--electric:#00E5FF;--royal:#215CAE;--bg:#060A18;--surface:#0D1220;--card:#111827;--border:rgba(255,255,255,0.07);--text:#E8E8E8;--text2:rgba(255,255,255,0.55);--text3:rgba(255,255,255,0.28);}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;line-height:1.6;padding:0 0 80px}
+.hero{background:linear-gradient(135deg,#060A18,#080e14,#060A18);border-bottom:1px solid rgba(255,107,43,0.2);padding:48px 40px 36px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--fire),var(--gold),var(--fire))}
+.hi{max-width:900px;margin:0 auto;position:relative;z-index:1}
+.doc-ref{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--fire);text-transform:uppercase;margin-bottom:12px}
+.title{font-family:'Bebas Neue',sans-serif;font-size:clamp(48px,8vw,80px);letter-spacing:4px;color:#fff;line-height:.95;margin-bottom:8px}
+.title span{color:var(--fire)}
+.sub{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:3px;color:var(--text3);margin-bottom:14px;text-transform:uppercase}
+.meta-row{display:flex;gap:24px;flex-wrap:wrap;margin-top:16px}
+.meta-item{display:flex;flex-direction:column;gap:2px}
+.meta-label{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--text3)}
+.meta-value{font-size:13px;font-weight:500;color:var(--text)}
+.meta-value.hi{color:var(--gold)}
+.wrap{max-width:900px;margin:0 auto;padding:48px 40px 0}
+.sec{margin-bottom:44px}
+.sl{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--electric);text-transform:uppercase;margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid rgba(0,229,255,0.15)}
+/* DELIVERABLES TABLE */
+.del-table{width:100%;border-collapse:collapse;font-size:12px}
+.del-table th{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:2px;color:var(--text3);text-align:left;padding:7px 12px;border-bottom:1px solid var(--border);text-transform:uppercase}
+.del-table td{padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:top;color:var(--text2)}
+.del-table td:first-child{font-weight:600;color:var(--text);white-space:nowrap;font-family:'DM Mono',monospace;font-size:10px}
+.del-table tr:last-child td{border-bottom:none}
+.del-table tr:hover td{background:rgba(255,255,255,0.015)}
+.chip{display:inline-block;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1px;padding:2px 8px;border-radius:3px;text-transform:uppercase}
+.chip-live{background:rgba(34,197,94,0.1);color:#22C55E;border:1px solid rgba(34,197,94,0.3)}
+.chip-signed{background:rgba(33,92,174,0.1);color:#215CAE;border:1px solid rgba(33,92,174,0.3)}
+.chip-pending{background:rgba(255,184,48,0.1);color:var(--gold);border:1px solid rgba(255,184,48,0.3)}
+.chip-new{background:rgba(255,107,43,0.1);color:var(--fire);border:1px solid rgba(255,107,43,0.3)}
+/* DECISIONS TABLE */
+.dec-table{width:100%;border-collapse:collapse;font-size:12px}
+.dec-table th{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:2px;color:var(--text3);text-align:left;padding:7px 12px;border-bottom:1px solid var(--border);text-transform:uppercase}
+.dec-table td{padding:10px 12px;border-bottom:1px solid var(--border);vertical-align:top;color:var(--text2);line-height:1.6}
+.dec-table td:first-child{font-weight:600;color:var(--text);white-space:nowrap;min-width:180px}
+.dec-table tr:last-child td{border-bottom:none}
+/* TASK LIST */
+.task-item{display:flex;gap:12px;padding:10px 14px;background:var(--card);border:1px solid var(--border);border-radius:6px;margin-bottom:7px;align-items:flex-start}
+.task-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.task-name{font-size:13px;color:var(--text);flex:1;font-weight:500}
+.task-tag{font-family:'DM Mono',monospace;font-size:9px;color:var(--text3);white-space:nowrap}
+.task-item.done .task-name{text-decoration:line-through;color:var(--text3)}
+/* INFO BOX */
+.info-box{background:rgba(0,229,255,0.04);border:1px solid rgba(0,229,255,0.15);border-left:3px solid var(--electric);border-radius:8px;padding:18px 22px;margin-bottom:16px}
+.info-label{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--electric);margin-bottom:8px}
+.info-body{font-size:13px;color:var(--text2);line-height:1.7}
+.info-body strong{color:var(--text)}
+.warn-box{background:rgba(255,107,43,0.04);border:1px solid rgba(255,107,43,0.18);border-left:3px solid var(--fire);border-radius:8px;padding:18px 22px;margin-bottom:16px}
+.warn-label{font-family:'DM Mono',monospace;font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--fire);margin-bottom:8px}
+footer{max-width:900px;margin:36px auto 0;padding:18px 40px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.fb{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:3px;color:var(--fire)}
+.fm{font-family:'DM Mono',monospace;font-size:9px;color:var(--text3);letter-spacing:1px}
+@media(max-width:600px){.hero,.wrap{padding-left:20px;padding-right:20px}}
+</style>
+</head>
+<body>
+
+<div class="hero"><div class="hi">
+  <div class="doc-ref">PhoennixAI · Session 11 Log · 20 March 2026</div>
+  <div class="title">SESSION <span>11</span></div>
+  <div class="sub">Full Deliverables Log, Decisions, Actions, and Next Session Agenda</div>
+  <div class="meta-row">
+    <div class="meta-item"><div class="meta-label">Date</div><div class="meta-value">Thursday 20 March 2026</div></div>
+    <div class="meta-item"><div class="meta-label">Session Duration</div><div class="meta-value hi">18+ hours (12:00 to 06:00+)</div></div>
+    <div class="meta-item"><div class="meta-label">Founder</div><div class="meta-value">Valerie Wilcox</div></div>
+    <div class="meta-item"><div class="meta-label">Strategic Partner</div><div class="meta-value">Claude, PAI-JD-001</div></div>
+    <div class="meta-item"><div class="meta-label">Files Built</div><div class="meta-value hi">12 new files</div></div>
+    <div class="meta-item"><div class="meta-label">Files Pushed to GitHub</div><div class="meta-value hi">11 files</div></div>
+  </div>
+</div></div>
+
+<div class="wrap">
+
+  <!-- DELIVERABLES -->
+  <div class="sec">
+    <div class="sl">01 — Full Deliverables Log</div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;overflow:hidden">
+      <table class="del-table">
+        <thead><tr><th>Ref</th><th>File</th><th>What It Is</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>PAI-JD-009</td><td>GRID_JobDescription_PhoennixAI.html</td><td>GRID Job Description. PM and BA. Stage 1 signed by Valerie 20 Mar 2026.</td><td><span class="chip chip-signed">Stage 1 Signed</span></td></tr>
+          <tr><td>PAI-CV-009</td><td>GRID_CV_PhoennixAI.html</td><td>GRID Agent Profile. Project Manager and Business Analyst. Deep Royal #215CAE.</td><td><span class="chip chip-live">Live</span></td></tr>
+          <tr><td>PAI-JD-015</td><td>SCRIBE_JobDescription_PhoennixAI.html</td><td>SCRIBE Job Description. Document Intelligence. Seven-step document control process documented.</td><td><span class="chip chip-pending">Sign Pending</span></td></tr>
+          <tr><td>PAI-CV-015</td><td>SCRIBE_CV_PhoennixAI.html</td><td>SCRIBE Agent Profile. Document Hub Owner. Bronze #C49A6C.</td><td><span class="chip chip-live">Live</span></td></tr>
+          <tr><td>PAI-JD-006</td><td>LEDGER_JobDescription_PhoennixAI.html</td><td>LEDGER Job Description. Upgraded to AGI Wall Street standard. Goldman Sachs, JPMorgan, Big Four tier.</td><td><span class="chip chip-pending">Sign Pending</span></td></tr>
+          <tr><td>PAI-CV-006</td><td>LEDGER_CV_PhoennixAI.html</td><td>LEDGER Agent Profile. AGI Financial Intelligence. Ember Gold #FFB830.</td><td><span class="chip chip-live">Live</span></td></tr>
+          <tr><td>PAI-JD-005</td><td>RELAY_JobDescription_PhoennixAI.html</td><td>RELAY Job Description. Client Onboarding Automation. External beta owner from 30 March 2026.</td><td><span class="chip chip-pending">Sign Pending</span></td></tr>
+          <tr><td>PAI-CV-005</td><td>RELAY_CV_PhoennixAI.html</td><td>RELAY Agent Profile. Client Onboarding. Sapphire Wing #46ABD7. Saves 3 to 5 hrs per client.</td><td><span class="chip chip-live">Live</span></td></tr>
+          <tr><td>MC v2.3</td><td>PhoennixAI_MissionControl_v2.html / index.html</td><td>GRID home page added. All classList bugs fixed. Org chart with SAGE and all 16 agents. Backlog BL-012 to BL-016. Priority stack current. St Paul's 23 Apr confirmed. GRID dot Deep Royal.</td><td><span class="chip chip-live">Live</span></td></tr>
+          <tr><td>WS v3.1</td><td>PhoennixAI_Workspace.html</td><td>24 tasks updated. All new agent doc bookmarks added. Session 11 deliverables log. GitHub upload instructions current.</td><td><span class="chip chip-live">Live</span></td></tr>
+          <tr><td>CU v2</td><td>PhoennixAI_CharacterUniverse_v2.html</td><td>PA and RELAY added as new hybrid characters. Nine Hybrids. Violet and Sapphire colour identities.</td><td><span class="chip chip-live">Live</span></td></tr>
+          <tr><td>LOG</td><td>PhoennixAI_Session11_Log.html</td><td>This document. Full session log, decisions, actions, next agenda.</td><td><span class="chip chip-new">New</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- AGI PROMPTS -->
+  <div class="sec">
+    <div class="sl">02 — AGI Intelligence Standards Created This Session</div>
+    <div class="info-box">
+      <div class="info-label">All 16 Agent AGI Prompts Written</div>
+      <div class="info-body">Every agent now has an AGI-level intelligence standard prompt written at the level of the world's leading institutions in their respective fields. These go into each agent's JD under an Intelligence Standard section and into the PRD for each product they power.<br><br>
+      <strong>Agents covered:</strong> GRID (McKinsey Engagement Manager + KPMG BA standard), PA (Harvard productivity researcher + FTSE 100 EA standard), SCOUT (Salesforce VP Sales + Goldman relationship manager), PULSE (MrBeast creative + Meta platform specialist), ATLAS (Spencer Stuart headhunter standard), RELAY (Apple Store experience + Salesforce CS director), LEDGER (Goldman Sachs MD + JPMorgan quant + Big Four CFO), ECHO (Zappos CS director + Ritz-Carlton service standard), ENROL (leading university admissions standard), SIGNAL (Gartner analyst + McKinsey competitive intelligence), GRANT (Big Lottery Fund + Deloitte public sector standard), FORGE (Klaviyo senior strategist + world-class direct response copywriter), BRIDGE (Unilever partnerships + Goldman relationship director), GUARDIAN (GCHQ analyst + fintech CISO standard), SCRIBE (McKinsey knowledge management director + Big Four document control), SAGE (Palantir data scientist + McKinsey analytics director).
+      </div>
+    </div>
+  </div>
+
+  <!-- KEY DECISIONS -->
+  <div class="sec">
+    <div class="sl">03 — Key Decisions Locked This Session</div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;overflow:hidden">
+      <table class="dec-table">
+        <thead><tr><th>Decision</th><th>Detail</th><th>Owner</th></tr></thead>
+        <tbody>
+          <tr><td>JDs get signed, CVs do not</td><td>Clean rule across all 16 agents. No exceptions. Signatures on JDs only.</td><td>Locked</td></tr>
+          <tr><td>GRID colour is Deep Royal #215CAE</td><td>Brand system document on GitHub still shows Signal Green in error. Must be updated.</td><td>Next session</td></tr>
+          <tr><td>GRID owns Mission Control</td><td>Stated in topbar, today page, and GRID home page. GRID is PM and BA, Mission Control owner.</td><td>Locked</td></tr>
+          <tr><td>RELAY owns external beta onboarding</td><td>GRID owns internal alpha. RELAY owns external beta from 30 March. Clean split.</td><td>Locked</td></tr>
+          <tr><td>SAGE is Agent 016, Steel Blue #4682B4</td><td>Strategic Analytics and Governance Engine. Partners with SCRIBE. SCRIBE holds the truth. SAGE reveals what it means.</td><td>Locked</td></tr>
+          <tr><td>Weekly retro every Friday</td><td>All agents and human team where available. GRID chairs. What went well, what could be better, what we learned.</td><td>Locked</td></tr>
+          <tr><td>Daily founder report at 08:00</td><td>GRID delivers. Previous day deliverables, outstanding tasks, blockers, agent alerts. Phase 2 automated.</td><td>Phase 2</td></tr>
+          <tr><td>Document control seven steps</td><td>Reference code, version number, status tag, date stamp, author and approver, changelog, single location rule. Owned by SCRIBE.</td><td>Locked</td></tr>
+          <tr><td>Orchestration layer build order</td><td>Phase 1: Claude API. Phase 2: Perplexity. Phase 3: Manus with Instagram connector. Phase 4: Kimi K2.5 for bulk tasks.</td><td>Confirmed</td></tr>
+          <tr><td>St Paul's work experience</td><td>23 April 2026. Three girls. Confirmed date. Claude to draft onboarding brief, schedule, project assignments, mentor allocation.</td><td>Before 23 Apr</td></tr>
+          <tr><td>Manus GDPR flag</td><td>Manus not yet SOC 2 or GDPR certified. Use for public-facing tasks only. Not for personal user data until certified.</td><td>Risk noted</td></tr>
+          <tr><td>Phoenix Cubs Interactive Universe</td><td>Dedicated children and young people interactive layer. Character picker, companion lifecycle tap-to-unlock, find your compatible AI quiz. Separate from the adult showcase.</td><td>Next session</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- BUGS FIXED -->
+  <div class="sec">
+    <div class="sl">04 — Bugs Fixed This Session</div>
+    <div class="task-item"><div class="task-dot" style="background:#22C55E"></div><div class="task-name">classList null errors — all three console errors fixed. Null checks added to showPage, showOrg, filterA, showPageMobile.</div><div class="task-tag">Fixed</div></div>
+    <div class="task-item"><div class="task-dot" style="background:#22C55E"></div><div class="task-name">Agents page showing inside Projects — page-agents div was missing its class="page" wrapper due to SAGE card insertion consuming it. Fixed.</div><div class="task-tag">Fixed</div></div>
+    <div class="task-item"><div class="task-dot" style="background:#22C55E"></div><div class="task-name">TASKS_MC scope error — TASKS_MC was scoped inside an IIFE. Moved to window.TASKS_MC so GRID home page JS can read it.</div><div class="task-tag">Fixed</div></div>
+    <div class="task-item"><div class="task-dot" style="background:#22C55E"></div><div class="task-name">SyntaxError and toggleTheme not defined — backtick template literals in GRID JS corrupted by Python string handling. Replaced with string concatenation. No more backtick errors.</div><div class="task-tag">Fixed</div></div>
+    <div class="task-item"><div class="task-dot" style="background:#22C55E"></div><div class="task-name">index.html not updated — Mission Control was pushed as PhoennixAI_MissionControl_v2.html but main URL loads index.html. Fixed by renaming and uploading as index.html.</div><div class="task-tag">Fixed</div></div>
+    <div class="task-item"><div class="task-dot" style="background:#22C55E"></div><div class="task-name">Duplicate files in repo — PhoennixAI_MissionControl_v2 (2), (3), (4).html and PhoennixAI_Workspace (2).html deleted. Repo clean at 37 files.</div><div class="task-tag">Fixed</div></div>
+  </div>
+
+  <!-- CRITICAL ACTIONS -->
+  <div class="sec">
+    <div class="sl">05 — Critical Actions, Next Session</div>
+    <div class="warn-box">
+      <div class="warn-label">Phase 2 Decision, Cannot Wait</div>
+      <div class="info-body">The Phase 2 developer decision is the unlock for everything. Supabase backend, React frontend, Claude API wiring, server infrastructure. Without this decision, agents remain prompt-configured rather than autonomous. The sequence is: Supabase first, developer hired, React frontend built, server infrastructure running. RELAY beta opens 30 March. This decision must happen before that date.</div>
+    </div>
+    <div class="task-item"><div class="task-dot" style="background:#ef4444"></div><div class="task-name">Sign SCRIBE JD (PAI-JD-015) — Stage 1 signature pending</div><div class="task-tag">Next Session</div></div>
+    <div class="task-item"><div class="task-dot" style="background:#ef4444"></div><div class="task-name">Sign LEDGER JD (PAI-JD-006) — Stage 1 signature pending</div><div class="task-tag">Next Session</div></div>
+    <div class="task-item"><div class="task-dot" style="background:#ef4444"></div><div class="task-name">Sign RELAY JD (PAI-JD-005) — Stage 1 signature pending</div><div class="task-tag">Next Session</div></div>
+    <div class="task-item"><div class="task-dot" style="background:#ef4444"></div><div class="task-name">RELAY beta onboarding activation — must be built and tested before 27 March</div><div class="task-tag">27 Mar Deadline</div></div>
+    <div class="task-item"><div class="task-dot" style="background:#46ABD7"></div><div class="task-name">Build PA JD and CV — AGI productivity intelligence. Priority Critical.</div><div class="task-tag">Next Session</div></div>
+    <div class="task-item"><div class="task-dot" style="background:#46ABD7"></div><div class="task-name">Build PULSE JD and CV — AGI social media intelligence. Priority Critical.</div><div class="task-tag">Next Session</div></div>
+    <div class="task-item"><div class="task-dot" style="background:#46ABD7"></div><div class="task-name">Build SAGE JD and CV — Strategic Analytics and Governance Engine. Agent 016.</div><div class="task-tag">Next Session</div></div>
+    <div class="task-item"><div class="task-dot" style="background:#46ABD7"></div><div class="task-name">Update Document Hub — add GRID, SCRIBE, LEDGER, RELAY at their stations with Open JD and CV Live buttons</div><div class="task-tag">Next Session</div></div>
+    <div class="task-item"><div class="task-dot" style="background:#46ABD7"></div><div class="task-name">Build Command Portal — single home screen for all tools. GRID owns. SCRIBE organises. ARIA surfaces.</div><div class="task-tag">Next Session</div></div>
+    <div class="task-item"><div class="task-dot" style="background:#46ABD7"></div><div class="task-name">Build Orchestration Layer PRD — Claude, Kimi K2.5, Manus, Perplexity routing architecture document</div><div class="task-tag">Next Session</div></div>
+    <div class="task-item"><div class="task-dot" style="background:#C49A6C"></div><div class="task-name">Update brand system file — GRID to Deep Royal #215CAE, SAGE Steel Blue #4682B4</div><div class="task-tag">This Session</div></div>
+    <div class="task-item"><div class="task-dot" style="background:#C49A6C"></div><div class="task-name">St Paul's work experience pack — onboarding brief, schedule, project assignments, mentor allocation. 23 April 2026.</div><div class="task-tag">Before 23 Apr</div></div>
+    <div class="task-item"><div class="task-dot" style="background:#C49A6C"></div><div class="task-name">Phoenix Cubs Interactive Universe — dedicated children layer. Character picker, companion lifecycle, find your AI quiz.</div><div class="task-tag">Scheduled</div></div>
+  </div>
+
+  <!-- ORCHESTRATION LAYER SUMMARY -->
+  <div class="sec">
+    <div class="sl">06 — Orchestration Layer, Confirmed Architecture</div>
+    <div class="info-box">
+      <div class="info-label">The PhoennixAI Four-Model Routing System</div>
+      <div class="info-body">
+        <strong>Claude (Anthropic):</strong> Deep reasoning, strategy, writing, document creation, agent intelligence. Phase 1 and permanent backbone.<br><br>
+        <strong>Kimi K2.5 (Moonshot AI):</strong> Bulk research, coding, cost-effective high-volume processing. Open-source, Modified MIT License, commercial use free. £0.50 per million input tokens. Agent Swarm coordinates up to 100 specialist agents simultaneously. Powers SIGNAL for competitor intelligence.<br><br>
+        <strong>Manus (Meta-acquired):</strong> Autonomous multi-step execution, web browsing, social posting. Native Instagram connector via Meet My Computer. PULSE can post directly to Instagram via Manus. GDPR note: not yet SOC 2 certified. Public-facing tasks only until certified.<br><br>
+        <strong>Perplexity Computer:</strong> Real-time web intelligence, live market data, news monitoring. Always-on. Complements Manus. Powers SIGNAL for live research.<br><br>
+        <strong>Users see:</strong> PhoennixAI agents only. All four models are invisible underneath.<br><br>
+        <strong>Build order:</strong> Phase 1 Claude API. Phase 2 Perplexity. Phase 3 Manus. Phase 4 Kimi K2.5.
+      </div>
+    </div>
+  </div>
+
+  <!-- GITHUB STATUS -->
+  <div class="sec">
+    <div class="sl">07 — GitHub Repository Status, End of Session 11</div>
+    <div class="info-box">
+      <div class="info-label">phoennixai-mission-control, Public Repo</div>
+      <div class="info-body">
+        <strong>Total commits:</strong> 37<br>
+        <strong>Files live:</strong> 31 HTML files plus README and docx<br>
+        <strong>Repo status:</strong> Clean. No duplicates. All Session 11 files pushed.<br>
+        <strong>Deployment:</strong> GitHub Pages, green tick confirmed.<br>
+        <strong>Last push:</strong> 20 March 2026, Session 11 complete.<br><br>
+        <strong>New files added this session:</strong> GRID JD, GRID CV, SCRIBE JD, SCRIBE CV, LEDGER JD, LEDGER CV, RELAY JD, RELAY CV, Mission Control v2.3, Workspace v3.1, Character Universe v2, index.html updated.
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="fb">PHOENNIXAI</div>
+  <div class="fm">Session 11 Log · 20 March 2026 · Valerie Wilcox x Claude · Confidential</div>
+</footer>
+
+</body></html>
