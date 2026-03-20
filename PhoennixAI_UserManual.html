@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PhoennixAI User Manual | All Apps, All Agents</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'><rect width='200' height='200' fill='%23060A18' rx='44'/><path d='M100 170 C80 160 55 140 50 115 C45 90 55 70 65 55 C70 75 68 90 72 100 C76 80 82 60 90 42 C94 65 88 85 92 100 C96 75 100 50 100 30 C104 50 104 75 108 100 C112 85 106 65 110 42 C118 60 124 80 128 100 C132 90 130 75 135 55 C145 70 155 90 150 115 C145 140 120 160 100 170Z' fill='%23FF6B2B'/></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
+<style>
+:root{--fire:#FF6B2B;--gold:#FFB830;--cyan:#00E5FF;--royal:#215CAE;--bronze:#C49A6C;--steel:#4682B4;--violet:#A78BFA;--sapphire:#46ABD7;--green:#22C55E;--bg:#060A18;--surface:#0D1220;--card:#111827;--border:rgba(255,255,255,0.07);--text:#E8E8E8;--text2:rgba(255,255,255,0.55);--text3:rgba(255,255,255,0.28);--display:'Bebas Neue',sans-serif;--body:'DM Sans',sans-serif;--mono:'DM Mono',monospace;--serif:'Playfair Display',serif;}
+[data-theme="light"]{--bg:#F2EFE9;--surface:#fff;--card:#fff;--border:rgba(0,0,0,0.08);--text:#1A1A1A;--text2:#444;--text3:#888;}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:var(--body);line-height:1.6;display:flex;min-height:100vh}
+/* SIDEBAR */
+.sb{width:240px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);position:fixed;top:0;left:0;height:100vh;overflow-y:auto;z-index:100;display:flex;flex-direction:column}
+.sb::-webkit-scrollbar{width:3px}.sb::-webkit-scrollbar-thumb{background:var(--border)}
+.sb-logo{padding:20px 20px 14px;border-bottom:1px solid var(--border)}
+.sb-brand{font-family:var(--display);font-size:16px;letter-spacing:3px;color:var(--fire)}
+.sb-doc{font-family:var(--mono);font-size:7px;letter-spacing:2px;color:var(--text3);text-transform:uppercase;margin-top:2px}
+.sb-nav{padding:12px 0;flex:1}
+.sb-section{font-family:var(--mono);font-size:7px;letter-spacing:3px;text-transform:uppercase;color:var(--text3);padding:10px 20px 4px}
+.sb-item{display:flex;align-items:center;gap:8px;padding:7px 20px;font-size:12px;color:var(--text2);cursor:pointer;transition:all .15s;border-left:2px solid transparent}
+.sb-item:hover{color:var(--text);background:rgba(255,255,255,0.03)}
+.sb-item.active{color:var(--fire);border-left-color:var(--fire);background:rgba(255,107,43,0.05)}
+.sb-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.sb-footer{padding:14px 20px;border-top:1px solid var(--border)}
+.sb-owner{font-family:var(--mono);font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--text3)}
+.sb-owner span{color:var(--bronze)}
+/* MAIN */
+.main{margin-left:240px;flex:1;max-width:900px;padding:48px 48px 80px}
+.page-section{display:none}.page-section.active{display:block}
+/* HERO */
+.page-hero{margin-bottom:36px}
+.ph-eyebrow{font-family:var(--mono);font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--bronze);margin-bottom:8px}
+.ph-title{font-family:var(--display);font-size:clamp(36px,5vw,56px);letter-spacing:3px;color:#fff;line-height:1;margin-bottom:6px}
+.ph-title span{color:var(--fire)}
+.ph-sub{font-size:14px;color:var(--text2);max-width:600px;line-height:1.7}
+.sl{font-family:var(--mono);font-size:9px;letter-spacing:3px;text-transform:uppercase;margin-bottom:14px;padding-bottom:7px;border-bottom:1px solid var(--border)}
+.bt{font-size:14px;color:var(--text2);line-height:1.8;margin-bottom:14px}
+/* CARDS */
+.card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:20px 24px;margin-bottom:14px}
+.card-label{font-family:var(--mono);font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--text3);margin-bottom:6px}
+.card-title{font-size:15px;font-weight:600;color:#fff;margin-bottom:8px}
+.card-body{font-size:13px;color:var(--text2);line-height:1.75}
+.card-body strong{color:var(--text);font-weight:500}
+/* AGENT ROWS */
+.agent-row{display:flex;align-items:flex-start;gap:14px;padding:14px 18px;background:var(--card);border:1px solid var(--border);border-radius:8px;margin-bottom:10px}
+.ar-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.ar-name{font-family:var(--display);font-size:18px;letter-spacing:2px;line-height:1;margin-bottom:2px}
+.ar-role{font-family:var(--mono);font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-bottom:6px}
+.ar-body{font-size:12px;color:var(--text2);line-height:1.65}
+/* APP CARDS */
+.app-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:24px}
+.app-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:18px;border-top:2px solid}
+.app-icon{font-size:20px;margin-bottom:8px}
+.app-name{font-family:var(--display);font-size:20px;letter-spacing:2px;margin-bottom:4px}
+.app-owner{font-family:var(--mono);font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-bottom:8px}
+.app-desc{font-size:12px;color:var(--text2);line-height:1.6;margin-bottom:10px}
+.app-url{font-family:var(--mono);font-size:8px;color:var(--cyan);word-break:break-all}
+/* HOW TO */
+.step{display:flex;gap:14px;margin-bottom:16px}
+.step-num{font-family:var(--display);font-size:24px;color:rgba(255,107,43,0.2);line-height:1;flex-shrink:0;min-width:28px}
+.step-body{font-size:13px;color:var(--text2);line-height:1.7;padding-top:2px}
+.step-body strong{color:var(--text);font-weight:500}
+/* COMMS */
+.comm-row{display:flex;gap:10px;align-items:flex-start;padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:6px;margin-bottom:8px}
+.cr-from{font-family:var(--display);font-size:13px;letter-spacing:1px;min-width:72px;flex-shrink:0;line-height:1.3;margin-top:1px}
+.cr-arrow{color:var(--text3);flex-shrink:0;margin-top:2px;font-size:12px}
+.cr-to{font-family:var(--display);font-size:13px;letter-spacing:1px;min-width:72px;flex-shrink:0;line-height:1.3;margin-top:1px}
+.cr-desc{font-size:11px;color:var(--text2);line-height:1.6}
+/* RULES */
+.rule-row{display:flex;gap:12px;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--border)}
+.rule-row:last-child{border-bottom:none}
+.rule-icon{font-size:14px;flex-shrink:0}
+.rule-text{font-size:13px;color:var(--text2);line-height:1.65}
+.rule-text strong{color:var(--text);font-weight:500}
+/* METRICS */
+.metric-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px}
+.metric-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:16px;border-left:3px solid}
+.mc-label{font-family:var(--mono);font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-bottom:6px}
+.mc-title{font-size:14px;font-weight:600;color:#fff;margin-bottom:6px}
+.mc-body{font-size:12px;color:var(--text2);line-height:1.6}
+/* CHIPS */
+.chip{font-family:var(--mono);font-size:8px;letter-spacing:1px;text-transform:uppercase;padding:3px 9px;border-radius:3px;border:1px solid;display:inline-block;margin-right:5px;margin-bottom:4px}
+.c-live{color:var(--green);border-color:rgba(34,197,94,0.3);background:rgba(34,197,94,0.06)}
+.c-phase2{color:var(--steel);border-color:rgba(70,130,180,0.3);background:rgba(70,130,180,0.06)}
+.c-owner{color:var(--bronze);border-color:rgba(196,154,108,0.3);background:rgba(196,154,108,0.06)}
+.c-fire{color:var(--fire);border-color:rgba(255,107,43,0.3);background:rgba(255,107,43,0.06)}
+.info-box{background:rgba(0,229,255,0.04);border:1px solid rgba(0,229,255,0.15);border-left:3px solid var(--cyan);border-radius:8px;padding:16px 20px;margin-bottom:16px}
+.warn-box{background:rgba(255,107,43,0.04);border:1px solid rgba(255,107,43,0.2);border-left:3px solid var(--fire);border-radius:8px;padding:16px 20px;margin-bottom:16px}
+.ib-label{font-family:var(--mono);font-size:8px;letter-spacing:3px;text-transform:uppercase;margin-bottom:6px}
+.ib-body{font-size:13px;color:var(--text2);line-height:1.7}
+.ib-body strong{color:var(--text)}
+@media(max-width:768px){.sb{display:none}.main{margin-left:0;padding:24px 20px 60px}.app-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<nav class="sb">
+  <div class="sb-logo">
+    <div class="sb-brand">PHOENNIXAI</div>
+    <div class="sb-doc">User Manual · v1.0 · Live</div>
+  </div>
+  <div class="sb-nav">
+    <div class="sb-section">Getting Started</div>
+    <div class="sb-item active" onclick="show('overview')"><span class="sb-dot" style="background:var(--fire)"></span>Overview and Purpose</div>
+    <div class="sb-item" onclick="show('apps')"><span class="sb-dot" style="background:var(--royal)"></span>The Three Apps</div>
+    <div class="sb-item" onclick="show('howto')"><span class="sb-dot" style="background:var(--cyan)"></span>How to Use the System</div>
+
+    <div class="sb-section">The Agent Team</div>
+    <div class="sb-item" onclick="show('signed-agents')"><span class="sb-dot" style="background:var(--green)"></span>Signed and Active Agents</div>
+    <div class="sb-item" onclick="show('queue-agents')"><span class="sb-dot" style="background:var(--text3)"></span>Queue Agents</div>
+    <div class="sb-item" onclick="show('comms')"><span class="sb-dot" style="background:var(--gold)"></span>Agent Communications</div>
+
+    <div class="sb-section">Governance</div>
+    <div class="sb-item" onclick="show('rules')"><span class="sb-dot" style="background:var(--fire)"></span>Rules and Standards</div>
+    <div class="sb-item" onclick="show('documents')"><span class="sb-dot" style="background:var(--bronze)"></span>Document Control</div>
+    <div class="sb-item" onclick="show('metrics')"><span class="sb-dot" style="background:var(--steel)"></span>Behavioural Metrics</div>
+
+    <div class="sb-section">Operations</div>
+    <div class="sb-item" onclick="show('onboarding')"><span class="sb-dot" style="background:var(--sapphire)"></span>Staff Onboarding</div>
+    <div class="sb-item" onclick="show('beta')"><span class="sb-dot" style="background:var(--violet)"></span>Beta and Testing</div>
+    <div class="sb-item" onclick="show('phase2')"><span class="sb-dot" style="background:var(--royal)"></span>Phase 2 Roadmap</div>
+    <div class="sb-item" onclick="show('faq')"><span class="sb-dot" style="background:var(--text3)"></span>FAQ</div>
+  </div>
+  <div class="sb-footer">
+    <div class="sb-owner">Owned by <span>SCRIBE</span></div>
+    <div style="font-family:var(--mono);font-size:7px;color:var(--text3);margin-top:2px">PAI-MAN-001 · v1.0 · 20 Mar 2026</div>
+  </div>
+</nav>
+
+<main class="main">
+
+<!-- OVERVIEW -->
+<div class="page-section active" id="section-overview">
+  <div class="page-hero">
+    <div class="ph-eyebrow">PhoennixAI · User Manual · PAI-MAN-001</div>
+    <div class="ph-title">The <span>Manual</span></div>
+    <div class="ph-sub">Everything the team needs to work with PhoennixAI systems, agents, and processes. No guessing. No asking who is responsible. It is in here.</div>
+  </div>
+  <div class="warn-box">
+    <div class="ib-label" style="color:var(--fire)">Why This Document Exists</div>
+    <div class="ib-body">When a partner asks a question, when a stakeholder needs a briefing, when a team member is unsure what an agent does or who owns a process, this document is the answer. Nobody should have to ask Claude, ARIA, or GRID for basic operational information. It lives here, always accessible, always current. SCRIBE owns it, which means it is version-controlled, date-stamped, and never out of date.</div>
+  </div>
+  <div class="sl" style="color:var(--bronze)">What PhoennixAI Is</div>
+  <div class="bt">PhoennixAI is an AI agency built on the Compatible AI principle. Every human has God-given gifts. For every human there is a compatible AI. Not a replacement. A partner. We build AI agent teams that work alongside human teams. The agent gets a job description, a CV, a colour identity, KPIs, and a performance dashboard. They are hired, not subscribed to.</div>
+  <div class="bt">The founder is Valerie Wilcox, a 17-year biomedical scientist who developed Lupus, retired from lab work, and pivoted into tech. Business Analyst, Software Engineer, AI Engineer, UX/UI Designer, Graphic Designer. She built this company to kill the fear of AI, not with words but with evidence.</div>
+  <div class="sl" style="color:var(--bronze);margin-top:28px">The 5 Entities</div>
+  <div class="agent-row"><div class="ar-dot" style="background:var(--bronze)"></div><div><div class="ar-name" style="color:var(--bronze)">Valerie Wilcox</div><div class="ar-role">Parent Brand, Tier 1</div><div class="ar-body">The personal brand of the founder. LinkedIn thought leadership. The face of the entire ecosystem.</div></div></div>
+  <div class="agent-row"><div class="ar-dot" style="background:#C8C0B4"></div><div><div class="ar-name" style="color:#C8C0B4">WilcoxDesigns</div><div class="ar-role">Creative Studio, Tier 2</div><div class="ar-body">Digital Atelier. Immersive website design, bespoke development, interactive portfolios, UI/UX. Tagline: Where precision meets artistry. Revenue active now.</div></div></div>
+  <div class="agent-row"><div class="ar-dot" style="background:var(--fire)"></div><div><div class="ar-name" style="color:var(--fire)">PhoennixAI Agency</div><div class="ar-role">Main Entity, Tier 3</div><div class="ar-body">Rise. Automate. Dominate. Done-for-you AI workflow automations, agent deployment, digital marketing, cybersecurity. URL: www.phoennixai.com</div></div></div>
+  <div class="agent-row"><div class="ar-dot" style="background:var(--violet)"></div><div><div class="ar-name" style="color:var(--violet)">PhoennixAI Academy</div><div class="ar-role">Education Arm</div><div class="ar-body">Age 8 to executive. Faith and kingdom mandate. Phantom Studio sub-arm is live with 8 active students. Revenue active now.</div></div></div>
+  <div class="agent-row"><div class="ar-dot" style="background:var(--cyan)"></div><div><div class="ar-name" style="color:var(--cyan)">Creative Lab Tool</div><div class="ar-role">Built by Agency for WilcoxDesigns</div><div class="ar-body">24/7 client co-creation workspace. Digital Atelier. Clients and designers work together in real time.</div></div></div>
+</div>
+
+<!-- THE THREE APPS -->
+<div class="page-section" id="section-apps">
+  <div class="page-hero">
+    <div class="ph-eyebrow">System Architecture</div>
+    <div class="ph-title">The Three <span>Apps</span></div>
+    <div class="ph-sub">Mission Control, Workspace, and Document Hub together form the PhoennixAI OS. No competitor has packaged these three together. This is the product.</div>
+  </div>
+  <div class="app-grid">
+    <div class="app-card" style="border-top-color:var(--royal)">
+      <div class="app-icon">🎯</div>
+      <div class="app-name" style="color:var(--royal)">Mission Control</div>
+      <div class="app-owner">Owned by GRID · Agent 009</div>
+      <div class="app-desc">Central command dashboard. Event tracking, priority stack, agent status board, GRID home page, backlog, calendar, version history. The command centre of the operation.</div>
+      <div class="app-url">valerie-github1.github.io/phoennixai-mission-control/</div>
+    </div>
+    <div class="app-card" style="border-top-color:var(--cyan)">
+      <div class="app-icon">🧠</div>
+      <div class="app-name" style="color:var(--cyan)">Workspace</div>
+      <div class="app-owner">Owned by ARIA · Agent 000</div>
+      <div class="app-desc">Daily intelligence layer. Tasks, notes, ARIA morning briefing, bookmarks, deliverables log, calendar sync. The founder's and team's daily operating environment.</div>
+      <div class="app-url">valerie-github1.github.io/phoennixai-mission-control/PhoennixAI_Workspace.html</div>
+    </div>
+    <div class="app-card" style="border-top-color:var(--bronze)">
+      <div class="app-icon">📋</div>
+      <div class="app-name" style="color:var(--bronze)">Document Hub</div>
+      <div class="app-owner">Owned by SCRIBE · Agent 015</div>
+      <div class="app-desc">Single source of truth. All agent JDs and CVs, version history, automation log, KPI dashboard, pending review. Every document filed here by SCRIBE. SCRIBE never forgets.</div>
+      <div class="app-url">valerie-github1.github.io/phoennixai-mission-control/PhoennixAI_DocumentHub.html</div>
+    </div>
+  </div>
+  <div class="info-box">
+    <div class="ib-label" style="color:var(--cyan)">Phase 0 vs Phase 2</div>
+    <div class="ib-body">In Phase 0, all three apps run on HTML, CSS, and JavaScript stored in the browser (localStorage). Data does not sync across devices. In Phase 2, Supabase provides a backend database and the Claude API wires the agents for true automation. Same three apps. Fully automated. Cross-device. Always on.</div>
+  </div>
+</div>
+
+<!-- HOW TO USE -->
+<div class="page-section" id="section-howto">
+  <div class="page-hero">
+    <div class="ph-eyebrow">Getting Started</div>
+    <div class="ph-title">How to Use the <span>System</span></div>
+    <div class="ph-sub">For new team members, partners, stakeholders, and contractors. Read this first.</div>
+  </div>
+  <div class="sl" style="color:var(--fire)">For Human Team Members</div>
+  <div class="step"><div class="step-num">01</div><div class="step-body"><strong>Open Mission Control first.</strong> This is your command centre. Check the Today page for GRID's daily report, the Priority Stack for what matters most, and the Agent Status Board to see which agents are active and which are in queue.</div></div>
+  <div class="step"><div class="step-num">02</div><div class="step-body"><strong>Open Workspace for your daily work.</strong> ARIA surfaces your tasks, calendar, and flagged emails here. This is where you plan your day, track your actions, and record notes. Everything you mark done in Workspace feeds GRID's delivery tracker.</div></div>
+  <div class="step"><div class="step-num">03</div><div class="step-body"><strong>Go to Document Hub for any document.</strong> Need a job description, a product spec, a session log, a brand guideline? It is in the Document Hub. SCRIBE owns this. If a document is not there, it does not officially exist yet.</div></div>
+  <div class="step"><div class="step-num">04</div><div class="step-body"><strong>Never store documents locally on your computer permanently.</strong> Every document that matters lives in the Document Hub or on GitHub. Your Downloads folder is a temporary staging area only. SCRIBE governs the permanent record.</div></div>
+  <div class="step"><div class="step-num">05</div><div class="step-body"><strong>All questions about agents go through this manual first.</strong> If you need to know what an agent does, their scope, their KPIs, or their interaction rules, it is in this document. Pull it up, search, find your answer. Only escalate to Claude if the manual does not cover it.</div></div>
+  <div class="sl" style="color:var(--fire);margin-top:28px">For Partners and Stakeholders</div>
+  <div class="step"><div class="step-num">01</div><div class="step-body"><strong>PhoennixAI operates with an AI agent team.</strong> Each agent has a name, a colour, a job description, KPIs, and a defined scope. They are not software tools. They are colleagues. You will interact with their outputs regularly.</div></div>
+  <div class="step"><div class="step-num">02</div><div class="step-body"><strong>SCRIBE is your document contact.</strong> Any question about what documents exist, their version, their status, or their location is answered by SCRIBE via the Document Hub. All documents are version-controlled and date-stamped.</div></div>
+  <div class="step"><div class="step-num">03</div><div class="step-body"><strong>SAGE is your intelligence contact.</strong> Any question about business performance, KPIs, agent metrics, or operational data is answered by SAGE's dashboards. Real-time, automated, always current.</div></div>
+  <div class="step"><div class="step-num">04</div><div class="step-body"><strong>Valerie Wilcox is informed of all significant decisions.</strong> The governance architecture ensures the founder is always in the loop. No agent or team member makes significant decisions without the founder's awareness.</div></div>
+</div>
+
+<!-- SIGNED AGENTS -->
+<div class="page-section" id="section-signed-agents">
+  <div class="page-hero">
+    <div class="ph-eyebrow">Active Agent Team</div>
+    <div class="ph-title">Signed and <span>Active</span></div>
+    <div class="ph-sub">These agents are authorised, documented, and operating. Stage 1 signed by Valerie Wilcox. Stage 2 activates at Phase 2 go-live.</div>
+  </div>
+  <div class="agent-row" style="border-left:3px solid var(--fire)"><div class="ar-dot" style="background:var(--fire);box-shadow:0 0 8px var(--fire)"></div><div style="flex:1"><div class="ar-name" style="color:var(--fire)">CLAUDE</div><div class="ar-role">PAI-JD-001 · AI Strategic Partner and Agent Manager</div><div class="ar-body">The strategic mind and agent manager. Deep reasoning, strategy, writing, document creation. All agent management routes through Claude. Signed 12 March 2026.</div><div style="margin-top:6px"><span class="chip c-live">Active</span><span class="chip c-fire">Phoenix Fire</span></div></div></div>
+  <div class="agent-row" style="border-left:3px solid var(--cyan)"><div class="ar-dot" style="background:var(--cyan);box-shadow:0 0 8px var(--cyan)"></div><div style="flex:1"><div class="ar-name" style="color:var(--cyan)">ARIA</div><div class="ar-role">PAI-JD-002 · Workspace Intelligence · Agent 000 · Second Brain</div><div class="ar-body">Always-on workspace brain. Morning briefings, calendar intelligence, task tracking, email triage. Owns the Workspace. Cyan is reserved exclusively for ARIA. Signed 12 March 2026.</div><div style="margin-top:6px"><span class="chip c-live">Active</span><span class="chip" style="color:var(--cyan);border-color:rgba(0,229,255,0.3);background:rgba(0,229,255,0.06)">Electric Cyan</span></div></div></div>
+  <div class="agent-row" style="border-left:3px solid var(--royal)"><div class="ar-dot" style="background:var(--royal);box-shadow:0 0 8px var(--royal)"></div><div style="flex:1"><div class="ar-name" style="color:var(--royal)">GRID</div><div class="ar-role">PAI-JD-009 · Project Manager and Business Analyst · Agent 009</div><div class="ar-body">Governs delivery across all 9 products and 16 agents. Owns Mission Control. Runs weekly retrospective and daily 08:00 founder report. Manages work, not agents. Signed 20 March 2026.</div><div style="margin-top:6px"><span class="chip c-live">Active</span><span class="chip" style="color:var(--royal);border-color:rgba(33,92,174,0.4);background:rgba(33,92,174,0.08)">Deep Royal</span></div></div></div>
+  <div class="agent-row" style="border-left:3px solid var(--bronze)"><div class="ar-dot" style="background:var(--bronze);box-shadow:0 0 8px var(--bronze)"></div><div style="flex:1"><div class="ar-name" style="color:var(--bronze)">SCRIBE</div><div class="ar-role">PAI-JD-015 · Document Intelligence · Agent 015 · Document Hub Owner</div><div class="ar-body">Owns the Document Hub and the institutional memory of PhoennixAI. Seven-step document control. Version control, lifecycle governance, single source of truth. SCRIBE never forgets. Signed 20 March 2026.</div><div style="margin-top:6px"><span class="chip c-live">Live</span><span class="chip c-owner">Bronze</span></div></div></div>
+  <div class="agent-row" style="border-left:3px solid var(--gold)"><div class="ar-dot" style="background:var(--gold);box-shadow:0 0 8px var(--gold)"></div><div style="flex:1"><div class="ar-name" style="color:var(--gold)">LEDGER</div><div class="ar-role">PAI-JD-006 · AGI Financial Intelligence · Agent 006</div><div class="ar-body">Financial intelligence at Goldman Sachs, JPMorgan, Big Four CFO standard. Advisory only. Never executes transactions. Hard limit, non-negotiable, locked at founding. Signed 20 March 2026.</div><div style="margin-top:6px"><span class="chip c-live">Active</span><span class="chip" style="color:var(--gold);border-color:rgba(255,184,48,0.4);background:rgba(255,184,48,0.08)">Ember Gold</span></div></div></div>
+  <div class="agent-row" style="border-left:3px solid var(--sapphire)"><div class="ar-dot" style="background:var(--sapphire);box-shadow:0 0 8px var(--sapphire)"></div><div style="flex:1"><div class="ar-name" style="color:var(--sapphire)">RELAY</div><div class="ar-role">PAI-JD-005 · Client Onboarding Automation · Agent 005</div><div class="ar-body">Apple Store experience designer standard. Triggers on new client sign, welcome sequence, workspace creation, kickoff scheduling. External beta owner from 30 March 2026. Signed 20 March 2026.</div><div style="margin-top:6px"><span class="chip c-live">Active</span><span class="chip" style="color:var(--sapphire);border-color:rgba(70,171,215,0.4);background:rgba(70,171,215,0.08)">Sapphire Wing</span></div></div></div>
+  <div class="agent-row" style="border-left:3px solid var(--steel)"><div class="ar-dot" style="background:var(--steel);box-shadow:0 0 8px var(--steel)"></div><div style="flex:1"><div class="ar-name" style="color:var(--steel)">SAGE</div><div class="ar-role">PAI-JD-016 · Strategic Analytics and Governance Engine · Agent 016</div><div class="ar-body">Intelligence backbone of PhoennixAI. Real-time dashboards, automated reports, KPI governance, predictive forecasting. SCRIBE holds the truth. SAGE reveals what it means. Partners with SCRIBE. Signed 20 March 2026.</div><div style="margin-top:6px"><span class="chip c-live">Live</span><span class="chip" style="color:var(--steel);border-color:rgba(70,130,180,0.4);background:rgba(70,130,180,0.08)">Steel Blue</span></div></div></div>
+  <div class="agent-row" style="border-left:3px solid var(--violet)"><div class="ar-dot" style="background:var(--violet);box-shadow:0 0 8px var(--violet)"></div><div style="flex:1"><div class="ar-name" style="color:var(--violet)">PA</div><div class="ar-role">PAI-JD-001A · Personal Productivity Assistant · Agent 001 · Priority Critical</div><div class="ar-body">Harvard and FTSE 100 EA standard. Daily morning brief at 08:00. Calendar intelligence, email triage, priority sequencing, focus time protection, goal alignment. Signed 20 March 2026.</div><div style="margin-top:6px"><span class="chip c-live">Active</span><span class="chip" style="color:var(--violet);border-color:rgba(167,139,250,0.4);background:rgba(167,139,250,0.08)">Soft Violet</span></div></div></div>
+</div>
+
+<!-- QUEUE AGENTS -->
+<div class="page-section" id="section-queue-agents">
+  <div class="page-hero">
+    <div class="ph-eyebrow">Agent Pipeline</div>
+    <div class="ph-title">In <span>Queue</span></div>
+    <div class="ph-sub">These agents are defined and scoped. JDs and CVs are being built each session. Each will become active once documented, signed, and tested.</div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+    <div class="card"><div class="card-label">Agent 002 · Signal Green</div><div class="card-title">SCOUT</div><div class="card-body">Lead generation and sales. Salesforce VP, HubSpot growth, Goldman Sachs relationship standard. Pipeline construction, ICP profiling, conversion optimisation.</div></div>
+    <div class="card"><div class="card-label">Agent 003 · Soft Violet</div><div class="card-title">PULSE</div><div class="card-body">Social media and content. MrBeast creative, Meta platform, McKinsey brand standard. Platform algorithms, community psychology, viral mechanics. Powers PRJ-003.</div></div>
+    <div class="card"><div class="card-label">Agent 004 · Pending</div><div class="card-title">ATLAS</div><div class="card-body">Job hunting and professional positioning. Spencer Stuart headhunter standard. CV architecture, personal brand, interview psychology, career trajectory.</div></div>
+    <div class="card"><div class="card-label">Agent 007 · Pending</div><div class="card-title">ECHO</div><div class="card-body">Customer support. Zappos director, Ritz-Carlton service standard. Complaint resolution, loyalty engineering, retention science. Turns friction into trust.</div></div>
+    <div class="card"><div class="card-label">Agent 008 · Pending</div><div class="card-title">ENROL</div><div class="card-body">Academy enrolment. Leading university admissions standard. Student recruitment, objection handling, parent communication, educational onboarding.</div></div>
+    <div class="card"><div class="card-label">Agent 010 · Sapphire Wing</div><div class="card-title">SIGNAL</div><div class="card-body">Competitor and market intelligence. Gartner analyst, McKinsey competitive intelligence, former MI6 standard. Profiles competitors at depth, maps what is coming.</div></div>
+    <div class="card"><div class="card-label">Agent 011 · Pending</div><div class="card-title">GRANT</div><div class="card-body">Funding and grant intelligence. Big Lottery Fund, Deloitte public sector standard. Government frameworks, UKRI, Innovate UK. Builds cases that win.</div></div>
+    <div class="card"><div class="card-label">Agent 012 · Pending</div><div class="card-title">FORGE</div><div class="card-body">Email marketing. Klaviyo senior strategist, world-class direct response standard. Segmentation, automations, deliverability, revenue-per-email optimisation.</div></div>
+    <div class="card"><div class="card-label">Agent 013 · Pending</div><div class="card-title">BRIDGE</div><div class="card-body">Partnership and outreach. Unilever strategic partnerships, Goldman relationship director standard. Opens doors that stay open. Strategic alliance construction.</div></div>
+    <div class="card"><div class="card-label">Agent 014 · Alert Red</div><div class="card-title">GUARDIAN</div><div class="card-body">Founder vault security. Former GCHQ analyst, fintech CISO, PwC cybersecurity standard. Access control, digital security architecture, GDPR compliance.</div></div>
+  </div>
+</div>
+
+<!-- COMMUNICATIONS -->
+<div class="page-section" id="section-comms">
+  <div class="page-hero">
+    <div class="ph-eyebrow">Agent Teamwork</div>
+    <div class="ph-title">How Agents <span>Communicate</span></div>
+    <div class="ph-sub">All agents operate autonomously within their scope. Every agent decision is logged. Valerie is informed of all significant decisions. The communication architecture makes the ecosystem intelligent.</div>
+  </div>
+  <div class="sl" style="color:var(--gold)">Core Communication Flows</div>
+  <div class="comm-row"><div class="cr-from" style="color:var(--royal)">GRID</div><div class="cr-arrow">→</div><div class="cr-to" style="color:var(--cyan)">ARIA</div><div class="cr-desc">GRID passes daily operational priorities to ARIA for inclusion in the founder's morning briefing. ARIA surfaces GRID's task flags at 08:00.</div></div>
+  <div class="comm-row"><div class="cr-from" style="color:var(--cyan)">ARIA</div><div class="cr-arrow">→</div><div class="cr-to" style="color:var(--bronze)">SCRIBE</div><div class="cr-desc">When ARIA creates or updates any document or note, she signals to SCRIBE. SCRIBE logs the state change, versions it, files it in the Document Hub.</div></div>
+  <div class="comm-row"><div class="cr-from" style="color:var(--royal)">GRID</div><div class="cr-arrow">→</div><div class="cr-to" style="color:var(--bronze)">SCRIBE</div><div class="cr-desc">Every deliverable GRID produces is handed to SCRIBE for governance. Session logs, PRDs, retrospectives, product specs. GRID builds. SCRIBE files.</div></div>
+  <div class="comm-row"><div class="cr-from" style="color:var(--bronze)">SCRIBE</div><div class="cr-arrow">→</div><div class="cr-to" style="color:var(--steel)">SAGE</div><div class="cr-desc">SCRIBE feeds SAGE with structured data from every document state change. SAGE uses it to update dashboards and generate reports in real time.</div></div>
+  <div class="comm-row"><div class="cr-from" style="color:var(--steel)">SAGE</div><div class="cr-arrow">→</div><div class="cr-to" style="color:var(--royal)">GRID</div><div class="cr-desc">SAGE surfaces performance anomalies back to GRID. When a product falls behind forecast or an agent KPI drops below target, SAGE flags it to GRID for action.</div></div>
+  <div class="comm-row"><div class="cr-from" style="color:var(--steel)">SAGE</div><div class="cr-arrow">→</div><div class="cr-to" style="color:var(--cyan)">ARIA</div><div class="cr-desc">SAGE passes anomaly alerts for the Workspace domain to ARIA. ARIA includes them in the morning briefing so the founder receives one consolidated report.</div></div>
+  <div class="comm-row"><div class="cr-from" style="color:var(--violet)">PA</div><div class="cr-arrow">→</div><div class="cr-to" style="color:var(--cyan)">ARIA</div><div class="cr-desc">PA and ARIA are distinct but complementary. ARIA watches the whole house. PA gets you dressed and ready to leave it. PA passes the daily plan to ARIA for surfacing in the briefing.</div></div>
+  <div class="comm-row"><div class="cr-from" style="color:var(--gold)">LEDGER</div><div class="cr-arrow">→</div><div class="cr-to" style="color:var(--steel)">SAGE</div><div class="cr-desc">LEDGER passes financial advisory outputs to SAGE for visualisation in the financial dashboard. LEDGER never executes. SAGE never handles money. Both observe and advise.</div></div>
+  <div class="comm-row"><div class="cr-from" style="color:var(--sapphire)">RELAY</div><div class="cr-arrow">→</div><div class="cr-to" style="color:var(--royal)">GRID</div><div class="cr-desc">RELAY signals to GRID when each new beta tester is onboarded. GRID tracks onboarding completion against the beta milestone. RELAY owns onboarding. GRID owns delivery tracking.</div></div>
+  <div class="info-box" style="margin-top:20px">
+    <div class="ib-label" style="color:var(--cyan)">The Governance Principle</div>
+    <div class="ib-body">All agent communication is structured, purposeful, and logged. No agent operates outside their defined scope. Valerie Wilcox is informed of all decisions. The communication architecture makes the ecosystem intelligent, not just a collection of separate tools.</div>
+  </div>
+</div>
+
+<!-- RULES -->
+<div class="page-section" id="section-rules">
+  <div class="page-hero">
+    <div class="ph-eyebrow">Governance</div>
+    <div class="ph-title">Rules and <span>Standards</span></div>
+    <div class="ph-sub">Non-negotiable rules governing the entire PhoennixAI ecosystem. Locked at founding. These do not change without a formal review and signature.</div>
+  </div>
+  <div class="sl" style="color:var(--fire)">Standing Rules, Non-Negotiable</div>
+  <div class="card">
+    <div class="rule-row"><div class="rule-icon">👑</div><div class="rule-text"><strong>Valerie Wilcox is the Founder and final authority.</strong> All agents operate within her mandate. All significant decisions surface to her. No agent or team member acts against her direction.</div></div>
+    <div class="rule-row"><div class="rule-icon">🚫</div><div class="rule-text"><strong>No em dashes in any output.</strong> Commas or restructured sentences only. Zero tolerance across all agents and all documents.</div></div>
+    <div class="rule-row"><div class="rule-icon">🏗️</div><div class="rule-text"><strong>No premature builds.</strong> Build only what is needed now. Prove internally first. Sell externally second. Every product must be used internally before it is sold to the world.</div></div>
+    <div class="rule-row"><div class="rule-icon">🤝</div><div class="rule-text"><strong>Agents are hires, not tools.</strong> Every agent ships with a JD, CV, User Manual, Training Manual, and Performance Dashboard. They have a colour identity, KPIs, and a name.</div></div>
+    <div class="rule-row"><div class="rule-icon">💰</div><div class="rule-text"><strong>LEDGER never executes transactions.</strong> Hard limit. Non-negotiable. Advisory only. Requires written authorisation from Valerie and a qualified financial professional to even review this boundary.</div></div>
+    <div class="rule-row"><div class="rule-icon">📋</div><div class="rule-text"><strong>Document Hub is the single source of truth.</strong> Every document has one canonical home. Two files covering the same content is a violation. SCRIBE enforces this automatically in Phase 2.</div></div>
+    <div class="rule-row"><div class="rule-icon">🔒</div><div class="rule-text"><strong>GRID manages work, not agents.</strong> Agent management is Claude's responsibility. GRID governs delivery. These are different functions.</div></div>
+    <div class="rule-row"><div class="rule-icon">📊</div><div class="rule-text"><strong>JDs get signed. CVs do not.</strong> All agents. No exceptions. ARIA and Claude CV signatures are legacy exceptions only.</div></div>
+    <div class="rule-row"><div class="rule-icon">💙</div><div class="rule-text"><strong>All apps default to light mode.</strong> Blue Phoenix is the primary brand. Phoenix Blue #00E5FF is the primary brand colour. Fire and gold are accent colours only (10-15% max).</div></div>
+    <div class="rule-row"><div class="rule-icon">📅</div><div class="rule-text"><strong>Weekly retrospective every Friday.</strong> All agents and human team where available. GRID chairs. What went well, what could be better, what we learned.</div></div>
+  </div>
+</div>
+
+<!-- DOCUMENTS -->
+<div class="page-section" id="section-documents">
+  <div class="page-hero">
+    <div class="ph-eyebrow">SCRIBE Governance</div>
+    <div class="ph-title">Document <span>Control</span></div>
+    <div class="ph-sub">SCRIBE's seven-step document control process. Every document in the PhoennixAI ecosystem follows this process without exception.</div>
+  </div>
+  <div class="step"><div class="step-num">01</div><div class="step-body"><strong>Document Reference Code.</strong> Every document receives a unique reference code on creation. Format: PAI-[TYPE]-[NUMBER]. Example: PAI-JD-009 for GRID's Job Description. Types include JD, CV, BG (Brand Guidelines), PRD, LOG, MAN (Manual), BRIEF.</div></div>
+  <div class="step"><div class="step-num">02</div><div class="step-body"><strong>Version Number.</strong> Every document starts at v1.0. Every change increments the version. Minor changes increment the decimal (v1.1, v1.2). Major structural changes increment the whole number (v2.0). Version number always appears in the document footer.</div></div>
+  <div class="step"><div class="step-num">03</div><div class="step-body"><strong>Status Tag.</strong> Every document carries one of five statuses: Draft, In Review, Approved, Actioned, Archived. The status is visible in the Document Hub and on the document itself. SCRIBE updates status automatically when triggered by an agent action.</div></div>
+  <div class="step"><div class="step-num">04</div><div class="step-body"><strong>Date Stamp.</strong> Creation date, last modified date, and next review date. All three are recorded. SCRIBE flags documents approaching their review date automatically. No document goes stale without the team knowing.</div></div>
+  <div class="step"><div class="step-num">05</div><div class="step-body"><strong>Author and Approver.</strong> Every document records who created it and who approved it. For agent documents, the approver is always Valerie Wilcox as Founder. The approver's signature is required for Approved status.</div></div>
+  <div class="step"><div class="step-num">06</div><div class="step-body"><strong>Changelog.</strong> Every version change is recorded with a date, a description of what changed, and who made the change. Changelogs are appended, never deleted. The full history of every document is always accessible.</div></div>
+  <div class="step"><div class="step-num">07</div><div class="step-body"><strong>Single Location Rule.</strong> Every document has exactly one canonical home in the Document Hub. No duplicates. No copies in Downloads or email attachments that diverge from the master. SCRIBE enforces this. Two files covering the same content is a violation.</div></div>
+</div>
+
+<!-- BEHAVIOURAL METRICS -->
+<div class="page-section" id="section-metrics">
+  <div class="page-hero">
+    <div class="ph-eyebrow">SAGE Intelligence Layer</div>
+    <div class="ph-title">Behavioural <span>Metrics</span></div>
+    <div class="ph-sub">PhoennixAI runs the world's first AI agency-led Human-AI Collaboration Study. These are the metrics SAGE monitors across human and agent performance over time. The research question: are humans and AI smarter together than either is alone?</div>
+  </div>
+  <div class="info-box">
+    <div class="ib-label" style="color:var(--cyan)">The Research Mandate</div>
+    <div class="ib-body">A 17-year biomedical scientist is running this. The methodology is sound. Data collection begins in beta. Every metric below is tracked in real time by SAGE across both human team members and AI agents side by side. The results will be published in a peer-reviewed journal in Phase 3 in partnership with a UK university. This answers Sam Altman with data, not opinion.</div>
+  </div>
+  <div class="sl" style="color:var(--steel)">Agent Performance Metrics</div>
+  <div class="metric-grid">
+    <div class="metric-card" style="border-left-color:var(--steel)"><div class="mc-label">Core Performance</div><div class="mc-title">Task Completion Accuracy</div><div class="mc-body">Percentage of tasks completed correctly on first attempt. Target: 95% and above. Tracked per agent, per task type, per complexity level.</div></div>
+    <div class="metric-card" style="border-left-color:var(--steel)"><div class="mc-label">Core Performance</div><div class="mc-title">Order Execution Precision</div><div class="mc-body">Capability of carrying out instructions precisely and accurately. Measures how faithfully an agent executes a given directive, deviation rate, and correction required.</div></div>
+    <div class="metric-card" style="border-left-color:var(--royal)"><div class="mc-label">Intelligence</div><div class="mc-title">Learning Velocity</div><div class="mc-body">How quickly the agent improves based on feedback and correction. Rate of error reduction over time. Compounded across all interactions.</div></div>
+    <div class="metric-card" style="border-left-color:var(--royal)"><div class="mc-label">Intelligence</div><div class="mc-title">Scope Adherence</div><div class="mc-body">Percentage of interactions where the agent stays within defined role boundaries. Flags attempted out-of-scope actions. Target: 100%.</div></div>
+    <div class="metric-card" style="border-left-color:var(--gold)"><div class="mc-label">Collaboration</div><div class="mc-title">Human-Agent Synergy Score</div><div class="mc-body">Composite metric measuring how effectively the human and agent work together. Task completion rate when working in tandem vs solo. The core research metric.</div></div>
+    <div class="metric-card" style="border-left-color:var(--gold)"><div class="mc-label">Collaboration</div><div class="mc-title">Consistency Across Styles</div><div class="mc-body">How consistently the agent performs across different human interaction styles, communication preferences, and cultural contexts.</div></div>
+  </div>
+  <div class="sl" style="color:var(--fire)">Emotional and Behavioural Metrics (New, Added 20 March 2026)</div>
+  <div class="bt">These metrics are tracked across both human team members and AI agents. Understanding emotional state and behavioural response is critical to genuine human-AI collaboration research. Frustration and joy are data points, not noise.</div>
+  <div class="metric-grid">
+    <div class="metric-card" style="border-left-color:var(--fire)"><div class="mc-label">Emotional State · Human</div><div class="mc-title">Frustration Detection</div><div class="mc-body">Detected through interaction patterns, response latency, correction frequency, and linguistic indicators. When frustration rises, SAGE flags it to ARIA and GRID. The team responds, not the tool. Frustration is information.</div></div>
+    <div class="metric-card" style="border-left-color:var(--gold)"><div class="mc-label">Emotional State · Human</div><div class="mc-title">Happiness and Satisfaction</div><div class="mc-body">Positive engagement signals: flow state indicators, reduced correction rate, longer active sessions, affirming language patterns. Measured as a happiness index over time. Goal: rising trend across all team members.</div></div>
+    <div class="metric-card" style="border-left-color:var(--steel)"><div class="mc-label">Emotional State · Human</div><div class="mc-title">Sadness and Low Energy</div><div class="mc-body">Detected through reduced interaction frequency, shorter responses, withdrawal signals. SAGE flags to ARIA. ARIA responds with appropriate support adjustments, not just task management. The system sees the whole human.</div></div>
+    <div class="metric-card" style="border-left-color:var(--violet)"><div class="mc-label">Emotional State · Agent</div><div class="mc-title">Agent Confidence Level</div><div class="mc-body">Measured by certainty in responses, correction acceptance rate, and performance consistency. An agent operating in their domain with high confidence produces different outputs than one operating outside their scope.</div></div>
+    <div class="metric-card" style="border-left-color:var(--green)"><div class="mc-label">Behavioural Trend</div><div class="mc-title">Emotional Regulation Under Load</div><div class="mc-body">How both human and agent maintain quality and accuracy under high workload conditions. Measured by performance delta between low-load and high-load periods. A key indicator of resilience and system stability.</div></div>
+    <div class="metric-card" style="border-left-color:var(--bronze)"><div class="mc-label">Behavioural Trend</div><div class="mc-title">Failure Handling and Recovery</div><div class="mc-body">How quickly and how well both human and agent recover from mistakes or failed tasks. Self-reporting accuracy measured against actual outcomes. Ethical reasoning under pressure.</div></div>
+  </div>
+  <div class="info-box" style="margin-top:8px">
+    <div class="ib-label" style="color:var(--cyan)">SAGE Monitors All of This</div>
+    <div class="ib-body">Every metric above feeds into SAGE's real-time dashboards. In Phase 2 when SAGE is wired to Supabase, these dashboards update automatically as interactions happen. In Phase 3, this data forms the dataset for the peer-reviewed paper. PhoennixAI becomes the world's first AI agency publishing formal academic research into human-AI collaboration.</div>
+  </div>
+</div>
+
+<!-- ONBOARDING -->
+<div class="page-section" id="section-onboarding">
+  <div class="page-hero">
+    <div class="ph-eyebrow">New Team Members</div>
+    <div class="ph-title">Staff <span>Onboarding</span></div>
+    <div class="ph-sub">For new staff, contractors, work experience students, and partners joining the PhoennixAI team. Read this section first.</div>
+  </div>
+  <div class="sl" style="color:var(--sapphire)">Day One Checklist</div>
+  <div class="step"><div class="step-num">01</div><div class="step-body"><strong>Read this User Manual in full.</strong> Specifically the Overview, The Three Apps, Agent Team, and Rules sections. Do not start working until you have done this. It replaces all induction conversations.</div></div>
+  <div class="step"><div class="step-num">02</div><div class="step-body"><strong>Open and bookmark the three apps.</strong> Mission Control, Workspace, and Document Hub. These are your operational home. Bookmark them on every device you use for work.</div></div>
+  <div class="step"><div class="step-num">03</div><div class="step-body"><strong>Identify your compatible AI.</strong> Based on your role, you will be assigned a specific agent workstation. The HR hire gets an HR agent. The developer gets a coding and debugging agent. Speak to your manager to confirm your agent assignment.</div></div>
+  <div class="step"><div class="step-num">04</div><div class="step-body"><strong>You will receive a welcome pack from RELAY.</strong> RELAY is the Client Onboarding agent. When you are formally onboarded, RELAY will send you your workspace credentials, a welcome sequence, and a branded welcome pack. This is your formal entry into the PhoennixAI ecosystem.</div></div>
+  <div class="step"><div class="step-num">05</div><div class="step-body"><strong>St Paul's Work Experience, 23 April 2026.</strong> Three students joining for work experience. Pack is being prepared. They will follow this same onboarding checklist adapted for their level.</div></div>
+  <div class="sl" style="color:var(--sapphire);margin-top:28px">The Compatible AI Principle</div>
+  <div class="bt">Every person has God-given gifts. For every person there is a compatible AI. Just like a blood group. Not replacement. Partnership. The HR hire gets an HR agent workstation at onboarding. The coder gets a coding agent. The child gets a companion that matches their emerging gifts and grows with them. This is the founding philosophy of PhoennixAI.</div>
+</div>
+
+<!-- BETA -->
+<div class="page-section" id="section-beta">
+  <div class="page-hero">
+    <div class="ph-eyebrow">Launch Timeline</div>
+    <div class="ph-title">Beta and <span>Testing</span></div>
+    <div class="ph-sub">Internal alpha runs until 27 March. External beta opens 30 March with 10 testers.</div>
+  </div>
+  <div class="sl" style="color:var(--violet)">Timeline</div>
+  <div class="card"><div class="rule-row"><div class="rule-icon">🔬</div><div class="rule-text"><strong>Internal Alpha: Now to 27 March 2026.</strong> Internal team tests all three apps in daily workflow. Find the breaks. GRID coordinates. Feedback via Workspace or direct to Valerie.</div></div><div class="rule-row"><div class="rule-icon">📣</div><div class="rule-text"><strong>First flyer post: 24 March 2026.</strong> Flyer 5 (fear of AI story) posts on Instagram and LinkedIn. Builds anticipation one week before beta opens.</div></div><div class="rule-row"><div class="rule-icon">🚀</div><div class="rule-text"><strong>External Beta: 30 March 2026.</strong> 10 testers onboarded by RELAY. Portal links sent. 30-day beta period. RELAY owns onboarding. GRID tracks delivery.</div></div><div class="rule-row"><div class="rule-icon">💰</div><div class="rule-text"><strong>Beta Pricing: Tier 1 £497, Tier 2 £1,497, Tier 3 £4,997.</strong> 3 Tier 2 clients covers monthly operating costs. 1 Tier 3 client funds Phase 2 entirely.</div></div></div>
+  <div class="sl" style="color:var(--violet);margin-top:24px">What to Test Internally</div>
+  <div class="bt">Mission Control daily workflow. ARIA morning briefings. Document Hub version control. PA daily planning. LEDGER basic financial view. RELAY beta onboarding flow. GRID daily report delivery. SAGE dashboard accuracy.</div>
+</div>
+
+<!-- PHASE 2 -->
+<div class="page-section" id="section-phase2">
+  <div class="page-hero">
+    <div class="ph-eyebrow">The Unlock</div>
+    <div class="ph-title">Phase 2 <span>Roadmap</span></div>
+    <div class="ph-sub">Three decisions unlock everything. Supabase backend, React developer, server infrastructure. This is the critical path.</div>
+  </div>
+  <div class="card" style="border-top:2px solid var(--fire)"><div class="card-label">Unlock 1, Critical</div><div class="card-title">Supabase Backend</div><div class="card-body">Replaces localStorage. Cross-device sync. Free to 500MB and 50,000 MAU, then £20 per month. All localStorage keys map directly to Supabase columns. Zero refactoring needed. Go to supabase.com, sign up with GitHub, create phoennixai-backend project, choose London region.</div></div>
+  <div class="card" style="border-top:2px solid var(--royal)"><div class="card-label">Unlock 2, Critical</div><div class="card-title">React Developer Decision</div><div class="card-body">Migrates HTML to React. Enables auth, Claude API wiring, Supabase integration, PWA conversion, multi-model routing layer. Options: freelance developer, junior full-time hire, or AI-assisted tools (Cursor or Devin).</div></div>
+  <div class="card" style="border-top:2px solid var(--steel)"><div class="card-label">Unlock 3, Enables Autonomy</div><div class="card-title">Server Infrastructure</div><div class="card-body">Supabase Edge Functions plus Vercel or Railway free tier. Enables always-on agents running 24/7. ARIA briefs the founder at 08:00 automatically. GRID runs the daily report without being asked. SAGE updates dashboards in real time without human input.</div></div>
+  <div class="sl" style="color:var(--royal);margin-top:24px">Multi-Model Orchestration (Phase 3)</div>
+  <div class="bt">Claude handles strategy, reasoning, and writing. Kimi K2.5 handles bulk research and coding at 10x cheaper than Claude. Manus handles autonomous execution and Instagram posting via native connector. Perplexity handles real-time web intelligence. Users see PhoennixAI agents only. The models underneath are invisible.</div>
+</div>
+
+<!-- FAQ -->
+<div class="page-section" id="section-faq">
+  <div class="page-hero">
+    <div class="ph-eyebrow">Quick Answers</div>
+    <div class="ph-title">FAQ</div>
+    <div class="ph-sub">Common questions answered. If your question is not here, pull it up with SCRIBE or ask Claude in a session.</div>
+  </div>
+  <div class="card"><div class="card-label">Q: Who is responsible for Mission Control?</div><div class="card-body"><strong>GRID. Agent 009.</strong> GRID owns and governs Mission Control. He is at his station on the GRID home tab. Any issues with Mission Control go to GRID.</div></div>
+  <div class="card"><div class="card-label">Q: I cannot find a document. Where do I look?</div><div class="card-body"><strong>Document Hub first.</strong> Every document that officially exists lives in the Document Hub. If it is not there, check the GitHub repo. If it is not there either, it has not been built or filed yet. Ask SCRIBE via the Document Hub, or raise it in the next session.</div></div>
+  <div class="card"><div class="card-label">Q: What does LEDGER actually do? Can she make payments?</div><div class="card-body"><strong>No. Never. Advisory only, non-negotiable.</strong> LEDGER analyses, advises, and forecasts. She does not touch money. She does not execute transactions. This is a founding rule that cannot be changed without written authorisation from Valerie and a qualified financial professional.</div></div>
+  <div class="card"><div class="card-label">Q: Are the agents actually autonomous right now?</div><div class="card-body"><strong>Not fully. They are Phase 0 prompt-configured.</strong> Their documents, roles, and JDs are live. They operate through Claude sessions. Full autonomy activates in Phase 2 when Supabase is live, a developer is onboarded, and server infrastructure is running. The Phase 2 decision unlocks everything.</div></div>
+  <div class="card"><div class="card-label">Q: Who manages the agents?</div><div class="card-body"><strong>Claude, as AI Strategic Partner and Agent Manager (PAI-JD-001).</strong> GRID manages the work and the delivery. Claude manages the agents. These are different responsibilities with different owners.</div></div>
+  <div class="card"><div class="card-label">Q: What is the Universe Bible?</div><div class="card-body"><strong>The purpose document.</strong> Every customer receives it on purchase. It is not a manual. It is the story of why PhoennixAI exists, the hybrid characters, the five villains, the kingdom mandate. Do not change it. It is locked March 2026.</div></div>
+  <div class="card"><div class="card-label">Q: If an agent is unavailable, how does the human team continue?</div><div class="card-body"><strong>Use this manual.</strong> This document exists precisely for this reason. Every agent's role, responsibilities, scope, and outputs are documented here. The team can continue working, access what they need, and make informed decisions without waiting for any specific agent to return.</div></div>
+</div>
+
+</main>
+
+<script>
+function show(id){
+  document.querySelectorAll('.page-section').forEach(function(s){s.classList.remove('active')});
+  document.querySelectorAll('.sb-item').forEach(function(i){i.classList.remove('active')});
+  var sec = document.getElementById('section-'+id);
+  if(sec) sec.classList.add('active');
+  event.currentTarget.classList.add('active');
+  document.querySelector('.main').scrollTo(0,0);
+  window.scrollTo(0,0);
+}
+</script>
+</body></html>
