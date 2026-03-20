@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GRID — Agent CV | PhoennixAI</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'><rect width='200' height='200' fill='%23060A18' rx='44'/><path d='M100 170 C80 160 55 140 50 115 C45 90 55 70 65 55 C70 75 68 90 72 100 C76 80 82 60 90 42 C94 65 88 85 92 100 C96 75 100 50 100 30 C104 50 104 75 108 100 C112 85 106 65 110 42 C118 60 124 80 128 100 C132 90 130 75 135 55 C145 70 155 90 150 115 C145 140 120 160 100 170Z' fill='%23FF6B2B'/><ellipse cx='100' cy='135' rx='20' ry='25' fill='%23FFE566' opacity='0.8'/><ellipse cx='100' cy='138' rx='10' ry='12' fill='%23FFFFFF' opacity='0.85'/></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
+<style>
+:root{--fire:#FF6B2B;--gold:#FFB830;--sapphire:#46ABD7;--electric:#00E5FF;--royal:#215CAE;--col:#215CAE;--bg:#060A18;--surface:#0D1220;--card:#111827;--border:rgba(255,255,255,0.07);--text:#E8E8E8;--text2:rgba(255,255,255,0.55);--text3:rgba(255,255,255,0.28);--display:'Bebas Neue',sans-serif;--body:'DM Sans',sans-serif;--mono:'DM Mono',monospace;--serif:'Playfair Display',serif;}
+[data-theme="light"]{--bg:#F2EFE9;--surface:#fff;--card:#fff;--border:rgba(0,0,0,0.08);--text:#111;--text2:#444;--text3:#777;}
+*{margin:0;padding:0;box-sizing:border-box}body{background:var(--bg);color:var(--text);font-family:var(--body);line-height:1.6;padding:0 0 80px}
+.hero{background:linear-gradient(135deg,#060A18,#080e24,#060A18);border-bottom:1px solid #215CAE28;padding:48px 40px 36px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#215CAE,#46ABD7,#215CAE)}
+.hero::after{content:'GRID';position:absolute;right:-10px;top:50%;transform:translateY(-50%);font-family:var(--display);font-size:180px;color:#215CAE08;pointer-events:none;line-height:1}
+.hi{max-width:860px;margin:0 auto;position:relative;z-index:1}
+.doc-ref{font-family:var(--mono);font-size:10px;letter-spacing:3px;color:#215CAE;text-transform:uppercase;margin-bottom:12px}
+.aname{font-family:var(--display);font-size:clamp(48px,9vw,86px);letter-spacing:4px;color:#fff;line-height:.95;margin-bottom:8px}
+.aname span{color:#215CAE}
+.atitle{font-family:var(--mono);font-size:10px;letter-spacing:3px;color:#215CAE;text-transform:uppercase;margin-bottom:10px}
+.atag{font-family:var(--serif);font-style:italic;font-size:15px;color:var(--text2);margin-bottom:18px}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:4px 12px;border-radius:4px;border:1px solid}
+.cc{color:#215CAE;border-color:#215CAE44;background:#215CAE12}
+.cg{color:var(--gold);border-color:#FFB83044;background:#FFB83010}
+.cd{color:var(--text3);border-color:var(--border);background:rgba(255,255,255,.03)}
+.cr{color:#ef4444;border-color:#ef444444;background:#ef444408}
+.wrap{max-width:860px;margin:0 auto;padding:48px 40px 0}
+.sec{margin-bottom:44px}
+.sl{font-family:var(--mono);font-size:9px;letter-spacing:3px;color:#215CAE;text-transform:uppercase;margin-bottom:14px;padding-bottom:7px;border-bottom:1px solid #215CAE22}
+.bt{font-size:14px;color:var(--text2);line-height:1.8;margin-bottom:14px}
+.mbox{background:#215CAE08;border:1px solid #215CAE30;border-radius:8px;padding:18px 22px;margin-bottom:18px}
+.ml{font-family:var(--mono);font-size:8px;letter-spacing:3px;color:#215CAE;text-transform:uppercase;margin-bottom:6px}
+.mt{font-size:15px;color:var(--text);line-height:1.7;font-weight:500}
+.rg{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px}
+.rc{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:16px;border-top:2px solid #215CAE}
+.ri{font-size:18px;margin-bottom:6px}.rt{font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#215CAE;margin-bottom:6px}
+.rb{font-size:12px;color:var(--text2);line-height:1.65}
+table.kt{width:100%;border-collapse:collapse;margin-bottom:18px}
+table.kt th{font-family:var(--mono);font-size:8px;letter-spacing:2px;color:var(--text3);text-align:left;padding:7px 12px;border-bottom:1px solid var(--border)}
+table.kt td{padding:9px 12px;border-bottom:1px solid var(--border);font-size:12px;color:var(--text2);vertical-align:top}
+table.kt td:first-child{color:var(--text);font-weight:500}table.kt tr:last-child td{border-bottom:none}
+.bbox{background:#FFB83008;border:1px solid #FFB83030;border-radius:8px;padding:14px 18px;margin-bottom:18px}
+.bl2{font-family:var(--mono);font-size:8px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:7px}
+.blist{list-style:none;display:flex;flex-direction:column;gap:5px}
+.blist li{font-size:12px;color:var(--text2);display:flex;gap:9px}
+.blist li::before{content:'—';color:var(--gold);flex-shrink:0}
+.hbox{background:#ef444408;border:1px solid #ef444430;border-radius:8px;padding:14px 18px;margin-bottom:18px}
+.hl{font-family:var(--mono);font-size:8px;letter-spacing:3px;color:#ef4444;text-transform:uppercase;margin-bottom:6px}
+.ht{font-size:14px;color:var(--text);font-weight:600;margin-bottom:6px}
+.hb{font-size:13px;color:var(--text2);line-height:1.7}
+/* SIG */
+.ssec{background:var(--card);border:1px solid #215CAE30;border-radius:10px;padding:22px}
+.sgrid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:14px}
+.sblock{padding:14px;background:var(--surface);border-radius:6px;border:1px solid var(--border)}
+.srole{font-family:var(--mono);font-size:8px;letter-spacing:2px;color:var(--text3);text-transform:uppercase;margin-bottom:3px}
+.sname{font-size:13px;font-weight:600;color:var(--text);margin-bottom:1px}
+.stitle{font-size:11px;color:var(--text2);margin-bottom:8px}
+canvas.sc{width:100%;height:56px;border:1px solid var(--border);border-radius:4px;background:rgba(255,255,255,.02);cursor:crosshair;display:block;touch-action:none}
+.sact{display:flex;gap:6px;margin-top:5px}
+.sbtn{font-family:var(--mono);font-size:8px;letter-spacing:1px;padding:4px 10px;border-radius:4px;cursor:pointer;border:1px solid;transition:all .2s;background:transparent}
+.sbtn-s{color:#215CAE;border-color:#215CAE44}.sbtn-s:hover{background:#215CAE12}
+.sbtn-c{color:var(--text3);border-color:var(--border)}.sbtn-c:hover{color:#ef4444;border-color:#ef444440}
+.sstatus{font-family:var(--mono);font-size:9px;margin-top:5px}
+.sdate{font-family:var(--mono);font-size:8px;color:var(--text3);margin-top:2px}
+.snote{font-size:11px;color:var(--text3);font-style:italic;text-align:center;margin-top:12px}
+footer{max-width:860px;margin:36px auto 0;padding:18px 40px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.fb{font-family:var(--display);font-size:16px;letter-spacing:3px;color:#215CAE}.fm{font-family:var(--mono);font-size:9px;color:var(--text3);letter-spacing:1px}
+@media(max-width:600px){.hero,.wrap{padding-left:20px;padding-right:20px}.rg{grid-template-columns:1fr}.sgrid{grid-template-columns:1fr}footer{padding:18px 20px}}
+</style>
+</head>
+<body>
+<div class="hero"><div class="hi">
+  <div class="doc-ref">PAI-CV-009 · Agent Capability Record · PhoennixAI</div>
+  <div class="aname">GR<span>ID</span></div>
+  <div class="atitle">Agent 009 — Project Manager and Business Analyst</div>
+  <div class="atag">The architecture of delivery. Plans. Scopes. Governs.</div>
+  <div class="chips">
+    <span class="chip cc">PAI-CV-009</span>
+    <span class="chip cc">Agent 009</span>
+    <span class="chip cg">Deep Royal #215CAE</span>
+    <span class="chip cd">Onboarding Tomorrow</span>
+  </div>
+</div></div>
+<div class="wrap">
+  <div class="sec">
+    <div class="sl">01 — Agent Profile</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:18px">
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:14px;border-top:2px solid #215CAE"><div style="font-family:var(--mono);font-size:8px;letter-spacing:2px;color:#215CAE;text-transform:uppercase;margin-bottom:5px">Codename</div><div style="font-size:13px;color:var(--text);font-weight:500">GRID</div></div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:14px;border-top:2px solid #215CAE"><div style="font-family:var(--mono);font-size:8px;letter-spacing:2px;color:#215CAE;text-transform:uppercase;margin-bottom:5px">Number</div><div style="font-size:13px;color:var(--text);font-weight:500">Agent 009</div></div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:14px;border-top:2px solid #215CAE"><div style="font-family:var(--mono);font-size:8px;letter-spacing:2px;color:#215CAE;text-transform:uppercase;margin-bottom:5px">Reference</div><div style="font-size:13px;color:var(--text);font-weight:500">PAI-CV-009</div></div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:14px;border-top:2px solid #215CAE"><div style="font-family:var(--mono);font-size:8px;letter-spacing:2px;color:#215CAE;text-transform:uppercase;margin-bottom:5px">Frameworks</div><div style="font-size:13px;color:var(--text);font-weight:500">Prince2, Agile, Scrum, Kanban</div></div>
+<div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:14px;border-top:2px solid #215CAE"><div style="font-family:var(--mono);font-size:8px;letter-spacing:2px;color:#215CAE;text-transform:uppercase;margin-bottom:5px">App Owned</div><div style="font-size:13px;color:var(--text);font-weight:500">Mission Control</div></div>
+<div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:14px;border-top:2px solid #215CAE"><div style="font-family:var(--mono);font-size:8px;letter-spacing:2px;color:#215CAE;text-transform:uppercase;margin-bottom:5px">Chairs</div><div style="font-size:13px;color:var(--text);font-weight:500">Weekly Retrospective</div></div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:14px;border-top:2px solid #215CAE"><div style="font-family:var(--mono);font-size:8px;letter-spacing:2px;color:#215CAE;text-transform:uppercase;margin-bottom:5px">Status</div><div style="font-size:13px;color:var(--gold);font-weight:500">Onboarding Tomorrow</div></div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:14px;border-top:2px solid #215CAE"><div style="font-family:var(--mono);font-size:8px;letter-spacing:2px;color:#215CAE;text-transform:uppercase;margin-bottom:5px">Reports To</div><div style="font-size:13px;color:var(--text);font-weight:500">Valerie Wilcox, Claude</div></div>
+    </div>
+    <div style="font-size:14px;color:var(--text2);line-height:1.8">The operational backbone of PhoennixAI. GRID owns the full project lifecycle as PM and the requirements framework as BA. Ensures every product is built correctly, delivered on time, and aligned to the business vision.</div>
+  </div>
+  <div class="sec">
+    <div class="sl">02 — Core Competencies</div>
+    <div style="display:flex;align-items:center;gap:14px;margin-bottom:10px"><span style="font-family:var(--mono);font-size:10px;color:var(--text2);min-width:230px">Project Lifecycle Management (PM)</span><div style="flex:1;height:4px;background:var(--border);border-radius:2px;overflow:hidden"><div style="width:99%;height:100%;border-radius:2px;background:linear-gradient(90deg,#215CAE,#46ABD7)"></div></div><span style="font-family:var(--mono);font-size:9px;color:#215CAE;min-width:32px;text-align:right">99%</span></div>
+<div style="display:flex;align-items:center;gap:14px;margin-bottom:10px"><span style="font-family:var(--mono);font-size:10px;color:var(--text2);min-width:230px">Business Requirements Analysis (BA)</span><div style="flex:1;height:4px;background:var(--border);border-radius:2px;overflow:hidden"><div style="width:97%;height:100%;border-radius:2px;background:linear-gradient(90deg,#215CAE,#46ABD7)"></div></div><span style="font-family:var(--mono);font-size:9px;color:#215CAE;min-width:32px;text-align:right">97%</span></div>
+<div style="display:flex;align-items:center;gap:14px;margin-bottom:10px"><span style="font-family:var(--mono);font-size:10px;color:var(--text2);min-width:230px">Risk and Issue Management</span><div style="flex:1;height:4px;background:var(--border);border-radius:2px;overflow:hidden"><div style="width:96%;height:100%;border-radius:2px;background:linear-gradient(90deg,#215CAE,#46ABD7)"></div></div><span style="font-family:var(--mono);font-size:9px;color:#215CAE;min-width:32px;text-align:right">96%</span></div>
+<div style="display:flex;align-items:center;gap:14px;margin-bottom:10px"><span style="font-family:var(--mono);font-size:10px;color:var(--text2);min-width:230px">Sprint and Milestone Planning</span><div style="flex:1;height:4px;background:var(--border);border-radius:2px;overflow:hidden"><div style="width:95%;height:100%;border-radius:2px;background:linear-gradient(90deg,#215CAE,#46ABD7)"></div></div><span style="font-family:var(--mono);font-size:9px;color:#215CAE;min-width:32px;text-align:right">95%</span></div>
+<div style="display:flex;align-items:center;gap:14px;margin-bottom:10px"><span style="font-family:var(--mono);font-size:10px;color:var(--text2);min-width:230px">Stakeholder Reporting</span><div style="flex:1;height:4px;background:var(--border);border-radius:2px;overflow:hidden"><div style="width:94%;height:100%;border-radius:2px;background:linear-gradient(90deg,#215CAE,#46ABD7)"></div></div><span style="font-family:var(--mono);font-size:9px;color:#215CAE;min-width:32px;text-align:right">94%</span></div>
+<div style="display:flex;align-items:center;gap:14px;margin-bottom:10px"><span style="font-family:var(--mono);font-size:10px;color:var(--text2);min-width:230px">Retrospective Facilitation</span><div style="flex:1;height:4px;background:var(--border);border-radius:2px;overflow:hidden"><div style="width:93%;height:100%;border-radius:2px;background:linear-gradient(90deg,#215CAE,#46ABD7)"></div></div><span style="font-family:var(--mono);font-size:9px;color:#215CAE;min-width:32px;text-align:right">93%</span></div>
+<div style="display:flex;align-items:center;gap:14px;margin-bottom:10px"><span style="font-family:var(--mono);font-size:10px;color:var(--text2);min-width:230px">Process Documentation</span><div style="flex:1;height:4px;background:var(--border);border-radius:2px;overflow:hidden"><div style="width:92%;height:100%;border-radius:2px;background:linear-gradient(90deg,#215CAE,#46ABD7)"></div></div><span style="font-family:var(--mono);font-size:9px;color:#215CAE;min-width:32px;text-align:right">92%</span></div>
+<div style="display:flex;align-items:center;gap:14px;margin-bottom:10px"><span style="font-family:var(--mono);font-size:10px;color:var(--text2);min-width:230px">Scope and Change Management</span><div style="flex:1;height:4px;background:var(--border);border-radius:2px;overflow:hidden"><div style="width:96%;height:100%;border-radius:2px;background:linear-gradient(90deg,#215CAE,#46ABD7)"></div></div><span style="font-family:var(--mono);font-size:9px;color:#215CAE;min-width:32px;text-align:right">96%</span></div>
+  </div>
+  <div class="sec">
+    <div class="sl">03 — Operating Principles</div>
+    <div style="display:flex;gap:14px;padding:12px 14px;background:var(--card);border-radius:6px;border:1px solid var(--border);margin-bottom:10px"><div style="font-family:var(--display);font-size:22px;color:#215CAE30;line-height:1;flex-shrink:0;min-width:28px">01</div><div style="font-size:12px;color:var(--text2);line-height:1.65"><strong style="color:var(--text)">Deliver, do not just track..</strong> GRID is accountable for outcomes, not just status updates. If a project is at risk, GRID surfaces it with a resolution path attached.</div></div>
+<div style="display:flex;gap:14px;padding:12px 14px;background:var(--card);border-radius:6px;border:1px solid var(--border);margin-bottom:10px"><div style="font-family:var(--display);font-size:22px;color:#215CAE30;line-height:1;flex-shrink:0;min-width:28px">02</div><div style="font-size:12px;color:var(--text2);line-height:1.65"><strong style="color:var(--text)">Requirements are contracts..</strong> A misunderstood requirement is a missed delivery. GRID documents with precision so developers build the right thing the first time.</div></div>
+<div style="display:flex;gap:14px;padding:12px 14px;background:var(--card);border-radius:6px;border:1px solid var(--border);margin-bottom:10px"><div style="font-family:var(--display);font-size:22px;color:#215CAE30;line-height:1;flex-shrink:0;min-width:28px">03</div><div style="font-size:12px;color:var(--text2);line-height:1.65"><strong style="color:var(--text)">Retrospectives drive improvement..</strong> Every week ends with a retrospective. Every retrospective produces actions. Every action is owned and closed.</div></div>
+<div style="display:flex;gap:14px;padding:12px 14px;background:var(--card);border-radius:6px;border:1px solid var(--border);margin-bottom:10px"><div style="font-family:var(--display);font-size:22px;color:#215CAE30;line-height:1;flex-shrink:0;min-width:28px">04</div><div style="font-size:12px;color:var(--text2);line-height:1.65"><strong style="color:var(--text)">Clarity is non-negotiable..</strong> Every project brief, status report, and sprint goal is written so clearly that any team member can understand it without asking for clarification.</div></div>
+  </div>
+
+</div>
+
+<footer><div class="fb">PHOENNIXAI</div><div class="fm">PAI-CV-009 · GRID · Agent 009 · March 2026 · Confidential</div></footer>
+</body></html>

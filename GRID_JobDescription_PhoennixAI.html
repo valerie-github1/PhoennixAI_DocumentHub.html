@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GRID, Job Description | PhoennixAI</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'><rect width='200' height='200' fill='%23060A18' rx='44'/><path d='M100 170 C80 160 55 140 50 115 C45 90 55 70 65 55 C70 75 68 90 72 100 C76 80 82 60 90 42 C94 65 88 85 92 100 C96 75 100 50 100 30 C104 50 104 75 108 100 C112 85 106 65 110 42 C118 60 124 80 128 100 C132 90 130 75 135 55 C145 70 155 90 150 115 C145 140 120 160 100 170Z' fill='%23FF6B2B'/><ellipse cx='100' cy='135' rx='20' ry='25' fill='%23FFE566' opacity='0.8'/><ellipse cx='100' cy='138' rx='10' ry='12' fill='%23FFFFFF' opacity='0.85'/></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
+<style>
+:root{--royal:#215CAE;--fire:#FF6B2B;--gold:#FFB830;--bg:#060A18;--surface:#0D1220;--card:#111827;--border:rgba(255,255,255,0.07);--text:#E8E8E8;--text2:rgba(255,255,255,0.55);--text3:rgba(255,255,255,0.28);--display:'Bebas Neue',sans-serif;--body:'DM Sans',sans-serif;--mono:'DM Mono',monospace;--serif:'Playfair Display',serif;}
+[data-theme="light"]{--bg:#F2EFE9;--surface:#fff;--card:#fff;--border:rgba(0,0,0,0.08);--text:#111;--text2:#444;--text3:#777;}
+*{margin:0;padding:0;box-sizing:border-box}body{background:var(--bg);color:var(--text);font-family:var(--body);line-height:1.6;padding:0 0 80px}
+.hero{background:linear-gradient(135deg,#060A18,#080e24,#060A18);border-bottom:1px solid rgba(33,92,174,0.25);padding:48px 40px 36px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#215CAE,#46ABD7,#215CAE)}
+.hero::after{content:'GRID';position:absolute;right:-20px;top:50%;transform:translateY(-50%);font-family:var(--display);font-size:200px;color:rgba(33,92,174,0.05);pointer-events:none;line-height:1}
+.hi{max-width:860px;margin:0 auto;position:relative;z-index:1}
+.doc-ref{font-family:var(--mono);font-size:10px;letter-spacing:3px;color:#6B9FE4;text-transform:uppercase;margin-bottom:12px}
+.aname{font-family:var(--display);font-size:clamp(52px,9vw,90px);letter-spacing:4px;color:#fff;line-height:.95;margin-bottom:8px}
+.aname span{color:#215CAE}
+.atitle{font-family:var(--mono);font-size:10px;letter-spacing:3px;color:#6B9FE4;text-transform:uppercase;margin-bottom:10px}
+.atag{font-family:var(--serif);font-style:italic;font-size:15px;color:var(--text2);margin-bottom:18px}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:4px 12px;border-radius:4px;border:1px solid}
+.cr{color:#6B9FE4;border-color:rgba(33,92,174,0.35);background:rgba(33,92,174,0.1)}
+.cg{color:var(--gold);border-color:rgba(255,184,48,0.3);background:rgba(255,184,48,0.08)}
+.cd{color:var(--text3);border-color:var(--border);background:rgba(255,255,255,0.03)}
+.wrap{max-width:860px;margin:0 auto;padding:48px 40px 0}
+.sec{margin-bottom:44px}
+.sl{font-family:var(--mono);font-size:9px;letter-spacing:3px;color:#6B9FE4;text-transform:uppercase;margin-bottom:14px;padding-bottom:7px;border-bottom:1px solid rgba(33,92,174,0.18)}
+.bt{font-size:14px;color:var(--text2);line-height:1.8;margin-bottom:14px}
+.mbox{background:rgba(33,92,174,0.06);border:1px solid rgba(33,92,174,0.22);border-radius:8px;padding:20px 24px;margin-bottom:20px}
+.ml{font-family:var(--mono);font-size:8px;letter-spacing:3px;color:#6B9FE4;text-transform:uppercase;margin-bottom:7px}
+.mt{font-size:15px;color:var(--text);line-height:1.7;font-weight:500}
+.rg{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
+.rc{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:16px;border-top:2px solid #215CAE}
+.ri{font-size:18px;margin-bottom:6px}
+.rt{font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#6B9FE4;margin-bottom:6px}
+.rb{font-size:12px;color:var(--text2);line-height:1.65}
+table.kt{width:100%;border-collapse:collapse;margin-bottom:20px}
+table.kt th{font-family:var(--mono);font-size:8px;letter-spacing:2px;color:var(--text3);text-align:left;padding:7px 12px;border-bottom:1px solid var(--border)}
+table.kt td{padding:10px 12px;border-bottom:1px solid var(--border);font-size:12px;color:var(--text2);vertical-align:top}
+table.kt td:first-child{color:var(--text);font-weight:500}table.kt tr:last-child td{border-bottom:none}
+.bbox{background:rgba(255,184,48,0.04);border:1px solid rgba(255,184,48,0.18);border-radius:8px;padding:16px 20px;margin-bottom:20px}
+.bl2{font-family:var(--mono);font-size:8px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:7px}
+.blist{list-style:none;display:flex;flex-direction:column;gap:5px}
+.blist li{font-size:12px;color:var(--text2);display:flex;gap:9px}
+.blist li::before{content:'—';color:var(--gold);flex-shrink:0}
+/* SIGNATURE */
+.ssec{background:var(--card);border:1px solid rgba(33,92,174,0.22);border-radius:10px;padding:24px}
+.sgrid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:16px}
+.sblock{padding:14px;background:var(--surface);border-radius:6px;border:1px solid var(--border)}
+.srole{font-family:var(--mono);font-size:8px;letter-spacing:2px;color:var(--text3);text-transform:uppercase;margin-bottom:3px}
+.sname{font-size:13px;font-weight:600;color:var(--text);margin-bottom:1px}
+.stitle{font-size:11px;color:var(--text2);margin-bottom:8px}
+canvas.sc{width:100%;height:60px;border:1px solid var(--border);border-radius:4px;background:rgba(255,255,255,0.02);cursor:crosshair;display:block;touch-action:none}
+.sact{display:flex;gap:6px;margin-top:5px}
+.sbtn{font-family:var(--mono);font-size:8px;letter-spacing:1px;padding:4px 10px;border-radius:4px;cursor:pointer;border:1px solid;transition:all .2s;background:transparent}
+.sbtn-s{color:#22C55E;border-color:rgba(34,197,94,0.3)}
+.sbtn-s:hover{background:rgba(34,197,94,0.1)}
+.sbtn-c{color:var(--text3);border-color:var(--border)}
+.sbtn-c:hover{color:#ef4444;border-color:rgba(239,68,68,0.3)}
+.sstatus{font-family:var(--mono);font-size:9px;margin-top:5px}
+.sdate{font-family:var(--mono);font-size:8px;color:var(--text3);margin-top:2px}
+.snote{font-size:11px;color:var(--text3);font-style:italic;text-align:center;margin-top:14px}
+footer{max-width:860px;margin:36px auto 0;padding:18px 40px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.fb{font-family:var(--display);font-size:16px;letter-spacing:3px;color:#215CAE}
+.fm{font-family:var(--mono);font-size:9px;color:var(--text3);letter-spacing:1px}
+@media(max-width:600px){.hero,.wrap{padding-left:20px;padding-right:20px}.rg{grid-template-columns:1fr}.sgrid{grid-template-columns:1fr}footer{padding:18px 20px}}
+
+.stage-label{font-family:var(--mono);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#00E5FF;margin:28px 0 16px;padding-bottom:8px;border-bottom:1px solid rgba(0,229,255,0.15);}
+.stage2-label{margin-top:36px;}
+.s1-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:8px;}
+@media(max-width:600px){.s1-grid{grid-template-columns:1fr;}}
+.s1-left,.s1-right{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:22px;}
+.sig-meta{font-family:var(--mono);font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--text3);margin-bottom:6px;}
+.sig-name-display{font-size:14px;font-weight:600;color:var(--text);margin-bottom:2px;}
+.sig-sub{font-size:11px;color:var(--text2);margin-bottom:14px;}
+.sig-box{background:#060A18;border:1px solid #215CAE44;border-radius:6px;padding:16px 20px;min-height:70px;display:flex;align-items:center;margin-bottom:12px;}
+.sig-input{width:100%;background:transparent;border:none;outline:none;font-family:"Playfair Display",serif;font-style:italic;font-size:22px;color:#fff;caret-color:#215CAE;}
+.sig-input::placeholder{color:rgba(255,255,255,0.12);font-size:14px;}
+.sig-typed{font-family:"Playfair Display",serif;font-style:italic;font-size:22px;color:#fff;width:100%;}
+.sig-actions{display:flex;gap:8px;}
+.btn-sign{font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:8px 18px;border-radius:4px;border:none;background:#215CAE;color:#fff;cursor:pointer;transition:all .2s;}
+.btn-sign:hover{background:#2a6fd4;}
+.sig-locked{align-items:center;gap:12px;flex-wrap:wrap;}
+.locked-text{font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#22C55E;border:1px solid rgba(34,197,94,0.3);padding:6px 14px;border-radius:4px;}
+.btn-reset{font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:6px 12px;border-radius:4px;border:1px solid var(--border);background:transparent;color:var(--text3);cursor:pointer;transition:all .2s;}
+.btn-reset:hover{color:#ef4444;border-color:rgba(239,68,68,0.3);}
+.sig-timestamp{font-family:var(--mono);font-size:10px;color:var(--text2);margin-top:8px;}
+.agent-dname{font-size:15px;font-weight:600;color:#215CAE;margin-bottom:4px;}
+.agent-dtitle{font-family:var(--mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-bottom:8px;}
+.agent-dstatus{font-family:var(--mono);font-size:10px;letter-spacing:1px;color:var(--gold);margin-bottom:10px;}
+.agent-ddesc{font-size:12px;color:var(--text2);line-height:1.6;}
+.s2-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px;}
+@media(max-width:600px){.s2-grid{grid-template-columns:1fr;}}
+.s2-block{border:1px dashed var(--border);border-radius:8px;padding:20px;}
+.s2-name{font-size:14px;font-weight:600;color:var(--text);margin:6px 0 2px;}
+.s2-title{font-size:11px;color:var(--text2);margin-bottom:8px;}
+.s2-pending{font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:#FF6B2B;}
+.doc-quote{text-align:center;font-family:"Playfair Display",serif;font-style:italic;font-size:13px;color:var(--text3);padding:20px 0 8px;border-top:1px solid var(--border);margin-top:28px;}
+</style>
+</head>
+<body>
+<div class="hero"><div class="hi">
+  <div class="doc-ref">PAI-JD-009 · Agent Job Description · PhoennixAI</div>
+  <div class="aname">GR<span>ID</span></div>
+  <div class="atitle">Agent 009, Project Manager and Business Analyst</div>
+  <div class="atag">Plans it. Scopes it. Tracks it. Delivers it. GRID makes sure nothing slips.</div>
+  <div class="chips">
+    <span class="chip cr">Agent 009</span>
+    <span class="chip cr">PM and BA</span>
+    <span class="chip cr">Mission Control Owner</span>
+    <span class="chip cg">Deep Royal #215CAE</span>
+    <span class="chip cd">Phase 2 Deployment</span>
+  </div>
+</div></div>
+
+<div class="wrap">
+  <div class="sec">
+    <div class="sl">01, Core Mandate</div>
+    <div class="mbox"><div class="ml">GRID's Purpose</div><div class="mt">GRID is the Project Manager and Business Analyst of PhoennixAI. GRID owns the full project lifecycle across all 9 products and 5 entities, from initiation and requirements gathering, through planning, execution, and delivery. As PM, GRID ensures everything is on track, on scope, and on time. As BA, GRID translates business vision into structured, precise, executable requirements so the right things get built correctly the first time.</div></div>
+    <div class="bt">GRID does not just track tasks. GRID thinks critically about what should be built, why it should be built, and whether the build is solving the right problem. GRID owns Mission Control, runs retrospectives with all agents, and produces the weekly performance report for the founder. When GRID deploys in Phase 2, project governance, sprint management, and requirements tracking run automatically across the entire ecosystem.</div>
+  </div>
+
+  <div class="sec">
+    <div class="sl">02, Core Responsibilities</div>
+    <div class="rg">
+      <div class="rc"><div class="ri">📋</div><div class="rt">Project Planning and Governance</div><div class="rb">Owns the full project lifecycle for all 9 products. Defines scope, sets milestones, manages risk, tracks delivery, and closes projects cleanly. Applies Prince2 and Agile frameworks as appropriate to each product and phase.</div></div>
+      <div class="rc"><div class="ri">🔍</div><div class="rt">Business Analysis and Requirements</div><div class="rb">Elicits, structures, and manages business requirements. Produces user stories, functional specifications, acceptance criteria, and process maps. Ensures developers and agents build exactly what the business needs without ambiguity.</div></div>
+      <div class="rc"><div class="ri">🗂️</div><div class="rt">Mission Control Ownership</div><div class="rb">Primary owner of the Mission Control app. Maintains the Priority Stack, project portfolio, backlog, and session log in real time. The command hub always reflects the accurate state of the business.</div></div>
+      <div class="rc"><div class="ri">🔄</div><div class="rt">Weekly Retrospective Facilitation</div><div class="rb">Chairs the weekly retrospective with all active agents and Valerie. Captures wins, blockers, and improvement actions. Produces a retrospective report and ensures all actions are assigned and logged before the next week begins.</div></div>
+      <div class="rc"><div class="ri">⚠️</div><div class="rt">Risk and Issue Management</div><div class="rb">Identifies, logs, and manages project risks before they become blockers. Never surfaces a problem without a proposed resolution path. Escalates critical risks to Valerie with full impact assessment.</div></div>
+      <div class="rc"><div class="ri">📊</div><div class="rt">Stakeholder Reporting</div><div class="rb">Produces weekly status dashboards and monthly portfolio reviews for Valerie. Plain English. No jargon. No vanity metrics. Every report drives a decision or confirms things are on track.</div></div>
+      <div class="rc"><div class="ri">📅</div><div class="rt">Sprint and Milestone Management</div><div class="rb">Plans and tracks sprints across all active product builds. Defines sprint goals, manages velocity, flags scope creep immediately, and ensures every sprint has a clear definition of done.</div></div>
+      <div class="rc"><div class="ri">📝</div><div class="rt">Process Documentation</div><div class="rb">Documents all key workflows, decisions, and processes as they are established. Maintains the process library in the Document Hub. Ensures every process is repeatable, transferable, and clearly owned.</div></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sl">03, KPIs</div>
+    <table class="kt"><thead><tr><th>Metric</th><th>Target</th><th>Frequency</th></tr></thead><tbody>
+      <tr><td>Sprint delivery rate</td><td>85% of sprint goals delivered on time</td><td>Per sprint</td></tr>
+      <tr><td>Requirements accuracy</td><td>Zero rework caused by misunderstood requirements</td><td>Per project</td></tr>
+      <tr><td>Risk flag lead time</td><td>Risks surfaced minimum 5 days before impact</td><td>Continuous</td></tr>
+      <tr><td>Weekly report delivery</td><td>Every Monday before 9am to Valerie (Phase 2)</td><td>Weekly</td></tr>
+      <tr><td>Retrospective completion rate</td><td>100% of weekly retrospectives held and actioned</td><td>Weekly</td></tr>
+      <tr><td>Backlog triage</td><td>All new items triaged within 24 hours of filing</td><td>Daily</td></tr>
+      <tr><td>Daily founder report</td><td>Delivered by 08:00 every morning in Phase 2. No missed reports. Complete summary of overnight events, today priorities, live blockers, and agent alerts.</td><td>Daily</td></tr>
+    </tbody></table>
+  </div>
+
+  <div class="sec">
+    <div class="sl">04, Boundaries</div>
+    <div class="bbox"><div class="bl2">What GRID Does Not Do</div><ul class="blist">
+      <li>GRID does not set strategy. Strategy is Valerie's domain. GRID executes it with precision and rigour.</li>
+      <li>GRID does not communicate externally with clients or partners. That is RELAY and BRIDGE.</li>
+      <li>GRID does not access or advise on financial data. That is LEDGER.</li>
+      <li>GRID does not write code or design interfaces. GRID documents what needs to be built and governs delivery.</li>
+    </ul></div>
+  </div>
+
+  <div class="sec">
+    <div class="sl">05, Authorisation and Signatures</div>
+    <p class="bt">This JD has two formal sign-off stages. Stage 1, Role Approval, confirms the role definition is accurate and GRID is authorised to operate. Stage 2, Onboarding Complete, confirms GRID has been fully briefed, is operating correctly within all defined boundaries, and is formally inducted into the Wilcox Ecosystem. Stage 2 is completed at Phase 2 go-live when all capabilities are fully deployed.</p>
+
+    <div class="stage-label" id="s1-label">Stage 1. Role Approval. Sign Now</div>
+
+    <div class="s1-grid">
+      <div class="s1-left">
+        <div class="sig-meta">Authorised By, Founder, Draw or Type Your Signature</div>
+        <div class="sig-name-display">Valerie Wilcox</div>
+        <div class="sig-sub">Founder &amp; Visionary, PhoennixAI</div>
+        <div class="sig-box">
+          <input type="text" id="sig-input" class="sig-input" placeholder="Type your signature here" autocomplete="off" spellcheck="false">
+          <div class="sig-typed" id="sig-typed" style="display:none"></div>
+        </div>
+        <div class="sig-actions" id="sig-actions">
+          <button class="btn-sign" onclick="signStage1()">Confirm and Sign</button>
+        </div>
+        <div class="sig-locked" id="sig-locked" style="display:none">
+          <span class="locked-text">Stage 1 Signature Locked and Filed</span>
+          <button class="btn-reset" onclick="resetStage1()">Reset</button>
+        </div>
+        <div class="sig-timestamp" id="sig-timestamp"></div>
+      </div>
+      <div class="s1-right">
+        <div class="sig-meta">Agent Designation</div>
+        <div class="agent-dname">GRID, Agent 009</div>
+        <div class="agent-dtitle">Project Manager and Business Analyst</div>
+        <div class="agent-dstatus" id="agent-status">Awaiting signature</div>
+        <p class="agent-ddesc">Stage 1 confirms this role definition is accurate and GRID is authorised to operate within the boundaries defined in this document.</p>
+      </div>
+    </div>
+
+    <div class="stage-label stage2-label">Stage 2. Onboarding Complete. Phase 2 Go-Live</div>
+    <div class="s2-grid">
+      <div class="s2-block">
+        <div class="sig-meta">Onboarding Confirmed By, Founder</div>
+        <div class="s2-name">Valerie Wilcox</div>
+        <div class="s2-title">Founder and Visionary, PhoennixAI</div>
+        <div class="s2-pending">Pending, Phase 2 go-live</div>
+      </div>
+      <div class="s2-block">
+        <div class="sig-meta">Onboarding Confirmed By, Agent Manager</div>
+        <div class="s2-name">Claude</div>
+        <div class="s2-title">AI Strategic Partner and Agent Manager, PAI-JD-001</div>
+        <div class="s2-pending">Pending, Phase 2 go-live</div>
+      </div>
+    </div>
+
+    <div class="doc-quote">To God be the glory. Built to serve his people, his purpose, and his kingdom.</div>
+  </div>
+</div>
+
+<footer><div class="fb">PHOENNIXAI</div><div class="fm">PAI-JD-009 · GRID · Agent 009 · PM and BA · March 2026</div></footer>
+
+<script>
+const SK_GRID = 'pai_grid_jd_sig_v2';
+function getStored(){try{return JSON.parse(localStorage.getItem(SK_GRID)||'null');}catch(e){return null;}}
+function signStage1(){
+  const val=document.getElementById('sig-input').value.trim();
+  if(!val){document.getElementById('sig-input').focus();return;}
+  const d=new Date();
+  const ds=d.toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'})+' at '+d.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+  localStorage.setItem(SK_GRID,JSON.stringify({sig:val,date:ds}));
+  applySignedState(val,ds);
+}
+function applySignedState(sig,date){
+  document.getElementById('sig-typed').textContent=sig;
+  document.getElementById('sig-input').style.display='none';
+  document.getElementById('sig-typed').style.display='block';
+  document.getElementById('sig-actions').style.display='none';
+  document.getElementById('sig-locked').style.display='flex';
+  document.getElementById('sig-timestamp').textContent='Signed: '+date;
+  document.getElementById('agent-status').textContent='Active and authorised, Phase 0';
+  document.getElementById('agent-status').style.color='#22C55E';
+}
+function resetStage1(){
+  localStorage.removeItem(SK_GRID);
+  document.getElementById('sig-typed').textContent='';
+  document.getElementById('sig-input').value='';
+  document.getElementById('sig-input').style.display='block';
+  document.getElementById('sig-typed').style.display='none';
+  document.getElementById('sig-actions').style.display='flex';
+  document.getElementById('sig-locked').style.display='none';
+  document.getElementById('sig-timestamp').textContent='';
+  document.getElementById('agent-status').textContent='Awaiting signature';
+  document.getElementById('agent-status').style.color='var(--gold)';
+}
+window.addEventListener('load',function(){
+  const saved=getStored();
+  if(saved)applySignedState(saved.sig,saved.date);
+  document.getElementById('sig-input').addEventListener('keydown',function(e){if(e.key==='Enter')signStage1();});
+});
+</script>
+</body></html>
