@@ -1060,6 +1060,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:13
           const valueMap = {fire:'Critical',sapphire:'High',bronze:'Medium'};
           const tagDone = ['Done','Done Today'];
           window.TASKS_MC = [
+            {n:'TL',t:'[Phase 2] Traceability Dashboard: dedicated URL, Supabase auto-logging, SAGE analytics automated',tag:'Phase 2',p:'blue'},
             {n:'P2',t:'Phase 2 developer decision — CRITICAL',tag:'This Week',p:'fire'},
             {n:'07',t:'Finance and Revenue section scope',tag:'Pending',p:'fire'},
             {n:'B14',t:'RELAY beta onboarding ready before 30 Mar',tag:'27 Mar Deadline',p:'fire'},
@@ -1273,6 +1274,14 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:13
       <tr><td>BL-014</td><td><div class="bl-title">RELAY Beta Onboarding Activation</div>RELAY must be configured and tested before 30 March 2026 external beta launch. Welcome sequence, smart form, workspace creation, kickoff scheduling, and welcome pack all need to be built and tested with internal team first.</td><td><span class="chip chip-next" style="font-size:8px">Beta</span></td><td><span class="chip chip-now" style="font-size:8px">Critical</span></td><td>Internal test by 27 March. External beta opens 30 March. RELAY must be live before that date.</td></tr>
       <tr><td>BL-015</td><td><div class="bl-title">Brand System Update</div>Update brand system document to reflect confirmed GRID colour as Deep Royal #215CAE (not Signal Green). SAGE added as Agent 016 Steel Blue #4682B4. Full agent colour registry updated.</td><td><span class="chip chip-next" style="font-size:8px">Brand</span></td><td><span class="chip chip-next" style="font-size:8px">Medium</span></td><td>Update phoennixai_updated_brand_system.html and push to GitHub.</td></tr>
       <tr><td>BL-016</td><td><div class="bl-title">Daily Report and Weekly Retro System</div>Build the automated daily founder report (delivered 08:00 every morning by GRID) and weekly retrospective framework. Requires GRID dashboard, delivery log, and task completion tracker. Phase 2 Claude API dependency.</td><td><span class="chip chip-filed" style="font-size:8px">Governance</span></td><td><span class="chip chip-next" style="font-size:8px">Phase 2</span></td><td>Framework to be designed in Phase 0. Automated delivery in Phase 2. Pick up when daily report format is agreed.</td></tr>
+              <tr>
+                <td class="bl-id">BL-017</td>
+                <td>
+                  <div class="bl-title">Traceability Dashboard, Phase 2 Supabase Automation</div>
+                  Move Communication and Traceability Dashboard to dedicated domain URL. Wire to Supabase. Every agent action auto-fires a log entry in real time. No human intervention. Founder opens it at any time for full live picture. SAGE runs analytics automatically. SCRIBE governs governance layer.
+                </td>
+                <td><span class="badge badge-blue">Phase 2 Critical</span></td>
+              </tr>
     </tbody>
   </table>
 
@@ -1414,6 +1423,19 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:13
         </div>
       </div>
 
+      <!-- Key Resources -->
+      <div class="grid-section-label" style="margin-top:18px">Key Resources</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:18px">
+        <a href="https://valerie-github1.github.io/phoennixai-mission-control/PhoennixAI_TraceabilityDashboard.html" target="_blank" style="display:flex;align-items:center;gap:8px;padding:10px 14px;background:rgba(70,130,180,0.06);border:1px solid rgba(70,130,180,0.25);border-radius:6px;text-decoration:none">
+          <span style="font-size:14px">🔍</span><div><div style="font-family:var(--mono);font-size:9px;letter-spacing:1px;color:#4682B4;text-transform:uppercase">Traceability Log</div><div style="font-size:10px;color:rgba(255,255,255,0.4)">SAGE and SCRIBE</div></div>
+        </a>
+        <a href="https://valerie-github1.github.io/phoennixai-mission-control/PhoennixAI_UserManual.html" target="_blank" style="display:flex;align-items:center;gap:8px;padding:10px 14px;background:rgba(196,154,108,0.06);border:1px solid rgba(196,154,108,0.25);border-radius:6px;text-decoration:none">
+          <span style="font-size:14px">📖</span><div><div style="font-family:var(--mono);font-size:9px;letter-spacing:1px;color:#C49A6C;text-transform:uppercase">User Manual</div><div style="font-size:10px;color:rgba(255,255,255,0.4)">SCRIBE</div></div>
+        </a>
+        <a href="https://valerie-github1.github.io/phoennixai-mission-control/PhoennixAI_DocumentHub.html" target="_blank" style="display:flex;align-items:center;gap:8px;padding:10px 14px;background:rgba(196,154,108,0.06);border:1px solid rgba(196,154,108,0.25);border-radius:6px;text-decoration:none">
+          <span style="font-size:14px">📋</span><div><div style="font-family:var(--mono);font-size:9px;letter-spacing:1px;color:#C49A6C;text-transform:uppercase">Document Hub</div><div style="font-size:10px;color:rgba(255,255,255,0.4)">SCRIBE</div></div>
+        </a>
+      </div>
       <!-- Upcoming Deadlines -->
       <div class="grid-section-label" style="margin-top:18px">Upcoming Deadlines</div>
       <div style="display:flex;flex-direction:column;gap:7px">
