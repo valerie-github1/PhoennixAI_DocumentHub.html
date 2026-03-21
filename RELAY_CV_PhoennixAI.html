@@ -6,12 +6,12 @@
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'><rect width='200' height='200' fill='%23060A18' rx='44'/><path d='M100 170 C80 160 55 140 50 115 C45 90 55 70 65 55 C70 75 68 90 72 100 C76 80 82 60 90 42 C94 65 88 85 92 100 C96 75 100 50 100 30 C104 50 104 75 108 100 C112 85 106 65 110 42 C118 60 124 80 128 100 C132 90 130 75 135 55 C145 70 155 90 150 115 C145 140 120 160 100 170Z' fill='%23FF6B2B'/><ellipse cx='100' cy='135' rx='20' ry='25' fill='%23FFE566' opacity='0.8'/><ellipse cx='100' cy='138' rx='10' ry='12' fill='%23FFFFFF' opacity='0.85'/></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
 <style>
-:root{--col:#46ABD7;--fire:#FF6B2B;--gold:#FFB830;--electric:#00E5FF;--bg:#060A18;--surface:#0D1220;--card:#111827;--border:rgba(255,255,255,0.07);--text:#E8E8E8;--text2:rgba(255,255,255,0.55);--text3:rgba(255,255,255,0.28);--display:'Bebas Neue',sans-serif;--body:'DM Sans',sans-serif;--mono:'DM Mono',monospace;--serif:'Playfair Display',serif;}
+:root{--col:#FB923C;--fire:#FF6B2B;--gold:#FFB830;--electric:#00E5FF;--bg:#060A18;--surface:#0D1220;--card:#111827;--border:rgba(255,255,255,0.07);--text:#E8E8E8;--text2:rgba(255,255,255,0.55);--text3:rgba(255,255,255,0.28);--display:'Bebas Neue',sans-serif;--body:'DM Sans',sans-serif;--mono:'DM Mono',monospace;--serif:'Playfair Display',serif;}
 [data-theme="light"]{--bg:#F2EFE9;--surface:#fff;--card:#fff;--border:rgba(0,0,0,0.08);--text:#111;--text2:#444;--text3:#777;}
 *{margin:0;padding:0;box-sizing:border-box}body{background:var(--bg);color:var(--text);font-family:var(--body);line-height:1.6;padding:0 0 80px}
-.hero{background:linear-gradient(135deg,#060A18,#060d18,#060A18);border-bottom:1px solid #46ABD728;padding:48px 40px 36px;position:relative;overflow:hidden}
-.hero::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#46ABD7,#00E5FF,#46ABD7)}
-.hero::after{content:'RELAY';position:absolute;right:-10px;top:50%;transform:translateY(-50%);font-family:var(--display);font-size:160px;color:#46ABD708;pointer-events:none;line-height:1;letter-spacing:-4px}
+.hero{background:linear-gradient(135deg,#060A18,#060d18,#060A18);border-bottom:1px solid #FB923C28;padding:48px 40px 36px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#FB923C,#00E5FF,#FB923C)}
+.hero::after{content:'RELAY';position:absolute;right:-10px;top:50%;transform:translateY(-50%);font-family:var(--display);font-size:160px;color:#FB923C08;pointer-events:none;line-height:1;letter-spacing:-4px}
 .hi{max-width:860px;margin:0 auto;position:relative;z-index:1}
 .doc-ref{font-family:var(--mono);font-size:10px;letter-spacing:3px;color:var(--col);text-transform:uppercase;margin-bottom:12px}
 .aname{font-family:var(--display);font-size:clamp(48px,9vw,86px);letter-spacing:4px;color:#fff;line-height:.95;margin-bottom:8px}
@@ -20,15 +20,15 @@
 .atag{font-family:var(--serif);font-style:italic;font-size:15px;color:var(--text2);margin-bottom:18px}
 .chips{display:flex;gap:8px;flex-wrap:wrap}
 .chip{font-family:var(--mono);font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:4px 12px;border-radius:4px;border:1px solid}
-.cc{color:var(--col);border-color:#46ABD744;background:#46ABD712}
+.cc{color:var(--col);border-color:#FB923C44;background:#FB923C12}
 .cg{color:#22C55E;border-color:#22C55E44;background:#22C55E08}
 .cf{color:var(--fire);border-color:#FF6B2B44;background:#FF6B2B08}
 .cd{color:var(--text3);border-color:var(--border);background:rgba(255,255,255,.03)}
 .wrap{max-width:860px;margin:0 auto;padding:48px 40px 0}
 .sec{margin-bottom:44px}
-.sl{font-family:var(--mono);font-size:9px;letter-spacing:3px;color:var(--col);text-transform:uppercase;margin-bottom:14px;padding-bottom:7px;border-bottom:1px solid #46ABD722}
+.sl{font-family:var(--mono);font-size:9px;letter-spacing:3px;color:var(--col);text-transform:uppercase;margin-bottom:14px;padding-bottom:7px;border-bottom:1px solid #FB923C22}
 .bt{font-size:14px;color:var(--text2);line-height:1.8;margin-bottom:14px}
-.mbox{background:#46ABD708;border:1px solid #46ABD730;border-radius:8px;padding:18px 22px;margin-bottom:18px}
+.mbox{background:#FB923C08;border:1px solid #FB923C30;border-radius:8px;padding:18px 22px;margin-bottom:18px}
 .ml{font-family:var(--mono);font-size:8px;letter-spacing:3px;color:var(--col);text-transform:uppercase;margin-bottom:6px}
 .mt{font-size:15px;color:var(--text);line-height:1.7;font-weight:500}
 .rg{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px}
@@ -46,10 +46,10 @@
 .skill-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--col),#00E5FF)}
 .skill-pct{font-family:var(--mono);font-size:9px;color:var(--col);min-width:32px;text-align:right}
 .principle{display:flex;gap:14px;padding:12px 14px;background:var(--card);border-radius:6px;border:1px solid var(--border);margin-bottom:10px}
-.prin-num{font-family:var(--display);font-size:22px;color:#46ABD730;line-height:1;flex-shrink:0;min-width:28px}
+.prin-num{font-family:var(--display);font-size:22px;color:#FB923C30;line-height:1;flex-shrink:0;min-width:28px}
 .prin-body{font-size:12px;color:var(--text2);line-height:1.65}
 .prin-body strong{color:var(--text)}
-.agi-box{background:rgba(70,171,215,0.05);border:1px solid rgba(70,171,215,0.25);border-left:3px solid var(--col);border-radius:8px;padding:20px 24px;margin-bottom:18px}
+.agi-box{background:rgba(251,146,60,0.05);border:1px solid rgba(251,146,60,0.25);border-left:3px solid var(--col);border-radius:8px;padding:20px 24px;margin-bottom:18px}
 .agi-label{font-family:var(--mono);font-size:8px;letter-spacing:3px;color:var(--col);text-transform:uppercase;margin-bottom:8px}
 .agi-title{font-size:15px;color:#fff;font-weight:600;margin-bottom:8px}
 .agi-body{font-size:13px;color:var(--text2);line-height:1.75}
@@ -70,7 +70,7 @@ footer{max-width:860px;margin:36px auto 0;padding:18px 40px;border-top:1px solid
     <span class="chip cf">Agent 005</span>
     <span class="chip cc">Client Onboarding</span>
     <span class="chip cg">Saves 3 to 5 hrs per client</span>
-    <span class="chip cd">Sapphire Wing #46ABD7</span>
+    <span class="chip cd">Warm Amber #FB923C</span>
     <span class="chip cd">Phase 2 Deployment</span>
   </div>
 </div></div>
@@ -139,7 +139,7 @@ footer{max-width:860px;margin:36px auto 0;padding:18px 40px;border-top:1px solid
     <div class="bt">Phase 0 (Current): RELAY is defined, documented, and ready. It operates through Claude sessions in a prompt-configured capacity. No autonomous deployment yet.</div>
     <div class="bt">External Beta from 30 March 2026: RELAY activates for all 10 external beta tester onboardings. This is RELAY's first live operational test.</div>
     <div class="bt">Phase 2 (Claude API): RELAY is wired to the Claude API and operates continuously and autonomously. Every new client who signs with any PhoennixAI entity triggers RELAY immediately without any human initiation required.</div>
-    <div style="background:rgba(70,171,215,0.05);border:1px solid rgba(70,171,215,0.2);border-radius:8px;padding:16px 20px;margin-top:16px">
+    <div style="background:rgba(251,146,60,0.05);border:1px solid rgba(251,146,60,0.2);border-radius:8px;padding:16px 20px;margin-top:16px">
       <div style="font-family:var(--mono);font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--col);margin-bottom:6px">Division of Labour</div>
       <div style="font-size:12px;color:var(--text2);line-height:1.7">GRID owns internal alpha testing (now to Friday 27 March). RELAY owns external beta onboarding (Monday 30 March onwards). This boundary is clean and non-overlapping. Internal team members are not onboarded by RELAY.</div>
     </div>
