@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PhoennixAI Mission Control — Product Strategy</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='f' x1='0' y1='1' x2='0' y2='0'%3E%3Cstop offset='0%25' stop-color='%23FF6B2B'/%3E%3Cstop offset='100%25' stop-color='%2300E5FF'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M16 2c-2 4-6 8-6 14 0 6 3 10 6 14 3-4 6-8 6-14 0-6-4-10-6-14z' fill='url(%23f)'/%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --midnight: #060A18;
+    --surface: #0D1220;
+    --card: #111827;
+    --border: rgba(255,255,255,0.07);
+    --text: #E8E8E8;
+    --muted: #6B7280;
+    --electric: #00E5FF;
+    --fire: #FF6B2B;
+    --gold: #FFB830;
+    --green: #22C55E;
+    --red: #EF4444;
+    --violet: #A78BFA;
+    --rose: #F43F5E;
+    --royal: #215CAE;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background: var(--midnight);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    line-height: 1.75;
+    min-height: 100vh;
+  }
+
+  body::before {
+    content:''; position:fixed; inset:0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events:none; z-index:0; opacity:0.35;
+  }
+
+  .container {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 60px 40px 100px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* HEADER */
+  .doc-header {
+    margin-bottom: 48px;
+    padding-bottom: 32px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .doc-ref {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--electric);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .doc-ref::before {
+    content: '';
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--electric);
+    box-shadow: 0 0 8px var(--electric);
+  }
+
+  .doc-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(36px, 5vw, 56px);
+    letter-spacing: 0.03em;
+    line-height: 0.95;
+    color: #fff;
+    margin-bottom: 12px;
+  }
+
+  .doc-title .accent { color: var(--electric); }
+
+  .doc-sub {
+    font-size: 16px;
+    color: var(--muted);
+    font-weight: 300;
+    max-width: 600px;
+    margin-bottom: 24px;
+  }
+
+  .doc-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  .meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .meta-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .meta-value {
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  /* SECTIONS */
+  .section {
+    margin-bottom: 48px;
+  }
+
+  .section-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--electric);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-num::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: rgba(0,229,255,0.12);
+  }
+
+  h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 0.03em;
+    color: #fff;
+    line-height: 1;
+    margin-bottom: 16px;
+  }
+
+  h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 8px;
+    margin-top: 24px;
+  }
+
+  p { margin-bottom: 14px; color: #D1D5DB; }
+  p strong { color: #fff; font-weight: 500; }
+
+  /* CARDS */
+  .value-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin-bottom: 10px;
+    border-left: 3px solid var(--electric);
+  }
+
+  .value-card.fire { border-left-color: var(--fire); }
+  .value-card.gold { border-left-color: var(--gold); }
+  .value-card.green { border-left-color: var(--green); }
+  .value-card.violet { border-left-color: var(--violet); }
+  .value-card.rose { border-left-color: var(--rose); }
+  .value-card.royal { border-left-color: var(--royal); }
+  .value-card.red { border-left-color: var(--red); }
+
+  .vc-title {
+    font-weight: 600;
+    font-size: 15px;
+    color: #fff;
+    margin-bottom: 6px;
+  }
+
+  .vc-body {
+    font-size: 13px;
+    color: #9CA3AF;
+    line-height: 1.6;
+  }
+
+  .vc-body strong { color: var(--text); font-weight: 500; }
+
+  .vc-metric {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--electric);
+    margin-top: 8px;
+    letter-spacing: 0.06em;
+  }
+
+  /* PERSONA */
+  .persona-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 24px;
+    margin-bottom: 10px;
+  }
+
+  .persona-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    color: #fff;
+    margin-bottom: 4px;
+  }
+
+  .persona-desc {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+
+  .persona-detail {
+    font-size: 13px;
+    color: #9CA3AF;
+    line-height: 1.6;
+  }
+
+  .persona-detail strong { color: var(--text); }
+
+  /* CALLOUT */
+  .callout {
+    background: rgba(0,229,255,0.04);
+    border: 1px solid rgba(0,229,255,0.15);
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin: 24px 0;
+  }
+
+  .callout.fire {
+    background: rgba(255,107,43,0.04);
+    border-color: rgba(255,107,43,0.2);
+  }
+
+  .callout-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--electric);
+    margin-bottom: 8px;
+  }
+
+  .callout.fire .callout-label { color: var(--fire); }
+
+  /* COMPETITOR TABLE */
+  .comp-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 16px 0;
+  }
+
+  .comp-table th {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-align: left;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .comp-table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border);
+    color: #9CA3AF;
+    vertical-align: top;
+  }
+
+  .comp-table td:first-child { color: #fff; font-weight: 500; }
+  .comp-table tr:last-child td { border-bottom: none; }
+
+  /* PRICING */
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin: 16px 0;
+  }
+
+  .price-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .price-card.featured {
+    border-color: var(--electric);
+    background: rgba(0,229,255,0.04);
+  }
+
+  .price-tier {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  .price-amount {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    color: #fff;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .price-period {
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+
+  .price-desc {
+    font-size: 12px;
+    color: #9CA3AF;
+    line-height: 1.5;
+  }
+
+  /* FOOTER */
+  .doc-footer {
+    margin-top: 60px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    text-align: center;
+  }
+
+  .doc-footer-brand {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    color: var(--fire);
+    letter-spacing: 0.08em;
+  }
+
+  .doc-footer-meta {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    margin-top: 4px;
+  }
+
+  @media (max-width: 600px) {
+    .container { padding: 32px 20px 60px; }
+    .pricing-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="doc-header">
+    <div class="doc-ref">PAI-STRAT-001 · Product Strategy · Confidential</div>
+    <div class="doc-title">Mission Control<br><span class="accent">Product Strategy</span></div>
+    <div class="doc-sub">The complete product positioning, value proposition, competitive analysis, and go-to-market strategy for PhoennixAI Mission Control. For sales team, agents, and stakeholders.</div>
+    <div class="doc-meta">
+      <div class="meta-item">
+        <span class="meta-label">Version</span>
+        <span class="meta-value">v1.0</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Date</span>
+        <span class="meta-value">22 March 2026</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Author</span>
+        <span class="meta-value">Claude, AI Strategic Partner</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Approved By</span>
+        <span class="meta-value">Valerie Wilcox, Founder</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Classification</span>
+        <span class="meta-value">Internal + Sales Team</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">SCRIBE Ref</span>
+        <span class="meta-value">Document Hub / Strategy</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 01: WHAT IS MISSION CONTROL -->
+  <div class="section">
+    <div class="section-num">01 · Product Definition</div>
+    <h2>What is Mission Control?</h2>
+    <p>Mission Control is the first AI-powered Business Operating System built for solo founders and small business owners. It replaces 6 to 12 separate tools (Notion, Trello, Asana, Google Calendar, spreadsheets, CRM, social media schedulers) with one command centre where an AI agent team manages the operational weight of the business.</p>
+    <p>The founder opens one app. Their AI team has already briefed them on the day, sequenced their tasks by strategic value, flagged financial issues, confirmed all documents are current, and built a time-blocked schedule around their energy pattern. <strong>The founder's first decision of the day is a strategic one, not an administrative one.</strong></p>
+    <p>Mission Control is not a dashboard. It is an augmented workforce member who runs the back office.</p>
+  </div>
+
+  <!-- 02: THE PAIN -->
+  <div class="section">
+    <div class="section-num">02 · The Problem</div>
+    <h2>The Pain Mission Control Solves</h2>
+
+    <div class="value-card red">
+      <div class="vc-title">Tool Sprawl</div>
+      <div class="vc-body">Solo founders run their operation across 6 to 12 different tools. Notion for docs, Trello for tasks, Google Calendar for scheduling, Slack for comms, spreadsheets for finance, another tool for CRM, another for social media. Nothing talks to anything else. Every tool has its own login, interface, and logic.</div>
+      <div class="vc-metric">Average founder uses 8.2 tools daily (source: Productiv 2025 SaaS Report)</div>
+    </div>
+
+    <div class="value-card red">
+      <div class="vc-title">Administrative Overhead</div>
+      <div class="vc-body">The founder spends 2 to 3 hours per day managing the tools that are supposed to be managing the business. Decision fatigue hits before lunchtime. Important tasks fall through the cracks because they live in a different app from the one you opened that morning.</div>
+      <div class="vc-metric">10 to 15 hours per week lost to operational admin</div>
+    </div>
+
+    <div class="value-card red">
+      <div class="vc-title">No Intelligence Layer</div>
+      <div class="vc-body">Existing tools organise. They do not think. Notion does not know which task has the highest revenue impact. Trello does not flag that your invoice is overdue. Google Calendar does not protect your focus time based on your energy patterns. The founder is the intelligence layer, and the founder is exhausted.</div>
+    </div>
+
+    <div class="value-card red">
+      <div class="vc-title">The Freedom Trap</div>
+      <div class="vc-body"><strong>"You built this business for freedom. But the business has become the cage."</strong> The founder who started a business to have control of their life now spends every waking hour managing the operational machinery. They cannot take a holiday without the business stopping. They are the single point of failure.</div>
+    </div>
+  </div>
+
+  <!-- 03: THE TRANSFORMATION -->
+  <div class="section">
+    <div class="section-num">03 · The Transformation</div>
+    <h2>Before and After Mission Control</h2>
+
+    <h3>Before Mission Control</h3>
+    <p>The founder wakes up, opens 5 apps, spends 45 minutes figuring out what to do today, forgets about the invoice that was due yesterday, misses a follow-up with a warm lead, and arrives at their actual work already exhausted. By evening, they have been busy all day but cannot point to the one thing that moved the business forward.</p>
+
+    <h3>After Mission Control</h3>
+    <p>The founder opens one app. <strong>ARIA</strong> has already briefed them on the day. <strong>PA</strong> has sequenced their tasks by value and urgency. <strong>GRID</strong> shows project health across every active workstream. <strong>LEDGER</strong> flags the overdue invoice. <strong>SCRIBE</strong> confirms all documents are current. <strong>PULSE</strong> shows the social media calendar is on track. The founder's first decision of the day is a strategic one.</p>
+
+    <div class="callout">
+      <div class="callout-label">The Core Transformation</div>
+      <p><strong>The founder stops managing the business and starts leading it.</strong> The AI team handles the operational weight. The human focuses on vision, relationships, and the work only they can do. This is not productivity software. This is an augmented workforce.</p>
+    </div>
+  </div>
+
+  <!-- 04: VALUE AND BENEFITS -->
+  <div class="section">
+    <div class="section-num">04 · Value Proposition</div>
+    <h2>The Value and Benefits</h2>
+
+    <div class="value-card">
+      <div class="vc-title">Time Reclaimed</div>
+      <div class="vc-body">A conservative estimate is 10 to 15 hours per week saved on operational overhead: task management, document hunting, calendar planning, follow-up tracking, financial monitoring, and project status updates. At a founder's hourly value of £50 to £150, that is <strong>£500 to £2,250 per week</strong> returned to revenue-generating work.</div>
+      <div class="vc-metric">520 to 780 hours per year returned to the founder</div>
+    </div>
+
+    <div class="value-card gold">
+      <div class="vc-title">Augmented Intelligence</div>
+      <div class="vc-body">The AI agents do not just organise, they think. PA sequences tasks by strategic value, not just urgency. LEDGER flags financial problems before they become crises. SAGE predicts trends from your own operational data. GRID spots delivery risks across your project portfolio. This is not automation. This is <strong>augmented decision-making</strong>.</div>
+    </div>
+
+    <div class="value-card fire">
+      <div class="vc-title">The Hire Model (Unique IP)</div>
+      <div class="vc-body">The client does not subscribe to software. They onboard a colleague. Each agent has a name, a colour identity, a job description, a CV, KPIs, and a performance dashboard. <strong>A subscription is something you cancel. A team member is someone you rely on.</strong> That psychological shift is the retention engine. Nobody else in the market is packaging AI agents as hires.</div>
+      <div class="vc-metric">IP #1: Agent as a Hire model. Category creator. No direct competitor.</div>
+    </div>
+
+    <div class="value-card green">
+      <div class="vc-title">Cost Replacement</div>
+      <div class="vc-body">Mission Control replaces multiple senior hires. A full-time operations manager (£35,000 to £50,000/yr), a project coordinator (£22,000 to £30,000/yr), a social media manager (£25,000 to £35,000/yr), and a financial controller (£40,000 to £60,000/yr). Total: <strong>£122,000 to £175,000 per year</strong> in human hires replaced by AI agents at a fraction of the cost.</div>
+      <div class="vc-metric">ROI: 24x to 350x return on Tier 1 to Tier 3 pricing</div>
+    </div>
+
+    <div class="value-card violet">
+      <div class="vc-title">AI-Powered Smart Scheduler</div>
+      <div class="vc-body">PA and ARIA build your day for you. PA analyses tasks by strategic value, revenue impact, and deadline urgency. ARIA builds time blocks around your calendar and energy pattern. GRID feeds project dependencies. LEDGER flags anything financially time-sensitive. One button generates your entire day. <strong>This is not scheduling. This is an AI chief of staff.</strong></div>
+      <div class="vc-metric">Competes with Motion ($19-34/mo) but with full business context</div>
+    </div>
+
+    <div class="value-card royal">
+      <div class="vc-title">Cross-Device, Always On</div>
+      <div class="vc-body">Supabase backend means your data syncs across every device in real time. Mark a task done on your phone, it shows done on your laptop. ARIA generates the morning briefing before you open the app. Your business state is always current, always accessible, anywhere.</div>
+    </div>
+  </div>
+
+  <!-- 05: TARGET AUDIENCE -->
+  <div class="section">
+    <div class="section-num">05 · Target Audience</div>
+    <h2>Who Is This For?</h2>
+
+    <div class="persona-card" style="border-left:3px solid var(--electric);">
+      <div class="persona-name">Primary: Solo Founders and SME Owners</div>
+      <div class="persona-desc">1 to 20 employees, revenue £50,000 to £2,000,000</div>
+      <div class="persona-detail">Service-based businesses: agencies, consultancies, coaching practices, creative studios, freelancers at scale. Technically capable (uses a browser) but not developers. <strong>They do not want to build systems. They want systems to work for them.</strong> In business 1 to 5 years, profitable or nearly profitable, outgrown spreadsheets and free tools, cannot afford (or does not want) a full-time ops manager, PM, financial controller, and social media manager. Mission Control replaces all four.</div>
+    </div>
+
+    <div class="persona-card" style="border-left:3px solid var(--gold);">
+      <div class="persona-name">Secondary: Operations Managers in SMEs</div>
+      <div class="persona-desc">Inside companies with 10 to 50 staff</div>
+      <div class="persona-detail">Drowning in tool sprawl. Managing projects across Asana, Slack, spreadsheets, and email. They want a unified command layer that shows every workstream, every deadline, every team member's status in one place. Mission Control gives them the dashboard their CEO has been asking for.</div>
+    </div>
+
+    <div class="persona-card" style="border-left:3px solid var(--violet);">
+      <div class="persona-name">Tertiary: Enterprise Departments (Phase 3+)</div>
+      <div class="persona-desc">Pilot programmes for human-AI collaboration</div>
+      <div class="persona-detail">Departments that want to test human-AI collaboration in a controlled, governed, measurable environment. The Human-AI Collaboration Study becomes the sales weapon. PhoennixAI provides the agents, the governance framework, the traceability, and the academic rigour. Enterprise clients pay for the research as much as the product.</div>
+    </div>
+  </div>
+
+  <!-- 06: COMPETITIVE LANDSCAPE -->
+  <div class="section">
+    <div class="section-num">06 · Competitive Landscape</div>
+    <h2>How We Compare</h2>
+
+    <table class="comp-table">
+      <thead>
+        <tr><th>Feature</th><th>Mission Control</th><th>Notion</th><th>Motion</th><th>Monday.com</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>AI agent team</td><td style="color:var(--green);">11 agents, named, governed</td><td>AI assist (single model)</td><td>No agents</td><td>AI assist (single model)</td></tr>
+        <tr><td>Smart scheduling</td><td style="color:var(--green);">PA + ARIA + GRID + LEDGER</td><td>No</td><td style="color:var(--green);">Yes (single AI)</td><td>No</td></tr>
+        <tr><td>Financial intelligence</td><td style="color:var(--green);">LEDGER (advisory)</td><td>No</td><td>No</td><td>No</td></tr>
+        <tr><td>Document governance</td><td style="color:var(--green);">SCRIBE (7-step control)</td><td>Basic wiki</td><td>No</td><td>Basic docs</td></tr>
+        <tr><td>Agent governance</td><td style="color:var(--green);">Full traceability, audit log</td><td>No</td><td>No</td><td>No</td></tr>
+        <tr><td>Hire model (CV, JD, KPIs)</td><td style="color:var(--green);">Unique IP, category creator</td><td>No</td><td>No</td><td>No</td></tr>
+        <tr><td>Cross-device sync</td><td style="color:var(--green);">Supabase backend</td><td style="color:var(--green);">Yes</td><td style="color:var(--green);">Yes</td><td style="color:var(--green);">Yes</td></tr>
+        <tr><td>Price (solo founder)</td><td>£497 to £4,997</td><td>$8 to $15/mo</td><td>$19 to $34/mo</td><td>$9 to $19/mo</td></tr>
+        <tr><td>What you get</td><td style="color:var(--electric);">An AI team</td><td>A workspace</td><td>A scheduler</td><td>A project board</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout fire">
+      <div class="callout-label">Competitive Advantage</div>
+      <p><strong>Nobody in the market sells an AI agent as a complete hire.</strong> AutoGPT, CrewAI, and AgentGPT offer developer frameworks. Zapier and Make offer automation. HubSpot and Monday offer CRM. Motion offers scheduling. None of them sell an agent with a CV, JD, user manual, training manual, and performance dashboard packaged as a deployable team member. That framing is completely new. PhoennixAI is the category creator.</p>
+    </div>
+  </div>
+
+  <!-- 07: PRICING -->
+  <div class="section">
+    <div class="section-num">07 · Pricing Strategy</div>
+    <h2>Beta Pricing (30 March 2026)</h2>
+
+    <div class="pricing-grid">
+      <div class="price-card">
+        <div class="price-tier">Tier 1 · Starter</div>
+        <div class="price-amount">£497</div>
+        <div class="price-period">30-day access</div>
+        <div class="price-desc">Mission Control access. PA Smart Scheduler. ARIA daily briefing. GRID project tracking. Basic agent team.</div>
+      </div>
+      <div class="price-card featured">
+        <div class="price-tier">Tier 2 · Professional</div>
+        <div class="price-amount">£1,497</div>
+        <div class="price-period">Full onboarding</div>
+        <div class="price-desc">Everything in Tier 1 plus full agent onboarding, LEDGER financial intelligence, SCRIBE document governance, RELAY client onboarding, and dedicated setup session.</div>
+      </div>
+      <div class="price-card">
+        <div class="price-tier">Tier 3 · Enterprise</div>
+        <div class="price-amount">£4,997</div>
+        <div class="price-period">Full deployment</div>
+        <div class="price-desc">Everything in Tier 2 plus custom agent configuration, The DevHub (NEXUS + PROBE), white-label option, priority support, and quarterly strategy review.</div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <div class="callout-label">Revenue Targets</div>
+      <p><strong>3 Tier 2 clients covers monthly operating costs.</strong> 1 Tier 3 client funds Phase 2 entirely. Beta opens 30 March with 10 testers. Waitlist opens 24 March with first flyer posts.</p>
+    </div>
+  </div>
+
+  <!-- 08: KEY SALES MESSAGES -->
+  <div class="section">
+    <div class="section-num">08 · Sales Playbook</div>
+    <h2>Key Messages for Client Conversations</h2>
+
+    <div class="value-card">
+      <div class="vc-title">The Opening Line</div>
+      <div class="vc-body">"How many tools are you using to run your business right now? What if one app, with an AI team inside it, could replace all of them?"</div>
+    </div>
+
+    <div class="value-card fire">
+      <div class="vc-title">The Pain Statement</div>
+      <div class="vc-body">"You are spending 10 to 15 hours a week managing tools instead of growing your business. Mission Control gives you those hours back and an AI team that thinks about your business while you sleep."</div>
+    </div>
+
+    <div class="value-card gold">
+      <div class="vc-title">The Differentiator</div>
+      <div class="vc-body">"Other tools give you features. We give you team members. Each AI agent has a name, a role, a job description, and KPIs. You are not subscribing to software. You are hiring a team."</div>
+    </div>
+
+    <div class="value-card green">
+      <div class="vc-title">The ROI Statement</div>
+      <div class="vc-body">"Mission Control replaces four hires: an ops manager, a project coordinator, a social media manager, and a financial controller. That is £122,000 to £175,000 per year in human salaries. Our enterprise tier is £4,997."</div>
+    </div>
+
+    <div class="value-card violet">
+      <div class="vc-title">The Demo Moment</div>
+      <div class="vc-body">"Watch this. I click one button and four AI agents collaborate to build my entire day: PA analyses my tasks, ARIA blocks my time, GRID checks my project deadlines, and LEDGER flags anything financially urgent. That took 1.5 seconds."</div>
+    </div>
+
+    <div class="value-card rose">
+      <div class="vc-title">The Close</div>
+      <div class="vc-body">"You built your business for freedom. We make sure the business does not become the cage. When would you like to start?"</div>
+    </div>
+  </div>
+
+  <!-- 09: FEATURE ROADMAP -->
+  <div class="section">
+    <div class="section-num">09 · Feature Roadmap</div>
+    <h2>What is Coming Next</h2>
+
+    <div class="value-card">
+      <div class="vc-title">Phase 0 (Now, Live)</div>
+      <div class="vc-body">GRID Command panel, Agent Intelligence Feed, PA + ARIA Smart Scheduler, task management with Supabase sync, calendar, notes, backlog, org chart, session log. Blue Phoenix brand. Mobile responsive.</div>
+    </div>
+
+    <div class="value-card gold">
+      <div class="vc-title">Phase 2 (Post-Beta)</div>
+      <div class="vc-body">Sound and notification system (agent audio signatures, vibration, toast notifications). Unified Inbox (BL-032, ECHO-powered). Live Revenue Dashboard (BL-033, LEDGER-powered). Client Portal (BL-034, RELAY-powered). Weekly AI Retrospective PDF (BL-035, GRID). Goal Tracking with AI Accountability (BL-036, PA + GRID + ARIA). PWA conversion (BL-002).</div>
+    </div>
+
+    <div class="value-card violet">
+      <div class="vc-title">Phase 3 (Multi-Model)</div>
+      <div class="vc-body">Claude for strategy and reasoning. Kimi K2.5 for bulk research at 10x lower cost. Manus for autonomous execution (Instagram posting, email sending). Perplexity for real-time web intelligence. Users see PhoennixAI agents only. The models underneath are invisible.</div>
+    </div>
+
+    <div class="value-card fire">
+      <div class="vc-title">Phase 4 (Super Business OS)</div>
+      <div class="vc-body">Takes over the founder's desktop and phone as one unified AI suite. All agents, all products, all entities, one interface. The business runs itself. The founder governs. BL-007.</div>
+    </div>
+  </div>
+
+  <!-- 10: STANDING RULES FOR SALES -->
+  <div class="section">
+    <div class="section-num">10 · Sales Rules</div>
+    <h2>Non-Negotiable Rules for Client Conversations</h2>
+
+    <div class="value-card red">
+      <div class="vc-title">LEDGER is advisory only. Never promise financial execution.</div>
+      <div class="vc-body">LEDGER analyses, advises, and forecasts. He never touches money. He never executes transactions. This is a founding rule. Any client who asks "can the AI pay my invoices?" must receive a clear no. LEDGER requires human sign-off on all financial actions.</div>
+    </div>
+
+    <div class="value-card red">
+      <div class="vc-title">Agents are Phase 0 prompt-configured, not fully autonomous.</div>
+      <div class="vc-body">Do not oversell autonomy. In Phase 0, agents operate through Claude sessions and the apps. Full autonomy activates in Phase 2 when Supabase, the Claude API, and server infrastructure are live. Be honest about what is live now and what is coming.</div>
+    </div>
+
+    <div class="value-card red">
+      <div class="vc-title">Every claim must be demonstrable.</div>
+      <div class="vc-body">If you say "Mission Control replaces 4 hires," be prepared to show which agents do which jobs and how. If you say "10 to 15 hours per week saved," be prepared to walk through the time breakdown. Never make a claim you cannot prove with the live product.</div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="doc-footer">
+    <div class="doc-footer-brand">PhoennixAI</div>
+    <div class="doc-footer-meta">PAI-STRAT-001 · Mission Control Product Strategy · v1.0 · 22 March 2026 · Valerie Wilcox and Claude · Confidential</div>
+  </div>
+
+</div>
+
+</body>
+</html>
