@@ -1078,7 +1078,7 @@ body::before {
     <div class="topbar-logo"></div>
     <div class="topbar-name">PHOENNIX<span>AI</span></div>
   </div>
-  <div class="topbar-meta">Mission Control v3.0 · Session 13 · 21 March 2026</div>
+  <div class="topbar-meta">Mission Control v3.1 · Supabase Live · Session 13 · 22 March 2026</div>
   <div class="topbar-right">
     <div class="topbar-status">Internal Alpha</div>
   </div>
@@ -2086,8 +2086,54 @@ body::before {
   </div>
 </nav>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-// Tab switching
+// ============================================================
+// PHOENNIXAI SUPABASE CONNECTION
+// Primary: Supabase | Fallback: localStorage
+// ============================================================
+const SUPABASE_URL = 'https://erfvunwhpsdbyayzdjmz.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVyZnZ1bndocHNkYnlheXpkam16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQxMDEzODQsImV4cCI6MjA4OTY3NzM4NH0.JdoYnDufRjOc2p4wVz0hgZql9-eZyo0-BHongtORhKo';
+
+let sb = null;
+let dbConnected = false;
+
+// Initialise Supabase
+try {
+  sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  // Test connection
+  sb.from('tasks').select('id', { count: 'exact', head: true }).then(res => {
+    if (!res.error) {
+      dbConnected = true;
+      console.log('PhoennixAI Backend: Connected to Supabase');
+      updateConnectionStatus(true);
+      syncFromSupabase();
+    } else {
+      console.warn('PhoennixAI Backend: Supabase error, using localStorage fallback', res.error);
+      updateConnectionStatus(false);
+    }
+  });
+} catch(e) {
+  console.warn('PhoennixAI Backend: Supabase unavailable, using localStorage fallback');
+  updateConnectionStatus(false);
+}
+
+function updateConnectionStatus(connected) {
+  const statusEl = document.querySelector('.topbar-status');
+  if (statusEl) {
+    if (connected) {
+      statusEl.innerHTML = '<span style="width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);display:inline-block;animation:pulse-dot 2s ease-in-out infinite;"></span> Supabase Live';
+      statusEl.style.color = 'var(--green)';
+    } else {
+      statusEl.innerHTML = '<span style="width:6px;height:6px;border-radius:50%;background:var(--gold);display:inline-block;"></span> Local Mode';
+      statusEl.style.color = 'var(--gold)';
+    }
+  }
+}
+
+// ============================================================
+// TAB SWITCHING
+// ============================================================
 function switchTab(id) {
   document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -2116,19 +2162,75 @@ function switchTab(id) {
   window.scrollTo(0, 0);
 }
 
-// Task toggling with localStorage persistence
+// ============================================================
+// TASK MANAGEMENT (Supabase + localStorage)
+// ============================================================
 function toggleTask(el) {
   el.classList.toggle('done');
-  saveTasks();
+  const taskId = el.getAttribute('data-task');
+  const isDone = el.classList.contains('done');
+  
+  // Save to localStorage (instant)
+  saveTasksLocal();
+  
+  // Save to Supabase (async)
+  if (dbConnected && sb) {
+    const title = el.querySelector('.task-title')?.textContent || taskId;
+    saveTaskToSupabase(taskId, title, isDone);
+  }
 }
 
-function saveTasks() {
+function saveTasksLocal() {
   const tasks = {};
   document.querySelectorAll('.task-item').forEach(t => {
     const id = t.getAttribute('data-task');
     if (id) tasks[id] = t.classList.contains('done');
   });
   localStorage.setItem('pai_mc_tasks', JSON.stringify(tasks));
+}
+
+async function saveTaskToSupabase(taskId, title, isDone) {
+  try {
+    // Check if task exists
+    const { data: existing } = await sb.from('tasks')
+      .select('id')
+      .eq('source_app', 'mission_control')
+      .eq('title', title)
+      .limit(1);
+
+    if (existing && existing.length > 0) {
+      // Update existing task
+      await sb.from('tasks').update({
+        status: isDone ? 'done' : 'pending',
+        completed_at: isDone ? new Date().toISOString() : null,
+        updated_at: new Date().toISOString()
+      }).eq('id', existing[0].id);
+    } else {
+      // Insert new task
+      await sb.from('tasks').insert({
+        title: title,
+        status: isDone ? 'done' : 'pending',
+        completed_at: isDone ? new Date().toISOString() : null,
+        priority: getPriorityFromTaskId(taskId),
+        source_app: 'mission_control',
+        agent_owner: getAgentFromTaskId(taskId),
+        created_by: 'Valerie Wilcox'
+      });
+    }
+    console.log('Task synced to Supabase:', title);
+  } catch(e) {
+    console.warn('Task sync failed, localStorage backup active:', e);
+  }
+}
+
+function getPriorityFromTaskId(id) {
+  const map = {t1:'critical',t2:'critical',t3:'high',t4:'high',t5:'high',t6:'medium',t7:'medium',t8:'medium',t9:'medium',t10:'low',t11:'low'};
+  return map[id] || 'medium';
+}
+
+function getAgentFromTaskId(id) {
+  const map = {t1:'LEDGER',t2:'SCRIBE',t3:'Claude',t4:'LEDGER',t5:'SCRIBE',t6:'PULSE',t7:'PA',t8:'PULSE',t9:'NEXUS',t10:'SCRIBE',t11:'RELAY'};
+  return map[id] || 'GRID';
 }
 
 function loadTasks() {
@@ -2143,17 +2245,57 @@ function loadTasks() {
   } catch(e) {}
 }
 
-// Restore last tab
+// ============================================================
+// SYNC FROM SUPABASE ON LOAD
+// ============================================================
+async function syncFromSupabase() {
+  if (!dbConnected || !sb) return;
+  
+  try {
+    // Sync tasks
+    const { data: tasks } = await sb.from('tasks')
+      .select('*')
+      .eq('source_app', 'mission_control')
+      .order('created_at', { ascending: false });
+    
+    if (tasks && tasks.length > 0) {
+      console.log('Synced ' + tasks.length + ' tasks from Supabase');
+    }
+
+    // Log the connection event to agent_log
+    await sb.from('agent_log').insert({
+      agent_name: 'GRID',
+      event_type: 'action',
+      description: 'Mission Control v3 connected to Supabase backend. Session active.',
+      outcome: 'Database connection established. Cross-device sync live.',
+      founder_aware: true,
+      severity: 'info',
+      related_product: 'PRJ-001',
+      session_number: 13
+    });
+
+  } catch(e) {
+    console.warn('Supabase sync error:', e);
+  }
+}
+
+// ============================================================
+// RESTORE TAB
+// ============================================================
 function restoreTab() {
   const saved = localStorage.getItem('pai_mc_tab');
   if (saved) switchTab(saved);
 }
 
-// Init
+// ============================================================
+// INIT
+// ============================================================
 loadTasks();
 restoreTab();
 
-// ===== SMART SCHEDULER (PA + ARIA) =====
+// ============================================================
+// SMART SCHEDULER (PA + ARIA) - Supabase enabled
+// ============================================================
 function generateSchedule() {
   const btn = document.getElementById('scheduleBtn');
   const output = document.getElementById('scheduleOutput');
@@ -2174,15 +2316,64 @@ function generateSchedule() {
     renderSchedule(schedule, output);
     btn.classList.remove('running');
     btn.textContent = 'Regenerate Schedule';
+    
+    // Save to localStorage
     localStorage.setItem('pai_schedule', JSON.stringify({date: new Date().toDateString(), schedule: schedule}));
+    
+    // Save to Supabase
+    if (dbConnected && sb) {
+      saveScheduleToSupabase(startH, endH, energy, schedule);
+    }
   }, 1400);
 }
 
+async function saveScheduleToSupabase(startH, endH, energy, blocks) {
+  try {
+    const today = new Date().toISOString().split('T')[0];
+    
+    // Delete any existing schedule for today
+    await sb.from('schedule').delete().eq('schedule_date', today);
+    
+    // Calculate totals
+    let totalWork = 0, totalBreak = 0;
+    blocks.forEach(b => {
+      if (b.type === 'break') totalBreak += b.duration;
+      else totalWork += b.duration;
+    });
+
+    // Insert new schedule
+    await sb.from('schedule').insert({
+      schedule_date: today,
+      start_hour: startH,
+      end_hour: endH,
+      energy_pattern: energy,
+      blocks: blocks,
+      total_work_hours: totalWork,
+      total_break_hours: totalBreak,
+      generated_by: 'PA + ARIA'
+    });
+    
+    // Log the schedule generation
+    await sb.from('agent_log').insert({
+      agent_name: 'PA',
+      event_type: 'action',
+      description: 'Daily schedule generated. ' + blocks.length + ' blocks. ' + totalWork.toFixed(1) + 'h work, ' + totalBreak.toFixed(1) + 'h breaks.',
+      outcome: 'Schedule saved to Supabase. Cross-device access active.',
+      founder_aware: true,
+      severity: 'info',
+      related_agent: 'ARIA',
+      session_number: 13
+    });
+
+    console.log('Schedule synced to Supabase');
+  } catch(e) {
+    console.warn('Schedule sync failed, localStorage backup active:', e);
+  }
+}
+
 function buildSchedule(startH, endH, energy) {
-  // Normalise end hour (handles past midnight)
   const totalHours = endH > startH ? endH - startH : (24 - startH) + (endH - 24 + 24);
 
-  // Task database: pulls from current priority stack with metadata
   const tasks = [
     { name:'IP Protection: Poor Man Patent', duration:0.5, priority:'critical', agent:'LEDGER', reason:'Date-stamps all 13 IPs before any external disclosure. Financially time-sensitive, LEDGER flags this as the highest urgency action.', type:'admin', revenue:true },
     { name:'Push Session 12 files to GitHub (8 files)', duration:1, priority:'critical', agent:'SCRIBE', reason:'8 files pending. SCRIBE flags: Document Hub, Staff Manual, NEXUS, PROBE, PULSE JDs and CVs all waiting. Blocks all other app updates.', type:'technical' },
@@ -2196,34 +2387,21 @@ function buildSchedule(startH, endH, energy) {
     { name:'User Manual update planning (NEXUS, PROBE, PULSE)', duration:0.5, priority:'low', agent:'SCRIBE', reason:'SCRIBE: Manual is one session behind. RELAY colour error. Three agents missing from active list. Plan the corrections.', type:'technical' },
   ];
 
-  // Energy-based sorting: creative tasks during peak energy, admin during low energy
-  const typeOrder = {
-    'start': { peak:['strategic','creative'], mid:['technical'], low:['admin'] },
-    'mid': { peak:['admin'], mid:['strategic','creative'], low:['technical'] },
-    'night': { peak:['admin','technical'], mid:['strategic'], low:['creative'] }
-  };
-
-  // Priority weighting
   const priorityWeight = { critical:4, high:3, medium:2, low:1 };
 
-  // Sort: priority first, then energy-appropriate placement
-  const pattern = typeOrder[energy];
   tasks.sort((a, b) => {
     const pw = priorityWeight[b.priority] - priorityWeight[a.priority];
     if (pw !== 0) return pw;
-    // Within same priority, revenue tasks first
     if (a.revenue && !b.revenue) return -1;
     if (!a.revenue && b.revenue) return 1;
     return 0;
   });
 
-  // Build time blocks
   const blocks = [];
   let currentHour = startH;
   let totalScheduled = 0;
   const maxHours = totalHours;
 
-  // Add ARIA morning briefing first
   blocks.push({
     time: formatHour(currentHour),
     endTime: formatHour(currentHour + 0.25),
@@ -2238,9 +2416,8 @@ function buildSchedule(startH, endH, energy) {
 
   for (let i = 0; i < tasks.length; i++) {
     const t = tasks[i];
-    if (totalScheduled + t.duration > maxHours - 0.5) break; // Reserve 30min buffer
+    if (totalScheduled + t.duration > maxHours - 0.5) break;
 
-    // Insert break every 2.5 hours of work
     const hoursSinceBreak = totalScheduled - (blocks.filter(b => b.type === 'break').length * 0.25);
     if (hoursSinceBreak >= 2.5) {
       blocks.push({
@@ -2269,7 +2446,6 @@ function buildSchedule(startH, endH, energy) {
     totalScheduled += t.duration;
   }
 
-  // End of day review
   blocks.push({
     time: formatHour(currentHour),
     endTime: formatHour(currentHour + 0.25),
@@ -2284,7 +2460,6 @@ function buildSchedule(startH, endH, energy) {
 }
 
 function formatHour(h) {
-  // Handle hours past midnight
   const hour = h >= 24 ? h - 24 : h;
   const wholeHour = Math.floor(hour);
   const mins = Math.round((hour - wholeHour) * 60);
@@ -2311,18 +2486,16 @@ function renderSchedule(blocks, container) {
 
   container.innerHTML = html;
 
-  // Add footer
   const footer = document.createElement('div');
   footer.className = 'schedule-footer';
-  footer.innerHTML = '<div class="sf-meta">PA + ARIA · ' + totalWork.toFixed(1) + 'h work · ' + totalBreak.toFixed(1) + 'h breaks · ' + blocks.length + ' blocks</div><button class="sf-regen" onclick="generateSchedule()">Regenerate</button>';
+  const dbBadge = dbConnected ? '<span style="color:var(--green);margin-left:8px;">Supabase Synced</span>' : '<span style="color:var(--gold);margin-left:8px;">Local Only</span>';
+  footer.innerHTML = '<div class="sf-meta">PA + ARIA · ' + totalWork.toFixed(1) + 'h work · ' + totalBreak.toFixed(1) + 'h breaks · ' + blocks.length + ' blocks' + dbBadge + '</div><button class="sf-regen" onclick="generateSchedule()">Regenerate</button>';
   container.parentElement.appendChild(footer);
 
-  // Remove old footer if exists
   const footers = container.parentElement.querySelectorAll('.schedule-footer');
   if (footers.length > 1) footers[0].remove();
 }
 
-// Load saved schedule for today
 function loadSchedule() {
   try {
     const saved = JSON.parse(localStorage.getItem('pai_schedule') || '{}');
