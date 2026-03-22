@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PhoennixAI Mission Control v3</title>
+<title>PhoennixAI Mission Control v3.3</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3ClinearGradient id='f' x1='0' y1='1' x2='0' y2='0'%3E%3Cstop offset='0%25' stop-color='%23FF6B2B'/%3E%3Cstop offset='100%25' stop-color='%2300E5FF'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M16 2c-2 4-6 8-6 14 0 6 3 10 6 14 3-4 6-8 6-14 0-6-4-10-6-14z' fill='url(%23f)'/%3E%3C/svg%3E">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
 <style>
@@ -39,6 +39,499 @@
   --teal: #7ECEC4;
   --lime: #84CC16;
 }
+
+/* LIGHT MODE (Default per Key Decision 24) */
+body.light {
+  --midnight: #F8F9FC;
+  --surface: #FFFFFF;
+  --card: #FFFFFF;
+  --card-hover: #F3F4F8;
+  --border: rgba(0,0,0,0.08);
+  --border-light: rgba(0,0,0,0.12);
+  --text: #1A1A2E;
+  --muted: #6B7280;
+  --dim: #D1D5DB;
+  --phoenix-blue: #0091A8;
+  --phoenix-blue-dim: rgba(0,145,168,0.08);
+  --phoenix-blue-glow: rgba(0,145,168,0.15);
+  --fire-dim: rgba(255,107,43,0.06);
+  --gold-dim: rgba(255,184,48,0.06);
+}
+
+body.light::before { opacity: 0; }
+
+body.light .topbar {
+  background: rgba(255,255,255,0.92);
+  border-bottom-color: rgba(0,0,0,0.08);
+}
+
+body.light .topbar-name { color: var(--phoenix-blue); }
+body.light .topbar-name span { color: #6B7280; }
+
+body.light .tab-nav {
+  background: #FFFFFF;
+  border-bottom-color: rgba(0,0,0,0.08);
+}
+
+body.light .tab-btn { color: #6B7280; }
+body.light .tab-btn:hover { color: #1A1A2E; background: rgba(0,0,0,0.02); }
+body.light .tab-btn.active { color: var(--phoenix-blue); }
+
+body.light .stat-strip { background: rgba(0,0,0,0.06); }
+body.light .stat-cell { background: #FFFFFF; }
+
+body.light .card { box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+body.light .agent-row { box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+body.light .org-card { box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+body.light .product-card { box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+body.light .gc-card { box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+body.light .af-card { box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+body.light .note-card { box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+body.light .scheduler-wrap { box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+
+body.light .card-name,
+body.light .agent-codename,
+body.light .org-name,
+body.light .product-name,
+body.light .gc-name,
+body.light .vc-title,
+body.light .note-title,
+body.light .task-title,
+body.light .tb-task,
+body.light .scheduler-title { color: #1A1A2E; }
+
+body.light .card-body,
+body.light .agent-role,
+body.light .org-role,
+body.light .product-desc,
+body.light .gc-status,
+body.light .af-msg,
+body.light .vc-body,
+body.light .note-body,
+body.light .tb-reason { color: #4B5563; }
+
+body.light .callout {
+  background: rgba(0,145,168,0.04);
+  border-color: rgba(0,145,168,0.15);
+}
+
+body.light .callout p { color: #374151; }
+body.light .callout p strong { color: #1A1A2E; }
+
+body.light .section-title,
+body.light h2 { color: #1A1A2E; }
+
+body.light .bl-table td { color: #4B5563; }
+body.light .bl-table td:nth-child(2) { color: #1A1A2E; }
+body.light .bl-table tr:hover td { background: rgba(0,0,0,0.02); }
+
+body.light .session-log td { color: #4B5563; }
+body.light .session-log td:first-child { color: var(--phoenix-blue); }
+
+body.light .cal-day { background: #FFFFFF; }
+body.light .cal-day:hover { background: #F3F4F8; }
+body.light .cal-header { background: #F8F9FC; }
+
+body.light .sc-field select,
+body.light .sc-field input {
+  background: #F8F9FC;
+  border-color: rgba(0,0,0,0.12);
+  color: #1A1A2E;
+}
+
+body.light .bottom-nav {
+  background: rgba(255,255,255,0.95);
+  border-top-color: rgba(0,0,0,0.08);
+}
+
+body.light .bnav-btn { color: #6B7280; }
+body.light .bnav-btn.active { color: var(--phoenix-blue); }
+
+/* ===== ADD EVENT FORM ===== */
+.add-event-wrap {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 20px;
+}
+
+.ae-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.12s;
+}
+
+.ae-header:hover { background: var(--card-hover); }
+
+.ae-header-title {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--phoenix-blue);
+}
+
+.ae-header-icon {
+  font-size: 16px;
+  color: var(--muted);
+  transition: transform 0.2s;
+}
+
+.ae-header-icon.open { transform: rotate(45deg); }
+
+.ae-form {
+  display: none;
+  padding: 20px;
+}
+
+.ae-form.open { display: block; }
+
+.ae-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.ae-row.full { grid-template-columns: 1fr; }
+
+.ae-field label {
+  display: block;
+  font-family: 'DM Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+
+.ae-field input,
+.ae-field select,
+.ae-field textarea {
+  width: 100%;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  color: var(--text);
+  padding: 8px 12px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.ae-field input:focus,
+.ae-field select:focus,
+.ae-field textarea:focus { border-color: var(--phoenix-blue); }
+
+.ae-field textarea { resize: vertical; min-height: 60px; }
+
+.ae-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.ae-save {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 10px 24px;
+  border-radius: 5px;
+  border: none;
+  background: var(--phoenix-blue);
+  color: #060A18;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.ae-save:hover { box-shadow: 0 0 12px rgba(0,229,255,0.3); }
+.ae-save:active { transform: scale(0.97); }
+.ae-save:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.ae-cancel {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: 1px solid var(--border);
+  background: none;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.ae-cancel:hover { border-color: var(--muted); color: var(--text); }
+
+.ae-success {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--green);
+  margin-top: 10px;
+  display: none;
+}
+
+.ae-success.show { display: block; }
+
+/* Upcoming events list */
+.upcoming-list { margin-top: 16px; }
+
+.upcoming-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 14px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  margin-bottom: 6px;
+}
+
+.upcoming-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 5px;
+}
+
+.upcoming-info { flex: 1; }
+
+.upcoming-title {
+  font-size: 13px;
+  font-weight: 500;
+  color: #fff;
+}
+
+.upcoming-meta {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+.upcoming-delete {
+  background: none;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 14px;
+  padding: 2px 6px;
+  border-radius: 3px;
+  transition: all 0.12s;
+}
+
+.upcoming-delete:hover { color: var(--red); background: rgba(239,68,68,0.1); }
+
+body.light .ae-field input,
+body.light .ae-field select,
+body.light .ae-field textarea {
+  background: #F8F9FC;
+  border-color: rgba(0,0,0,0.12);
+  color: #1A1A2E;
+}
+
+body.light .ae-save { color: #fff; background: var(--phoenix-blue); }
+body.light .upcoming-title { color: #1A1A2E; }
+
+/* Theme toggle button */
+.theme-toggle {
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.15s;
+  color: var(--muted);
+}
+
+.theme-toggle:hover { border-color: var(--phoenix-blue); color: var(--phoenix-blue); }
+
+/* ===== ADD EVENT FORM ===== */
+.event-form {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+.event-form-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 18px;
+  color: #fff;
+  margin-bottom: 14px;
+  letter-spacing: 0.03em;
+}
+
+body.light .event-form-title { color: #1A1A2E; }
+
+.ef-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.ef-row.full { grid-template-columns: 1fr; }
+
+.ef-field label {
+  display: block;
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+
+.ef-field input,
+.ef-field select,
+.ef-field textarea {
+  width: 100%;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  color: var(--text);
+  padding: 8px 12px;
+  outline: none;
+  transition: border-color 0.12s;
+}
+
+body.light .ef-field input,
+body.light .ef-field select,
+body.light .ef-field textarea {
+  background: #F8F9FC;
+  border-color: rgba(0,0,0,0.12);
+  color: #1A1A2E;
+}
+
+.ef-field input:focus,
+.ef-field select:focus,
+.ef-field textarea:focus { border-color: var(--phoenix-blue); }
+
+.ef-field textarea { resize: vertical; min-height: 60px; }
+
+.ef-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.ef-submit {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 10px 22px;
+  border-radius: 5px;
+  border: none;
+  background: var(--phoenix-blue);
+  color: #060A18;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.ef-submit:hover { box-shadow: 0 0 14px rgba(0,229,255,0.3); transform: translateY(-1px); }
+.ef-submit:active { transform: scale(0.97); }
+
+body.light .ef-submit { background: #0091A8; color: #fff; }
+
+.ef-cancel {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 10px 18px;
+  border-radius: 5px;
+  border: 1px solid var(--border);
+  background: none;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.12s;
+}
+
+.ef-cancel:hover { border-color: var(--muted); color: var(--text); }
+
+.ef-msg {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--green);
+  margin-top: 10px;
+  display: none;
+}
+
+/* Upcoming events list */
+.upcoming-events { margin-top: 20px; }
+
+.ue-item {
+  display: grid;
+  grid-template-columns: 80px 1fr auto;
+  gap: 14px;
+  align-items: center;
+  padding: 12px 16px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  margin-bottom: 6px;
+  transition: background 0.12s;
+}
+
+body.light .ue-item { box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+
+.ue-item:hover { background: var(--card-hover); }
+
+.ue-date {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--phoenix-blue);
+  text-align: right;
+}
+
+.ue-info {}
+
+.ue-title {
+  font-weight: 500;
+  font-size: 13px;
+  color: #fff;
+  margin-bottom: 2px;
+}
+
+body.light .ue-title { color: #1A1A2E; }
+
+.ue-desc {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.ue-delete {
+  font-size: 14px;
+  color: var(--muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: all 0.12s;
+}
+
+.ue-delete:hover { color: var(--red); background: rgba(239,68,68,0.1); }
 
 * { margin:0; padding:0; box-sizing:border-box; }
 html { scroll-behavior:smooth; }
@@ -1078,9 +1571,10 @@ body::before {
     <div class="topbar-logo"></div>
     <div class="topbar-name">PHOENNIX<span>AI</span></div>
   </div>
-  <div class="topbar-meta">Mission Control v3.1 · Supabase Live · Session 13 · 22 March 2026</div>
+  <div class="topbar-meta">Mission Control v3.3 · Supabase Live · Session 13 · 22 March 2026</div>
   <div class="topbar-right">
     <div class="topbar-status">Internal Alpha</div>
+    <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Toggle light/dark mode">☀️</button>
   </div>
 </div>
 
@@ -1929,12 +2423,80 @@ body::before {
     <div class="section-label">Key Dates</div>
     <div class="card"><div class="card-body">
       <strong>22 Mar:</strong> IP Protection + Finance session at 14:00<br>
+      <strong>22 Mar:</strong> PA Planner Strategy session at 16:00<br>
       <strong>24 Mar:</strong> First flyer posts (Flyer 5, fear of AI)<br>
       <strong>25 Mar:</strong> ARIA/SCRIBE trademark and Universe Bible copyright deadline<br>
       <strong>27 Mar:</strong> Internal alpha ends<br>
       <strong>30 Mar:</strong> External beta opens, 10 testers, RELAY onboards<br>
       <strong>23 Apr:</strong> St Paul's work experience (3 students)
     </div></div>
+
+    <!-- ADD EVENT -->
+    <div class="add-event-wrap">
+      <div class="ae-header" onclick="toggleEventForm()">
+        <span class="ae-header-title">+ Add Event</span>
+        <span class="ae-header-icon" id="aeIcon">+</span>
+      </div>
+      <div class="ae-form" id="aeForm">
+        <div class="ae-row full">
+          <div class="ae-field">
+            <label>Event Title</label>
+            <input type="text" id="aeTitle" placeholder="e.g. IP Protection meeting with Claude">
+          </div>
+        </div>
+        <div class="ae-row">
+          <div class="ae-field">
+            <label>Date</label>
+            <input type="date" id="aeDate" value="2026-03-22">
+          </div>
+          <div class="ae-field">
+            <label>Time</label>
+            <input type="time" id="aeTime" value="14:00">
+          </div>
+        </div>
+        <div class="ae-row">
+          <div class="ae-field">
+            <label>Type</label>
+            <select id="aeType">
+              <option value="meeting">Meeting</option>
+              <option value="deadline">Deadline</option>
+              <option value="task">Task</option>
+              <option value="personal">Personal</option>
+              <option value="session">Session</option>
+              <option value="milestone">Milestone</option>
+            </select>
+          </div>
+          <div class="ae-field">
+            <label>Priority</label>
+            <select id="aePriority">
+              <option value="medium" selected>Medium</option>
+              <option value="critical">Critical</option>
+              <option value="high">High</option>
+              <option value="low">Low</option>
+            </select>
+          </div>
+        </div>
+        <div class="ae-row full">
+          <div class="ae-field">
+            <label>Description (optional)</label>
+            <textarea id="aeDesc" placeholder="Details, notes, or context for this event"></textarea>
+          </div>
+        </div>
+        <div class="ae-actions">
+          <button class="ae-save" id="aeSaveBtn" onclick="saveEvent()">Save Event</button>
+          <button class="ae-cancel" onclick="toggleEventForm()">Cancel</button>
+        </div>
+        <div class="ae-success" id="aeSuccess">Event saved to Supabase and added to calendar.</div>
+      </div>
+    </div>
+
+    <!-- UPCOMING EVENTS FROM SUPABASE -->
+    <div class="section" style="margin-top:24px;">
+      <div class="section-label">Your Events (from Supabase)</div>
+      <div id="upcomingEvents" class="upcoming-list">
+        <div style="text-align:center;padding:20px;color:var(--muted);font-size:12px;font-family:'DM Mono',monospace;">Loading events from database...</div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -2288,6 +2850,35 @@ function restoreTab() {
 }
 
 // ============================================================
+// THEME TOGGLE (Light/Dark, defaults to Light per KD-24)
+// ============================================================
+function toggleTheme() {
+  const isLight = document.body.classList.toggle('light');
+  localStorage.setItem('pai_theme', isLight ? 'light' : 'dark');
+  updateThemeIcon(isLight);
+}
+
+function updateThemeIcon(isLight) {
+  const btn = document.getElementById('themeToggle');
+  if (btn) btn.textContent = isLight ? '🌙' : '☀️';
+}
+
+function loadTheme() {
+  const saved = localStorage.getItem('pai_theme');
+  // Default to light mode per Key Decision 24
+  if (saved === 'dark') {
+    document.body.classList.remove('light');
+    updateThemeIcon(false);
+  } else {
+    document.body.classList.add('light');
+    updateThemeIcon(true);
+    if (!saved) localStorage.setItem('pai_theme', 'light');
+  }
+}
+
+loadTheme();
+
+// ============================================================
 // INIT
 // ============================================================
 loadTasks();
@@ -2296,7 +2887,7 @@ restoreTab();
 // ============================================================
 // SMART SCHEDULER (PA + ARIA) - Supabase enabled
 // ============================================================
-function generateSchedule() {
+async function generateSchedule() {
   const btn = document.getElementById('scheduleBtn');
   const output = document.getElementById('scheduleOutput');
   const startH = parseInt(document.getElementById('schedStart').value);
@@ -2305,14 +2896,38 @@ function generateSchedule() {
 
   btn.classList.add('running');
   btn.textContent = 'PA is analysing...';
-  output.innerHTML = '<div class="schedule-empty"><span>Generating...</span>PA is sequencing tasks by strategic value and urgency...<br>ARIA is building time blocks around your energy pattern...</div>';
+  output.innerHTML = '<div class="schedule-empty"><span>Generating...</span>PA is reading your calendar events...<br>ARIA is building time blocks around your meetings and energy pattern...</div>';
+
+  // Fetch calendar events from Supabase first
+  let calendarEvents = [];
+  if (dbConnected && sb) {
+    try {
+      const today = new Date().toISOString().split('T')[0];
+      const { data } = await sb.from('events')
+        .select('*')
+        .eq('event_date', today)
+        .eq('status', 'pending')
+        .order('event_time', { ascending: true });
+      if (data) calendarEvents = data;
+      console.log('PA read ' + calendarEvents.length + ' calendar events for today');
+    } catch(e) {
+      console.warn('Could not fetch calendar events:', e);
+    }
+  } else {
+    // Fallback: read from localStorage
+    try {
+      const today = new Date().toISOString().split('T')[0];
+      const localEvents = JSON.parse(localStorage.getItem('pai_events') || '[]');
+      calendarEvents = localEvents.filter(e => e.date === today);
+    } catch(e) {}
+  }
 
   setTimeout(() => {
-    btn.textContent = 'ARIA is scheduling...';
+    btn.textContent = 'ARIA is scheduling around ' + calendarEvents.length + ' events...';
   }, 600);
 
   setTimeout(() => {
-    const schedule = buildSchedule(startH, endH, energy);
+    const schedule = buildSchedule(startH, endH, energy, calendarEvents);
     renderSchedule(schedule, output);
     btn.classList.remove('running');
     btn.textContent = 'Regenerate Schedule';
@@ -2371,8 +2986,31 @@ async function saveScheduleToSupabase(startH, endH, energy, blocks) {
   }
 }
 
-function buildSchedule(startH, endH, energy) {
+function buildSchedule(startH, endH, energy, calendarEvents) {
   const totalHours = endH > startH ? endH - startH : (24 - startH) + (endH - 24 + 24);
+
+  // Convert calendar events to time blocks
+  const meetings = [];
+  if (calendarEvents && calendarEvents.length > 0) {
+    calendarEvents.forEach(ev => {
+      const evTime = ev.event_time || ev.time;
+      if (evTime) {
+        const parts = evTime.split(':');
+        const hour = parseInt(parts[0]) + parseInt(parts[1] || 0) / 60;
+        meetings.push({
+          time: formatHour(hour),
+          endTime: formatHour(hour + 1), // Default 1 hour meetings
+          task: ev.title,
+          reason: 'ARIA: Calendar event. ' + (ev.description || ev.desc || 'Scheduled appointment.'),
+          agent: 'ARIA',
+          type: ev.priority === 'critical' ? 'high' : 'medium',
+          duration: 1,
+          hour: hour,
+          isCalendarEvent: true
+        });
+      }
+    });
+  }
 
   const tasks = [
     { name:'IP Protection: Poor Man Patent', duration:0.5, priority:'critical', agent:'LEDGER', reason:'Date-stamps all 13 IPs before any external disclosure. Financially time-sensitive, LEDGER flags this as the highest urgency action.', type:'admin', revenue:true },
@@ -2402,11 +3040,16 @@ function buildSchedule(startH, endH, energy) {
   let totalScheduled = 0;
   const maxHours = totalHours;
 
+  // Sort meetings by hour
+  meetings.sort((a, b) => a.hour - b.hour);
+  let meetingIndex = 0;
+
+  // ARIA morning briefing
   blocks.push({
     time: formatHour(currentHour),
     endTime: formatHour(currentHour + 0.25),
     task: 'ARIA Morning Briefing',
-    reason: 'ARIA compiles your day: events, notes, agent flags, and this schedule. Review before starting work.',
+    reason: 'ARIA compiles your day: ' + meetings.length + ' calendar events, ' + tasks.length + ' tasks, agent flags, and this schedule.',
     agent: 'ARIA',
     type: 'break',
     duration: 0.25
@@ -2418,6 +3061,47 @@ function buildSchedule(startH, endH, energy) {
     const t = tasks[i];
     if (totalScheduled + t.duration > maxHours - 0.5) break;
 
+    // Check if a calendar event falls before or during this task
+    while (meetingIndex < meetings.length && meetings[meetingIndex].hour <= currentHour + t.duration) {
+      const m = meetings[meetingIndex];
+      // If the meeting starts after current time, fill gap with prep or schedule task before it
+      if (m.hour > currentHour) {
+        const gapBefore = m.hour - currentHour;
+        if (gapBefore >= 0.25) {
+          // Add prep block before meeting
+          blocks.push({
+            time: formatHour(currentHour),
+            endTime: formatHour(m.hour),
+            task: 'Prep: ' + m.task,
+            reason: 'PA: ' + Math.round(gapBefore * 60) + ' min before your next event. Review agenda and prepare.',
+            agent: 'PA',
+            type: 'low',
+            duration: gapBefore
+          });
+          totalScheduled += gapBefore;
+        }
+        currentHour = m.hour;
+      }
+
+      // Insert the calendar event
+      blocks.push({
+        time: formatHour(m.hour),
+        endTime: formatHour(m.hour + m.duration),
+        task: m.task,
+        reason: m.reason,
+        agent: 'ARIA',
+        type: m.type,
+        duration: m.duration
+      });
+      currentHour = m.hour + m.duration;
+      totalScheduled += m.duration;
+      meetingIndex++;
+    }
+
+    // Check if we still have room for this task
+    if (totalScheduled + t.duration > maxHours - 0.5) break;
+
+    // Insert break every 2.5 hours of work
     const hoursSinceBreak = totalScheduled - (blocks.filter(b => b.type === 'break').length * 0.25);
     if (hoursSinceBreak >= 2.5) {
       blocks.push({
@@ -2446,6 +3130,25 @@ function buildSchedule(startH, endH, energy) {
     totalScheduled += t.duration;
   }
 
+  // Add any remaining calendar events that come after all tasks
+  while (meetingIndex < meetings.length) {
+    const m = meetings[meetingIndex];
+    if (m.hour > currentHour) currentHour = m.hour;
+    blocks.push({
+      time: formatHour(currentHour),
+      endTime: formatHour(currentHour + m.duration),
+      task: m.task,
+      reason: m.reason,
+      agent: 'ARIA',
+      type: m.type,
+      duration: m.duration
+    });
+    currentHour += m.duration;
+    totalScheduled += m.duration;
+    meetingIndex++;
+  }
+
+  // GRID end of day review
   blocks.push({
     time: formatHour(currentHour),
     endTime: formatHour(currentHour + 0.25),
@@ -2505,6 +3208,248 @@ function loadSchedule() {
     }
   } catch(e) {}
 }
+
+// ============================================================
+// CALENDAR EVENT MANAGEMENT (Supabase)
+// ============================================================
+function toggleEventForm() {
+  const form = document.getElementById('aeForm');
+  const icon = document.getElementById('aeIcon');
+  form.classList.toggle('open');
+  icon.classList.toggle('open');
+  // Reset success message
+  document.getElementById('aeSuccess').classList.remove('show');
+}
+
+async function saveEvent() {
+  const title = document.getElementById('aeTitle').value.trim();
+  const date = document.getElementById('aeDate').value;
+  const time = document.getElementById('aeTime').value;
+  const type = document.getElementById('aeType').value;
+  const priority = document.getElementById('aePriority').value;
+  const desc = document.getElementById('aeDesc').value.trim();
+  const btn = document.getElementById('aeSaveBtn');
+  const success = document.getElementById('aeSuccess');
+
+  if (!title || !date) {
+    alert('Please enter a title and date.');
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Saving...';
+
+  if (dbConnected && sb) {
+    try {
+      const { data, error } = await sb.from('events').insert({
+        title: title,
+        description: desc || null,
+        event_date: date,
+        event_time: time || null,
+        event_type: type,
+        priority: priority,
+        status: 'pending',
+        created_by: 'Valerie Wilcox'
+      }).select();
+
+      if (error) throw error;
+
+      // Log to agent_log
+      await sb.from('agent_log').insert({
+        agent_name: 'ARIA',
+        event_type: 'action',
+        description: 'Event created: ' + title + ' on ' + date + (time ? ' at ' + time : ''),
+        outcome: 'Saved to Supabase. Calendar updated.',
+        founder_aware: true,
+        severity: 'info',
+        session_number: 13
+      });
+
+      success.textContent = 'Event saved to Supabase and added to calendar.';
+      success.classList.add('show');
+      console.log('Event saved to Supabase:', title);
+
+      // Clear form
+      document.getElementById('aeTitle').value = '';
+      document.getElementById('aeDesc').value = '';
+
+      // Refresh events list and calendar
+      loadEventsFromSupabase();
+      renderEventOnCalendar(date, title, type, priority);
+
+    } catch(e) {
+      console.warn('Event save failed:', e);
+      success.textContent = 'Error saving to Supabase. Saved locally.';
+      success.classList.add('show');
+      saveEventLocally(title, date, time, type, priority, desc);
+    }
+  } else {
+    saveEventLocally(title, date, time, type, priority, desc);
+    success.textContent = 'Saved locally (Supabase not connected).';
+    success.classList.add('show');
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'Save Event';
+
+  setTimeout(() => success.classList.remove('show'), 4000);
+}
+
+function saveEventLocally(title, date, time, type, priority, desc) {
+  try {
+    const events = JSON.parse(localStorage.getItem('pai_events') || '[]');
+    events.push({ title, date, time, type, priority, desc, id: Date.now() });
+    localStorage.setItem('pai_events', JSON.stringify(events));
+    renderEventOnCalendar(date, title, type, priority);
+    loadEventsLocal();
+  } catch(e) {}
+}
+
+function getEventColour(type, priority) {
+  if (priority === 'critical') return 'var(--red)';
+  const colours = {
+    meeting: 'var(--phoenix-blue)',
+    deadline: 'var(--gold)',
+    task: 'var(--royal)',
+    personal: 'var(--violet)',
+    session: 'var(--fire)',
+    milestone: 'var(--green)'
+  };
+  return colours[type] || 'var(--phoenix-blue)';
+}
+
+function renderEventOnCalendar(dateStr, title, type, priority) {
+  const day = parseInt(dateStr.split('-')[2]);
+  const month = parseInt(dateStr.split('-')[1]);
+  const year = parseInt(dateStr.split('-')[0]);
+  
+  if (year !== 2026 || month !== 3) return; // Only render March 2026
+
+  const calDays = document.querySelectorAll('.cal-day');
+  calDays.forEach(cell => {
+    const numEl = cell.querySelector('.cal-num');
+    if (numEl && parseInt(numEl.textContent) === day) {
+      const ev = document.createElement('div');
+      ev.className = 'cal-event';
+      ev.style.background = getEventColour(type, priority);
+      ev.textContent = title.length > 15 ? title.substring(0, 15) + '...' : title;
+      cell.appendChild(ev);
+    }
+  });
+}
+
+async function loadEventsFromSupabase() {
+  const container = document.getElementById('upcomingEvents');
+  if (!container) return;
+
+  if (dbConnected && sb) {
+    try {
+      const { data: events, error } = await sb.from('events')
+        .select('*')
+        .gte('event_date', '2026-03-01')
+        .order('event_date', { ascending: true })
+        .order('event_time', { ascending: true });
+
+      if (error) throw error;
+
+      if (events && events.length > 0) {
+        let html = '';
+        events.forEach(ev => {
+          const colour = getEventColour(ev.event_type, ev.priority);
+          const timeStr = ev.event_time ? ev.event_time.substring(0, 5) : 'All day';
+          const dateStr = formatEventDate(ev.event_date);
+          html += '<div class="upcoming-item">';
+          html += '<div class="upcoming-dot" style="background:' + colour + ';box-shadow:0 0 6px ' + colour + ';"></div>';
+          html += '<div class="upcoming-info">';
+          html += '<div class="upcoming-title">' + ev.title + '</div>';
+          html += '<div class="upcoming-meta">' + dateStr + ' · ' + timeStr + ' · ' + ev.event_type + (ev.priority === 'critical' ? ' · URGENT' : '') + '</div>';
+          if (ev.description) html += '<div class="upcoming-meta" style="margin-top:2px;color:var(--muted);">' + ev.description + '</div>';
+          html += '</div>';
+          html += '<button class="upcoming-delete" onclick="deleteEvent(\'' + ev.id + '\')" title="Delete">×</button>';
+          html += '</div>';
+
+          // Render on calendar grid
+          renderEventOnCalendar(ev.event_date, ev.title, ev.event_type, ev.priority);
+        });
+        container.innerHTML = html;
+      } else {
+        container.innerHTML = '<div style="text-align:center;padding:20px;color:var(--muted);font-size:12px;">No events yet. Add your first event above.</div>';
+      }
+    } catch(e) {
+      console.warn('Failed to load events from Supabase:', e);
+      loadEventsLocal();
+    }
+  } else {
+    loadEventsLocal();
+  }
+}
+
+function loadEventsLocal() {
+  const container = document.getElementById('upcomingEvents');
+  if (!container) return;
+  
+  try {
+    const events = JSON.parse(localStorage.getItem('pai_events') || '[]');
+    if (events.length > 0) {
+      let html = '';
+      events.sort((a, b) => a.date.localeCompare(b.date));
+      events.forEach(ev => {
+        const colour = getEventColour(ev.type, ev.priority);
+        html += '<div class="upcoming-item">';
+        html += '<div class="upcoming-dot" style="background:' + colour + ';"></div>';
+        html += '<div class="upcoming-info">';
+        html += '<div class="upcoming-title">' + ev.title + '</div>';
+        html += '<div class="upcoming-meta">' + ev.date + ' · ' + (ev.time || 'All day') + ' · ' + ev.type + '</div>';
+        html += '</div>';
+        html += '<button class="upcoming-delete" onclick="deleteEventLocal(' + ev.id + ')" title="Delete">×</button>';
+        html += '</div>';
+        renderEventOnCalendar(ev.date, ev.title, ev.type, ev.priority);
+      });
+      container.innerHTML = html;
+    } else {
+      container.innerHTML = '<div style="text-align:center;padding:20px;color:var(--muted);font-size:12px;">No events yet. Add your first event above. (Local mode)</div>';
+    }
+  } catch(e) {
+    container.innerHTML = '<div style="text-align:center;padding:20px;color:var(--muted);font-size:12px;">No events yet.</div>';
+  }
+}
+
+async function deleteEvent(id) {
+  if (!confirm('Delete this event?')) return;
+  if (dbConnected && sb) {
+    try {
+      await sb.from('events').delete().eq('id', id);
+      loadEventsFromSupabase();
+      // Clear and re-render calendar events (simple approach: reload page section)
+      document.querySelectorAll('.cal-event:not([style*="background:var(--phoenix-blue)"])').forEach(el => {
+        // Only remove user-added events, keep hard-coded ones
+      });
+      console.log('Event deleted from Supabase');
+    } catch(e) {
+      console.warn('Delete failed:', e);
+    }
+  }
+}
+
+function deleteEventLocal(id) {
+  if (!confirm('Delete this event?')) return;
+  try {
+    let events = JSON.parse(localStorage.getItem('pai_events') || '[]');
+    events = events.filter(e => e.id !== id);
+    localStorage.setItem('pai_events', JSON.stringify(events));
+    loadEventsLocal();
+  } catch(e) {}
+}
+
+function formatEventDate(dateStr) {
+  const d = new Date(dateStr + 'T00:00:00');
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  return days[d.getDay()] + ' ' + d.getDate() + ' ' + months[d.getMonth()];
+}
+
+// Load events on page load
+setTimeout(() => loadEventsFromSupabase(), 1500);
 
 loadSchedule();
 </script>
