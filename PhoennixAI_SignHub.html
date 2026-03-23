@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>PhoennixAI SignHub | Electronic Signature Tool</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='28' font-size='28'>🔥</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&family=Great+Vibes&family=Pacifico&family=Caveat:wght@400;500;600;700&family=Satisfy&family=Sacramento&family=Kalam:wght@400;700&family=Permanent+Marker&family=Homemade+Apple&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#060A18;--card:#0C1225;--card2:#111832;--border:rgba(255,255,255,0.08);--text:#E8E8E8;--text2:#9CA3AF;--text3:#6B7280;--blue:#00E5FF;--fire:#FF6B2B;--gold:#FFB830;--green:#22C55E;--red:#EF4444;--bronze:#C49A6C;--mono:'DM Mono',monospace;--body:'DM Sans',sans-serif}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--body);background:var(--bg);color:var(--text);min-height:100vh}
+
+/* TOPBAR */
+.topbar{background:var(--card);border-bottom:1px solid var(--border);padding:12px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.tb-left{display:flex;align-items:center;gap:12px}
+.tb-logo{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:3px}
+.tb-logo span:first-child{color:var(--blue)}
+.tb-logo span:last-child{color:var(--text3)}
+.tb-sep{width:1px;height:20px;background:var(--border)}
+.tb-app{font-family:var(--mono);font-size:10px;letter-spacing:2px;color:var(--bronze);text-transform:uppercase}
+.tb-badge{font-family:var(--mono);font-size:8px;letter-spacing:1px;padding:3px 8px;border-radius:3px;color:var(--bronze);border:1px solid rgba(196,154,108,0.3);background:rgba(196,154,108,0.06)}
+
+/* MAIN */
+.main{max-width:900px;margin:0 auto;padding:32px 24px 100px}
+.page-title{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:2px;margin-bottom:4px}
+.page-sub{color:var(--text2);font-size:13px;margin-bottom:32px}
+
+/* STEPS */
+.step{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px;margin-bottom:16px;display:none}
+.step.active{display:block;animation:fadeIn 0.3s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.step-num{font-family:var(--mono);font-size:9px;letter-spacing:3px;color:var(--blue);text-transform:uppercase;margin-bottom:4px}
+.step-title{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;margin-bottom:4px}
+.step-sub{color:var(--text2);font-size:12px;margin-bottom:20px}
+
+/* INPUT */
+.input-group{margin-bottom:16px}
+.input-label{font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--text3);text-transform:uppercase;margin-bottom:6px}
+.input-field{width:100%;padding:12px 16px;background:var(--card2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:var(--body);font-size:15px;outline:none;transition:border-color 0.2s}
+.input-field:focus{border-color:var(--blue)}
+.input-row{display:flex;gap:12px;flex-wrap:wrap}
+.input-row .input-group{flex:1;min-width:200px}
+
+/* SIGNATURE FONTS GRID */
+.sig-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;margin:16px 0}
+.sig-option{background:var(--card2);border:2px solid var(--border);border-radius:10px;padding:20px;cursor:pointer;transition:all 0.2s;position:relative;overflow:hidden}
+.sig-option:hover{border-color:rgba(0,229,255,0.3);background:rgba(0,229,255,0.02)}
+.sig-option.selected{border-color:var(--blue);background:rgba(0,229,255,0.04)}
+.sig-option.selected::after{content:'';position:absolute;top:8px;right:8px;width:20px;height:20px;background:var(--blue);border-radius:50%;display:flex;align-items:center;justify-content:center}
+.sig-option.selected::before{content:'✓';position:absolute;top:9px;right:12px;color:var(--bg);font-size:12px;font-weight:700;z-index:1}
+.sig-font-name{font-family:var(--mono);font-size:8px;letter-spacing:2px;color:var(--text3);text-transform:uppercase;margin-bottom:8px}
+.sig-preview{color:var(--text);line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* PREVIEW */
+.preview-card{background:var(--card);border:2px solid var(--blue);border-radius:12px;padding:32px;margin:24px 0;text-align:center}
+.preview-sig{margin:16px 0;padding:20px 0;border-bottom:2px solid var(--text)}
+.preview-meta{display:flex;justify-content:center;gap:32px;flex-wrap:wrap;margin-top:16px}
+.preview-item{text-align:center}
+.preview-item-label{font-family:var(--mono);font-size:8px;letter-spacing:2px;color:var(--text3);text-transform:uppercase;margin-bottom:2px}
+.preview-item-value{font-size:13px;color:var(--text)}
+
+/* BUTTONS */
+.btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+.btn{font-family:var(--mono);font-size:10px;letter-spacing:1px;text-transform:uppercase;padding:10px 20px;border-radius:8px;border:1px solid var(--border);background:var(--card2);color:var(--text2);cursor:pointer;transition:all 0.2s}
+.btn:hover{border-color:var(--text);color:var(--text)}
+.btn.primary{background:var(--blue);color:var(--bg);border-color:var(--blue);font-weight:600}
+.btn.primary:hover{background:#00c8e0}
+.btn.success{background:var(--green);color:#fff;border-color:var(--green)}
+
+/* PROGRESS */
+.progress{display:flex;gap:4px;margin-bottom:24px}
+.progress-dot{width:100%;height:4px;border-radius:2px;background:var(--border)}
+.progress-dot.done{background:var(--blue)}
+.progress-dot.current{background:var(--gold)}
+
+/* DOCUMENT AREA */
+.doc-area{background:#fff;border-radius:12px;padding:32px;margin:16px 0;color:#1F2937;min-height:200px;position:relative}
+.doc-area .doc-placeholder{text-align:center;padding:40px;color:#9CA3AF;font-size:13px}
+.doc-content{font-size:13px;line-height:1.8;color:#1F2937}
+.doc-content .sig-slot{border:2px dashed #D1D5DB;border-radius:8px;padding:16px;margin:12px 0;text-align:center;color:#9CA3AF;font-family:var(--mono);font-size:10px;cursor:pointer;transition:all 0.2s}
+.doc-content .sig-slot:hover{border-color:var(--blue);color:var(--blue);background:rgba(0,229,255,0.02)}
+.doc-content .sig-slot.filled{border-style:solid;border-color:#22C55E;background:rgba(34,197,94,0.02);color:#1F2937;cursor:default}
+.doc-content .sig-slot.filled .placed-sig{padding:8px 0}
+.doc-content .sig-slot.filled .placed-meta{font-family:var(--mono);font-size:9px;color:#6B7280;margin-top:4px}
+
+/* EDIT MODE */
+.edit-bar{background:var(--gold);color:var(--bg);padding:8px 16px;border-radius:8px;display:none;align-items:center;justify-content:space-between;margin-bottom:12px;font-family:var(--mono);font-size:10px;letter-spacing:1px}
+.edit-bar.active{display:flex}
+
+/* SIGNED BADGE */
+.signed-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:6px;background:rgba(34,197,94,0.1);border:1px solid rgba(34,197,94,0.3);color:var(--green);font-family:var(--mono);font-size:10px;letter-spacing:1px;text-transform:uppercase}
+
+@media(max-width:768px){
+.main{padding:20px 16px 80px}
+.sig-grid{grid-template-columns:1fr}
+.preview-meta{gap:16px}
+.input-row{flex-direction:column}
+.input-row .input-group{min-width:100%}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+<div class="tb-left">
+<div class="tb-logo"><span>PHOENNIX</span><span>AI</span></div>
+<div class="tb-sep"></div>
+<div class="tb-app">SignHub</div>
+</div>
+<div class="tb-badge">Owned by SCRIBE</div>
+</div>
+
+<div class="main">
+<div class="page-title">Electronic Signature</div>
+<div class="page-sub">Type your name. Choose your signature style. Sign any document. No printing. No scanning.</div>
+
+<div class="progress">
+<div class="progress-dot done" id="prog1"></div>
+<div class="progress-dot" id="prog2"></div>
+<div class="progress-dot" id="prog3"></div>
+<div class="progress-dot" id="prog4"></div>
+</div>
+
+<!-- STEP 1: Enter Details -->
+<div class="step active" id="step1">
+<div class="step-num">Step 1 of 4</div>
+<div class="step-title">Your Details</div>
+<div class="step-sub">Enter the information that will appear alongside your signature.</div>
+
+<div class="input-group">
+<div class="input-label">Full Name (as it appears on signature)</div>
+<input type="text" class="input-field" id="fullName" placeholder="Valerie Wilcox" value="Valerie Wilcox" oninput="updatePreviews()">
+</div>
+
+<div class="input-row">
+<div class="input-group">
+<div class="input-label">Title / Role</div>
+<input type="text" class="input-field" id="role" placeholder="Founder, PhoennixAI" value="Founder, PhoennixAI">
+</div>
+<div class="input-group">
+<div class="input-label">Date</div>
+<input type="date" class="input-field" id="sigDate" value="2026-03-23">
+</div>
+</div>
+
+<div class="input-group">
+<div class="input-label">Location</div>
+<input type="text" class="input-field" id="location" placeholder="United Kingdom" value="United Kingdom">
+</div>
+
+<div class="btn-row">
+<button class="btn primary" onclick="goStep(2)">Choose Signature Style</button>
+</div>
+</div>
+
+<!-- STEP 2: Choose Font -->
+<div class="step" id="step2">
+<div class="step-num">Step 2 of 4</div>
+<div class="step-title">Choose Your Signature Style</div>
+<div class="step-sub">Select the font that best represents your signature. Your name is rendered in each style below.</div>
+
+<div class="sig-grid" id="sigGrid"></div>
+
+<div class="btn-row">
+<button class="btn" onclick="goStep(1)">Back</button>
+<button class="btn primary" onclick="confirmFont()" id="confirmFontBtn" style="opacity:0.5" disabled>Confirm Style</button>
+</div>
+</div>
+
+<!-- STEP 3: Preview -->
+<div class="step" id="step3">
+<div class="step-num">Step 3 of 4</div>
+<div class="step-title">Preview Your Signature</div>
+<div class="step-sub">This is how your signature will appear on documents. Confirm to save.</div>
+
+<div class="preview-card">
+<div style="font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--text3);text-transform:uppercase;margin-bottom:8px">Your Electronic Signature</div>
+<div class="preview-sig" id="previewSig"></div>
+<div class="preview-meta">
+<div class="preview-item"><div class="preview-item-label">Name</div><div class="preview-item-value" id="prevName"></div></div>
+<div class="preview-item"><div class="preview-item-label">Role</div><div class="preview-item-value" id="prevRole"></div></div>
+<div class="preview-item"><div class="preview-item-label">Date</div><div class="preview-item-value" id="prevDate"></div></div>
+<div class="preview-item"><div class="preview-item-label">Location</div><div class="preview-item-value" id="prevLoc"></div></div>
+</div>
+</div>
+
+<div class="btn-row">
+<button class="btn" onclick="goStep(2)">Change Style</button>
+<button class="btn primary" onclick="saveSig()">Confirm and Save Signature</button>
+</div>
+</div>
+
+<!-- STEP 4: Done -->
+<div class="step" id="step4">
+<div class="step-num">Step 4 of 4</div>
+<div class="step-title">Signature Saved</div>
+<div class="step-sub">Your signature is ready to use on any document.</div>
+
+<div class="preview-card" style="border-color:var(--green)">
+<div class="signed-badge" style="margin:0 auto 12px">Signature Active</div>
+<div class="preview-sig" id="finalSig"></div>
+<div class="preview-meta">
+<div class="preview-item"><div class="preview-item-label">Name</div><div class="preview-item-value" id="finalName"></div></div>
+<div class="preview-item"><div class="preview-item-label">Date</div><div class="preview-item-value" id="finalDate"></div></div>
+</div>
+</div>
+
+<div style="margin:24px 0">
+<div class="step-title" style="font-size:16px">Sign a Document</div>
+<div class="step-sub">Paste or type document content below. Click any signature slot to place your signature.</div>
+
+<div class="edit-bar" id="editBar">
+<span>EDIT MODE ACTIVE</span>
+<button class="btn" style="padding:4px 12px;font-size:9px" onclick="toggleEdit()">Done Editing</button>
+</div>
+
+<div class="btn-row" style="margin-bottom:12px">
+<button class="btn" onclick="loadIPDeclaration()">Load IP Declaration</button>
+<button class="btn" onclick="toggleEdit()">Edit Document</button>
+<button class="btn" onclick="window.print()">Print / Save as PDF</button>
+<button class="btn" onclick="goStep(2)">Change Signature</button>
+</div>
+
+<div class="doc-area" id="docArea">
+<div class="doc-placeholder" id="docPlaceholder">
+Click "Load IP Declaration" to sign the IP Declaration document,<br>or paste any document content here.
+</div>
+<div class="doc-content" id="docContent" style="display:none"></div>
+</div>
+</div>
+</div>
+
+</div>
+
+<script>
+// SIGNATURE FONTS
+const fonts = [
+  { name:'Dancing Script', family:"'Dancing Script', cursive", weight:'600', size:'32px' },
+  { name:'Great Vibes', family:"'Great Vibes', cursive", weight:'400', size:'34px' },
+  { name:'Pacifico', family:"'Pacifico', cursive", weight:'400', size:'28px' },
+  { name:'Caveat', family:"'Caveat', cursive", weight:'600', size:'32px' },
+  { name:'Satisfy', family:"'Satisfy', cursive", weight:'400', size:'30px' },
+  { name:'Sacramento', family:"'Sacramento', cursive", weight:'400', size:'36px' },
+  { name:'Kalam', family:"'Kalam', cursive", weight:'700', size:'28px' },
+  { name:'Permanent Marker', family:"'Permanent Marker', cursive", weight:'400', size:'26px' },
+  { name:'Homemade Apple', family:"'Homemade Apple', cursive", weight:'400', size:'22px' },
+];
+
+let selectedFont = null;
+let savedSig = null;
+
+function updatePreviews(){
+  const name = document.getElementById('fullName').value || 'Your Name';
+  document.querySelectorAll('.sig-preview').forEach((el, i) => {
+    el.textContent = name;
+  });
+}
+
+function buildFontGrid(){
+  const grid = document.getElementById('sigGrid');
+  const name = document.getElementById('fullName').value || 'Your Name';
+  grid.innerHTML = '';
+  fonts.forEach((f, i) => {
+    const opt = document.createElement('div');
+    opt.className = 'sig-option';
+    opt.onclick = () => selectFont(i);
+    opt.innerHTML = `
+      <div class="sig-font-name">${f.name}</div>
+      <div class="sig-preview" style="font-family:${f.family};font-weight:${f.weight};font-size:${f.size}">${name}</div>
+    `;
+    grid.appendChild(opt);
+  });
+}
+
+function selectFont(idx){
+  selectedFont = idx;
+  document.querySelectorAll('.sig-option').forEach((el, i) => {
+    el.classList.toggle('selected', i === idx);
+  });
+  document.getElementById('confirmFontBtn').disabled = false;
+  document.getElementById('confirmFontBtn').style.opacity = '1';
+}
+
+function confirmFont(){
+  if(selectedFont === null) return;
+  const f = fonts[selectedFont];
+  const name = document.getElementById('fullName').value;
+  const role = document.getElementById('role').value;
+  const date = document.getElementById('sigDate').value;
+  const loc = document.getElementById('location').value;
+  const fmtDate = new Date(date).toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
+
+  document.getElementById('previewSig').innerHTML = `<span style="font-family:${f.family};font-weight:${f.weight};font-size:${f.size};color:var(--text)">${name}</span>`;
+  document.getElementById('prevName').textContent = name;
+  document.getElementById('prevRole').textContent = role;
+  document.getElementById('prevDate').textContent = fmtDate;
+  document.getElementById('prevLoc').textContent = loc;
+  goStep(3);
+}
+
+function saveSig(){
+  const f = fonts[selectedFont];
+  const name = document.getElementById('fullName').value;
+  const role = document.getElementById('role').value;
+  const date = document.getElementById('sigDate').value;
+  const loc = document.getElementById('location').value;
+  const fmtDate = new Date(date).toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
+
+  savedSig = { font:f, name, role, date:fmtDate, location:loc };
+
+  document.getElementById('finalSig').innerHTML = `<span style="font-family:${f.family};font-weight:${f.weight};font-size:${f.size};color:var(--text)">${name}</span>`;
+  document.getElementById('finalName').textContent = name;
+  document.getElementById('finalDate').textContent = fmtDate;
+
+  // Save to localStorage
+  localStorage.setItem('phoennixai_signature', JSON.stringify({
+    fontIdx: selectedFont,
+    name, role, date, location: loc
+  }));
+
+  // Enable print button
+  const sb = document.getElementById('statusBar');
+  const st = document.getElementById('statusText');
+  const pb = document.getElementById('printBtn');
+  if(sb) sb.className = 'status-bar status-signed';
+  if(st) st.textContent = 'SIGNED - Ready to print or save as PDF';
+  if(pb){ pb.disabled = false; pb.style.opacity = '1'; }
+
+  goStep(4);
+}
+
+function goStep(n){
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+  const stepEl = document.getElementById('step'+n);
+  if(stepEl) stepEl.classList.add('active');
+  for(let i=1;i<=4;i++){
+    const dot = document.getElementById('prog'+i);
+    if(dot){
+      dot.className = 'progress-dot';
+      if(i < n) dot.classList.add('done');
+      if(i === n) dot.classList.add('current');
+    }
+  }
+  if(n === 2) buildFontGrid();
+  window.scrollTo(0,0);
+}
+
+function placeSig(slotId){
+  if(!savedSig) return;
+  const slot = document.getElementById(slotId);
+  if(slot.classList.contains('filled')) return;
+  const f = savedSig.font;
+  slot.classList.add('filled');
+  slot.innerHTML = `
+    <div class="placed-sig" style="font-family:${f.family};font-weight:${f.weight};font-size:${f.size};color:#1F2937">${savedSig.name}</div>
+    <div class="placed-meta">${savedSig.name} | ${savedSig.role} | ${savedSig.date} | ${savedSig.location}</div>
+    <div class="placed-meta">Electronically signed via PhoennixAI SignHub</div>
+  `;
+}
+
+function toggleEdit(){
+  const bar = document.getElementById('editBar');
+  const content = document.getElementById('docContent');
+  if(bar.classList.contains('active')){
+    bar.classList.remove('active');
+    content.contentEditable = 'false';
+    content.style.outline = 'none';
+  } else {
+    bar.classList.add('active');
+    content.contentEditable = 'true';
+    content.style.outline = '2px solid #FFB830';
+    content.style.outlineOffset = '4px';
+    content.focus();
+  }
+}
+
+function loadIPDeclaration(){
+  document.getElementById('docPlaceholder').style.display = 'none';
+  const dc = document.getElementById('docContent');
+  dc.style.display = 'block';
+  dc.innerHTML = `
+    <div style="text-align:center;margin-bottom:24px">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:3px;color:#1F2937">PHOENNIXAI</div>
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;color:#1F2937">INTELLECTUAL PROPERTY DECLARATION</div>
+      <div style="font-family:var(--mono);font-size:9px;color:#6B7280;margin-top:4px">PAI-IP-DEC-001 | Version 2.0 | 23 March 2026</div>
+      <div style="font-family:var(--mono);font-size:8px;color:#EF4444;margin-top:4px;letter-spacing:2px">CONFIDENTIAL | STRICTLY PRIVATE</div>
+    </div>
+    <hr style="border:none;border-top:2px solid #1F2937;margin:16px 0">
+
+    <p><strong>PURPOSE:</strong> This document declares all intellectual property created and owned by Valerie Wilcox, trading as PhoennixAI Agency, WilcoxDesigns Creative Studio, PhoennixAI Academy, The Wilcox Foundation, and Phantom Studio.</p>
+
+    <p><strong>DECLARANT:</strong> Valerie Wilcox | Founder | United Kingdom | 23 March 2026</p>
+
+    <hr style="border:none;border-top:1px solid #E5E7EB;margin:16px 0">
+    <p style="font-family:var(--mono);font-size:10px;color:#6B7280;letter-spacing:2px">PART 1: 17 UNIQUE INTELLECTUAL PROPERTIES</p>
+
+    <p><strong>IP-001:</strong> The Agent as a Hire (Not a Tool). Complete HR framework for AI agents: JD, CV, colour identity, KPIs, dashboard.</p>
+    <p><strong>IP-002:</strong> The Compatible AI Philosophy. Human matched to AI based on God-given gifting and role.</p>
+    <p><strong>IP-003:</strong> The Phoenix Cub Companion. 5 lifecycle stages from infant to adult colleague.</p>
+    <p><strong>IP-004:</strong> Role-Specific AI Workstation. Assigned at onboarding based on employee role.</p>
+    <p><strong>IP-005:</strong> The Agent Colour Identity System. 21 unique colours as data, not decoration.</p>
+    <p><strong>IP-006:</strong> The Entrepreneurial Club as Talent Succession Pipeline.</p>
+    <p><strong>IP-007:</strong> The PhoennixAI Universe and Hybrid Mythology. Kingdom mandate, five villains, anime art.</p>
+    <p><strong>IP-008:</strong> The Human-AI Collaboration Study. Named academic research initiative.</p>
+    <p><strong>IP-009:</strong> The Prisoner Reformation Programme. Government fundable AI rehabilitation.</p>
+    <p><strong>IP-010:</strong> Post-Lithium Energy Research for AI Companion Devices.</p>
+    <p><strong>IP-011:</strong> Universe Bible as Digital Ebook Product Delivery.</p>
+    <p><strong>IP-012:</strong> Mini Computer Bible as Physical Booklet.</p>
+    <p><strong>IP-013:</strong> The DevHub: AI Dev Team as Sellable Product. NEXUS builds, PROBE tests.</p>
+    <p><strong>IP-014:</strong> The DevHub Developer Coding Platform. Ecosystem-aware AI development environment.</p>
+    <p><strong>IP-015:</strong> PA Planner: AI Productivity for Founders (Pro) and Children (Student).</p>
+    <p><strong>IP-016:</strong> Mission Control: AI Business Operating System with agent command centre.</p>
+    <p><strong>IP-017:</strong> MAYAH: Floating AI Signing Companion. A Chrome Extension and Desktop App that lives on the user's screen like Grammarly but for document signing. Detects signature fields in Google Docs, Word, PDFs, and emails. Animated character with speech bubble personality. Places typed electronic signatures in the user's chosen font style. Named after the Founder's daughter. Standalone product. No equivalent exists in the market. Agent 022.</p>
+
+    <hr style="border:none;border-top:1px solid #E5E7EB;margin:16px 0">
+    <p style="font-family:var(--mono);font-size:10px;color:#6B7280;letter-spacing:2px">PART 2: TRADEMARKS</p>
+
+    <p><strong>Brand Names (8):</strong> PhoennixAI | WilcoxDesigns | PhoennixAI Academy | The Wilcox Foundation | Phantom Studio | The DevHub | Phoenix Cub | The Entrepreneurial Club</p>
+
+    <p><strong>Agent Names (22):</strong> ARIA | PA | SCOUT | PULSE | ATLAS | RELAY | LEDGER | ECHO | ENROL | GRID | SIGNAL | GRANT | FORGE | BRIDGE | GUARDIAN | SCRIBE | SAGE | NEXUS | PROBE | UI/UX Designer Agent | Manga/Anime Designer Agent | PHANTOM | MAYAH (022, Floating AI Signing Companion)</p>
+
+    <p><strong>Taglines (7):</strong> "Rise. Automate. Dominate." | "Beautiful by design. Intelligent by nature." | "Where precision meets artistry." | "Your business should work for you. Not the other way around." | "We don't raise followers. We raise leaders and builders." | "Compatible AI" | "The Agent as a Hire"</p>
+
+    <p><strong>Visual Marks (5):</strong> Blue Phoenix logo | Flame favicon | Agent Colour Identity System | Phoenix Blue #00E5FF | PHOENNIX wordmark</p>
+
+    <hr style="border:none;border-top:1px solid #E5E7EB;margin:16px 0">
+    <p style="font-family:var(--mono);font-size:10px;color:#6B7280;letter-spacing:2px">PART 3: SOFTWARE AND SYSTEMS</p>
+
+    <p><strong>Live Apps (5):</strong> Mission Control v3.3, Workspace v3.1, Document Hub v1.8, Traceability Dashboard v1.0, New Hire Manual v1.0</p>
+    <p><strong>In Development (4):</strong> PA Planner Pro, PA Planner Student, PULSE Social Media App, DevHub Platform</p>
+    <p><strong>Internal Tools (4, monetisable):</strong> Traceability Dashboard, New Hire Manual, Agent Registry, Master Project Brief System</p>
+    <p><strong>Infrastructure:</strong> Supabase backend (12 tables, London), GitHub repo (40+ commits)</p>
+
+    <hr style="border:none;border-top:2px solid #1F2937;margin:24px 0">
+    <p style="font-family:var(--mono);font-size:10px;color:#6B7280;letter-spacing:2px">FORMAL DECLARATION</p>
+
+    <p>I, Valerie Wilcox, hereby declare that all intellectual property described in this document is my original work. I am the sole owner. No other individual or entity has claim to any of the concepts, systems, names, marks, taglines, software, or creative works listed unless explicitly stated.</p>
+
+    <div class="sig-slot" id="sigSlot1" onclick="placeSig('sigSlot1')">
+      CLICK HERE TO PLACE YOUR SIGNATURE
+    </div>
+
+    <p style="text-align:center;font-family:var(--mono);font-size:8px;color:#6B7280;margin-top:24px;letter-spacing:2px">17 IPs | 22 Agents | 8 Brands | 7 Taglines | 5 Visual Marks | 75+ Items | PAI-IP-DEC-001 v3.0</p>
+    <p style="text-align:center;font-style:italic;color:#6B7280;font-size:11px">To God be the glory.</p>
+  `;
+}
+
+// Load saved signature on page load
+window.addEventListener('DOMContentLoaded', () => {
+  try {
+    const saved = localStorage.getItem('phoennixai_signature');
+    if(saved){
+      const data = JSON.parse(saved);
+      const fn = document.getElementById('fullName');
+      const rl = document.getElementById('role');
+      const sd = document.getElementById('sigDate');
+      const lc = document.getElementById('location');
+      if(fn) fn.value = data.name;
+      if(rl) rl.value = data.role;
+      if(sd) sd.value = data.date;
+      if(lc) lc.value = data.location;
+      selectedFont = data.fontIdx;
+      const f = fonts[selectedFont];
+      const fmtDate = new Date(data.date).toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
+      savedSig = { font:f, name:data.name, role:data.role, date:fmtDate, location:data.location };
+      const fs = document.getElementById('finalSig');
+      const fna = document.getElementById('finalName');
+      const fd = document.getElementById('finalDate');
+      if(fs) fs.innerHTML = `<span style="font-family:${f.family};font-weight:${f.weight};font-size:${f.size};color:var(--text)">${data.name}</span>`;
+      if(fna) fna.textContent = data.name;
+      if(fd) fd.textContent = fmtDate;
+      const sb = document.getElementById('statusBar');
+      const st = document.getElementById('statusText');
+      const pb = document.getElementById('printBtn');
+      if(sb) sb.className = 'status-bar status-signed';
+      if(st) st.textContent = 'SIGNED - Ready to print or save as PDF';
+      if(pb){ pb.disabled = false; pb.style.opacity = '1'; }
+      goStep(4);
+    }
+  } catch(e){ console.log('No saved signature'); }
+});
+</script>
+</body>
+</html>
