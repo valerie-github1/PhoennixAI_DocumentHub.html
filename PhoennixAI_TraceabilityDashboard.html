@@ -435,7 +435,7 @@ var currentFilter = 'all';
 function setFilter(f, btn){
   currentFilter = f;
   document.querySelectorAll('.filter-btn').forEach(function(b){ b.classList.remove('active'); });
-  btn.classList.add('active');
+  if(btn && btn.classList) btn.classList.add('active');
   renderLog();
 }
 
@@ -671,7 +671,9 @@ function showTab(id, tabEl){
   document.querySelectorAll('.tab').forEach(function(t){ t.classList.remove('active'); });
   var sec = document.getElementById('section-'+id);
   if(sec) sec.classList.add('active');
-  if(tabEl) tabEl.classList.add('active');
+  // tabEl may be a DOM element or a string ID — handle both
+  var tabNode = (tabEl && typeof tabEl === 'string') ? document.getElementById(tabEl) : tabEl;
+  if(tabNode && tabNode.classList) tabNode.classList.add('active');
   else { document.querySelectorAll('.tab').forEach(function(t){ if(t.getAttribute('onclick') && t.getAttribute('onclick').indexOf("'"+id+"'")>-1) t.classList.add('active'); }); }
 
   if(id==='log') renderLog();
