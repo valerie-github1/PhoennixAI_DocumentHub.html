@@ -223,6 +223,8 @@ const LOGO_FULL = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAgAAAQABAAD/wAARCAQABA
   <div class="sb-item" onclick="showSec('moodboard',this)"><span class="sb-icon">🎨</span>Mood Board</div>
   <div class="sb-item" onclick="showSec('whiteboard',this)"><span class="sb-icon">🖊️</span>Whiteboard</div>
   <div class="sb-item" onclick="showSec('strategy',this)"><span class="sb-icon">🧠</span>Strategy</div>
+  <div class="sb-item" onclick="showSec('market',this)"><span class="sb-icon">📡</span>Market Insights</div>
+  <div class="sb-item" onclick="showSec('trading',this)"><span class="sb-icon">📊</span>Trading Tools</div>
 
   <div class="sb-label">Agent</div>
   <div class="sb-item" onclick="showSec('about',this)"><span class="sb-icon">💜</span>About PULSE</div>
@@ -581,6 +583,133 @@ const LOGO_FULL = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAgAAAQABAAD/wAARCAQABA
   <div style="font-family:var(--mono);font-size:8px;color:var(--text3);margin-top:8px;text-align:center">Canvas · Click and drag to draw · Sticky Note tool places editable notes · Arrow tool draws connectors</div>
 </div>
 
+
+<!-- ── MARKET INSIGHTS ── -->
+<div id="sec-market" class="section" style="display:none">
+  <div class="page-eyebrow">PULSE + SIGNAL · Market Insights</div>
+  <div class="page-title">MARKET INSIGHTS</div>
+  <div class="page-sub">Real-time market trends, audience intelligence, competitor monitoring. Zero hype. Signal-to-noise ratio: maximum. SIGNAL feeds this. PULSE acts on it.</div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:24px">
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:18px">
+      <div style="font-family:var(--mono);font-size:8px;letter-spacing:2px;color:var(--pulse);margin-bottom:10px">TRENDING NOW</div>
+      <div id="trending-feed" style="font-size:12px;color:var(--text2);line-height:2">
+        <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border)"><span style="color:var(--green);font-family:var(--mono);font-size:9px">▲ 47%</span><span>AI automation for small businesses</span></div>
+        <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border)"><span style="color:var(--green);font-family:var(--mono);font-size:9px">▲ 31%</span><span>Founder-led marketing content</span></div>
+        <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border)"><span style="color:var(--green);font-family:var(--mono);font-size:9px">▲ 28%</span><span>AI agents replacing agency retainers</span></div>
+        <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border)"><span style="color:#EF4444;font-family:var(--mono);font-size:9px">▼ 12%</span><span>Traditional social media management</span></div>
+        <div style="display:flex;align-items:center;gap:8px;padding:6px 0"><span style="color:var(--green);font-family:var(--mono);font-size:9px">▲ 22%</span><span>Business OS platforms for SMEs</span></div>
+      </div>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:18px">
+      <div style="font-family:var(--mono);font-size:8px;letter-spacing:2px;color:var(--pulse);margin-bottom:10px">AUDIENCE PAIN SIGNALS</div>
+      <div style="font-size:12px;color:var(--text2);line-height:1.9">
+        <div style="padding:6px 0;border-bottom:1px solid var(--border)">"I spend more time on admin than on actual work"</div>
+        <div style="padding:6px 0;border-bottom:1px solid var(--border)">"Social media is a full-time job I can't afford"</div>
+        <div style="padding:6px 0;border-bottom:1px solid var(--border)">"I don't know what's happening in my business"</div>
+        <div style="padding:6px 0;border-bottom:1px solid var(--border)">"Agency retainers cost too much for what they do"</div>
+        <div style="padding:6px 0">"I need a team but can't afford to hire one"</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:20px;margin-bottom:20px">
+    <div style="font-family:var(--mono);font-size:8px;letter-spacing:2px;color:var(--pulse);margin-bottom:14px">COMPETITIVE LANDSCAPE</div>
+    <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:10px;font-family:var(--mono);font-size:8px;letter-spacing:1px;color:var(--text3);margin-bottom:8px;padding:0 0 6px;border-bottom:1px solid var(--border)">
+      <div>COMPETITOR</div><div>PRICE/MO</div><div>AI AGENTS</div><div>VERDICT</div>
+    </div>
+    <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:10px;font-size:12px;padding:8px 0;border-bottom:1px solid var(--border);align-items:center">
+      <div style="color:var(--text)">HubSpot</div><div style="font-family:var(--mono);color:var(--gold)">£800+</div><div style="color:var(--text2)">No</div><div><span style="font-family:var(--mono);font-size:8px;padding:2px 7px;border-radius:3px;background:rgba(34,197,94,0.1);color:var(--green)">Weak AI</span></div>
+    </div>
+    <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:10px;font-size:12px;padding:8px 0;border-bottom:1px solid var(--border);align-items:center">
+      <div style="color:var(--text)">Notion AI</div><div style="font-family:var(--mono);color:var(--gold)">£16</div><div style="color:var(--text2)">Partial</div><div><span style="font-family:var(--mono);font-size:8px;padding:2px 7px;border-radius:3px;background:rgba(34,197,94,0.1);color:var(--green)">No Team</span></div>
+    </div>
+    <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:10px;font-size:12px;padding:8px 0;border-bottom:1px solid var(--border);align-items:center">
+      <div style="color:var(--text)">Monday.com</div><div style="font-family:var(--mono);color:var(--gold)">£50+</div><div style="color:var(--text2)">No</div><div><span style="font-family:var(--mono);font-size:8px;padding:2px 7px;border-radius:3px;background:rgba(34,197,94,0.1);color:var(--green)">PM Only</span></div>
+    </div>
+    <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:10px;font-size:12px;padding:8px 0;align-items:center;background:rgba(167,139,250,0.05);border-radius:6px;margin-top:4px;padding:10px 8px">
+      <div style="color:var(--pulse);font-weight:600">PhoennixAI</div><div style="font-family:var(--mono);color:var(--gold)">£497</div><div style="color:var(--green)">22 Agents</div><div><span style="font-family:var(--mono);font-size:8px;padding:2px 7px;border-radius:3px;background:rgba(167,139,250,0.15);color:var(--pulse)">Unique</span></div>
+    </div>
+  </div>
+
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:20px">
+    <div style="font-family:var(--mono);font-size:8px;letter-spacing:2px;color:var(--pulse);margin-bottom:12px">LOG NEW INTELLIGENCE</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+      <div>
+        <label style="font-family:var(--mono);font-size:8px;letter-spacing:2px;color:var(--text3);display:block;margin-bottom:6px">SOURCE</label>
+        <input id="mi-source" type="text" placeholder="LinkedIn, Twitter, Reddit..." style="width:100%;background:var(--bg);border:1px solid var(--border2);border-radius:6px;padding:9px 11px;color:var(--text);font-size:12px;outline:none;font-family:var(--sans)">
+      </div>
+      <div>
+        <label style="font-family:var(--mono);font-size:8px;letter-spacing:2px;color:var(--text3);display:block;margin-bottom:6px">URGENCY</label>
+        <select id="mi-urgency" style="width:100%;background:var(--bg);border:1px solid var(--border2);border-radius:6px;padding:9px 11px;color:var(--text);font-size:12px;outline:none;font-family:var(--sans)">
+          <option value="High">High — Act this week</option>
+          <option value="Medium" selected>Medium — Act this month</option>
+          <option value="Low">Low — Monitor</option>
+        </select>
+      </div>
+    </div>
+    <textarea id="mi-insight" placeholder="What signal or pain did you detect? What gap does it reveal?" style="width:100%;background:var(--bg);border:1px solid var(--border2);border-radius:6px;padding:9px 11px;color:var(--text);font-size:12px;outline:none;font-family:var(--sans);min-height:72px;resize:vertical;margin-bottom:10px"></textarea>
+    <button onclick="saveMarketInsight()" class="btn btn-copy" style="font-size:8px;letter-spacing:2px">SAVE INSIGHT</button>
+    <div id="mi-log" style="margin-top:16px"></div>
+  </div>
+</div>
+
+<!-- ── TRADING TOOLS ── -->
+<div id="sec-trading" class="section" style="display:none">
+  <div class="page-eyebrow">SIGNAL · Trading Intelligence</div>
+  <div class="page-title">TRADING TOOLS</div>
+  <div class="page-sub">Zero hype. Data only. Macro context, sector momentum, and market structure — as inputs to business decision making, not financial advice. SIGNAL owns this feed.</div>
+
+  <div style="background:rgba(220,38,38,0.06);border:1px solid rgba(220,38,38,0.2);border-radius:8px;padding:12px 16px;margin-bottom:20px;font-family:var(--mono);font-size:9px;letter-spacing:1px;color:rgba(255,255,255,0.5)">
+    DISCLAIMER: This section is for market context and business intelligence only. PhoennixAI does not provide financial advice. LEDGER is the financial agent and operates in advisory mode only. No trading decisions should be made based on this data without qualified financial advice.
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:20px">
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center">
+      <div style="font-family:var(--mono);font-size:8px;letter-spacing:2px;color:var(--text3);margin-bottom:8px">AI SECTOR</div>
+      <div style="font-family:var(--display);font-size:28px;color:var(--green);letter-spacing:2px">▲ 34%</div>
+      <div style="font-family:var(--mono);font-size:9px;color:var(--text2);margin-top:4px">YTD 2026</div>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center">
+      <div style="font-family:var(--mono);font-size:8px;letter-spacing:2px;color:var(--text3);margin-bottom:8px">SAAS MULTIPLE</div>
+      <div style="font-family:var(--display);font-size:28px;color:var(--pulse);letter-spacing:2px">8.2x</div>
+      <div style="font-family:var(--mono);font-size:9px;color:var(--text2);margin-top:4px">ARR Avg 2026</div>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px;text-align:center">
+      <div style="font-family:var(--mono);font-size:8px;letter-spacing:2px;color:var(--text3);margin-bottom:8px">SME TECH SPEND</div>
+      <div style="font-family:var(--display);font-size:28px;color:var(--gold);letter-spacing:2px">▲ 19%</div>
+      <div style="font-family:var(--mono);font-size:9px;color:var(--text2);margin-top:4px">YoY UK 2026</div>
+    </div>
+  </div>
+
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:20px;margin-bottom:16px">
+    <div style="font-family:var(--mono);font-size:8px;letter-spacing:2px;color:var(--pulse);margin-bottom:14px">MARKET CONTEXT — UK SME AI ADOPTION</div>
+    <div style="display:grid;gap:10px;font-size:12px;color:var(--text2);line-height:1.7">
+      <div style="display:flex;gap:12px;padding:10px;background:var(--bg);border-radius:6px;align-items:flex-start">
+        <div style="font-family:var(--mono);font-size:9px;color:var(--green);min-width:60px;margin-top:2px">SIGNAL</div>
+        <div>Only 14% of UK SMEs have deployed AI tools in any capacity as of Q1 2026. First-mover advantage window is open. PhoennixAI is competing for a market that has not yet formed its habits.</div>
+      </div>
+      <div style="display:flex;gap:12px;padding:10px;background:var(--bg);border-radius:6px;align-items:flex-start">
+        <div style="font-family:var(--mono);font-size:9px;color:var(--gold);min-width:60px;margin-top:2px">CONTEXT</div>
+        <div>Average agency retainer for social media management in the UK: £1,200 to £3,500 per month. PhoennixAI Tier 2 at £1,497 competes directly with the bottom of that range while delivering 10x more capability.</div>
+      </div>
+      <div style="display:flex;gap:12px;padding:10px;background:var(--bg);border-radius:6px;align-items:flex-start">
+        <div style="font-family:var(--mono);font-size:9px;color:var(--pulse);min-width:60px;margin-top:2px">WATCH</div>
+        <div>Microsoft Copilot, Google Workspace AI, and Notion AI are all targeting the SME market from above (enterprise tools pushing down). PhoennixAI attacks from below — purpose-built for founders, not retrofitted from enterprise.</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:20px">
+    <div style="font-family:var(--mono);font-size:8px;letter-spacing:2px;color:var(--pulse);margin-bottom:12px">BUSINESS INTELLIGENCE WATCHLIST</div>
+    <div style="font-size:12px;color:var(--text3);margin-bottom:12px">Track trends, sectors, or companies relevant to your clients and positioning. Updated manually. Phase 2: SIGNAL auto-populates from Perplexity API.</div>
+    <div id="watchlist-items" style="margin-bottom:12px"></div>
+    <div style="display:flex;gap:8px">
+      <input id="watch-input" type="text" placeholder="e.g. AI productivity tools UK, SME automation market..." style="flex:1;background:var(--bg);border:1px solid var(--border2);border-radius:6px;padding:9px 11px;color:var(--text);font-size:12px;outline:none;font-family:var(--sans)">
+      <button onclick="addWatchItem()" class="btn btn-copy" style="font-size:8px;white-space:nowrap">ADD</button>
+    </div>
+  </div>
+</div>
 </div><!-- end main -->
 </div><!-- end shell -->
 
@@ -612,6 +741,7 @@ function buildEngRow(p){
 var SB_URL='https://erfvunwhpsdbyyayzdimz.supabase.co';
 var SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVyZnZ1bndocHNkYnlheXpkam16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQxMDEzODQsImV4cCI6MjA4OTY3NzM4NH0.JdoYnDufRjOc2p4wVz0hgZql9-eZyo0-BHongtORhKo';
 var STORE_KEY='pai_pulse_posts_v1';
+var POSTS_DATA=[];
 
 async function sbSave(post){
   try{
@@ -658,12 +788,10 @@ var SEED_POSTS=[
 // ── STORAGE ──
 function getPosts(){
   try{
-    var stored=JSON.parse(localStorage.getItem(STORE_KEY)||'[]');
-    if(stored.length===0){
-      localStorage.setItem(STORE_KEY,JSON.stringify(SEED_POSTS));
-      return SEED_POSTS;
-    }
-    return stored;
+    var d=localStorage.getItem(STORE_KEY);
+    var stored=JSON.parse(d||'[]');
+    if(stored&&stored.length>0){POSTS_DATA=stored;return stored;}
+    return SEED_POSTS;
   }catch(e){return SEED_POSTS;}
 }
 function savePosts(posts){localStorage.setItem(STORE_KEY,JSON.stringify(posts));}
@@ -746,10 +874,10 @@ function renderPosts(){
       '<div class="post-body">'+
         '<div class="post-caption" id="cap-'+p.id+'">'+escHtml(p.caption)+'</div>'+
         '<div class="post-actions">'+
-          '<button class="btn btn-copy" onclick="copyText(\''+escHtml(p.caption)+'\',this)">Copy Caption</button>'+
+          '<button class="btn btn-copy" onclick="copyById(\''+p.id+'\',\'caption\',this)">Copy Caption</button>'+
           '<button class="btn btn-expand" onclick="toggleExpand(\''+p.id+'\',this)">Expand</button>'+
           '<button class="btn" style="color:#00E5FF;border-color:rgba(0,229,255,0.25);background:rgba(0,229,255,0.05)" onclick="addLogoToPost(\''+p.id+'\')" title="Preview with logo watermark">Logo</button>'+
-          (p.hashtags?'<button class="btn btn-copy" onclick="copyText(\''+escHtml(p.hashtags)+'\',this)">Copy Hashtags</button>':'')+
+          (p.hashtags?'<button class="btn btn-copy" onclick="copyById(\''+p.id+'\',\'hashtags\',this)">Copy Hashtags</button>':'')+
         '</div>'+
         (p.hashtags?'<div class="post-hashtags">'+p.hashtags+'</div>':'')+
         mjSection+
@@ -847,12 +975,31 @@ function scrollToPost(id){
 
 // ── UTILS ──
 function copyText(text,btn){
-  navigator.clipboard.writeText(text).then(function(){
+  var clean=text.replace(/&#39;/g,"'").replace(/&quot;/g,'"').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&amp;/g,'&');
+  navigator.clipboard.writeText(clean).then(function(){
     var orig=btn.textContent;
     btn.textContent='Copied!';
     btn.classList.add('copied');
     setTimeout(function(){btn.textContent=orig;btn.classList.remove('copied');},1800);
-  }).catch(function(){showToast('Copy failed — select manually');});
+  }).catch(function(){
+    // Fallback: create textarea and execCommand
+    var ta=document.createElement('textarea');
+    ta.value=clean;ta.style.position='fixed';ta.style.opacity='0';
+    document.body.appendChild(ta);ta.select();
+    try{document.execCommand('copy');btn.textContent='Copied!';btn.classList.add('copied');
+      setTimeout(function(){btn.textContent=btn.dataset.orig||'Copy';btn.classList.remove('copied');},1800);}
+    catch(e){showToast('Select text manually to copy');}
+    document.body.removeChild(ta);
+  });
+}
+
+function copyById(id,field,btn){
+  var posts=JSON.parse(localStorage.getItem('pai_pulse_posts_v1')||'[]');
+  if(!posts.length) posts=window.POSTS_DATA||[];
+  var p=posts.find(function(x){return x.id===id;});
+  if(!p) return;
+  var text=field==='caption'?p.caption:field==='mj'?p.mj||'':p.hashtags||'';
+  copyText(text,btn);
 }
 
 function escHtml(str){
@@ -1234,7 +1381,70 @@ showSec=function(id,el){
     renderMoodboard();
     try{var cn=localStorage.getItem('pai_pulse_creative_notes');if(cn&&document.getElementById('creative-notes'))document.getElementById('creative-notes').value=cn;}catch(e){}
   }
+  if(id==='market'){renderMarketInsightLog();}
+  if(id==='trading'){renderWatchlist();}
 };
+
+function saveMarketInsight(){
+  var source=document.getElementById('mi-source').value.trim();
+  var insight=document.getElementById('mi-insight').value.trim();
+  var urgency=document.getElementById('mi-urgency').value;
+  if(!insight){return;}
+  var log=JSON.parse(localStorage.getItem('pai_market_intel')||'[]');
+  log.unshift({source:source,insight:insight,urgency:urgency,ts:new Date().toISOString()});
+  localStorage.setItem('pai_market_intel',JSON.stringify(log));
+  document.getElementById('mi-source').value='';
+  document.getElementById('mi-insight').value='';
+  renderMarketInsightLog();
+  showToast('Intelligence logged');
+}
+
+function renderMarketInsightLog(){
+  var el=document.getElementById('mi-log');
+  if(!el)return;
+  var log=JSON.parse(localStorage.getItem('pai_market_intel')||'[]');
+  if(!log.length){el.innerHTML='<div style="font-family:var(--mono);font-size:9px;color:var(--text3);text-align:center;padding:16px">No intelligence logged yet</div>';return;}
+  el.innerHTML=log.slice(0,10).map(function(e){
+    var uc=e.urgency==='High'?'#EF4444':e.urgency==='Medium'?'#FFB830':'#4682B4';
+    return '<div style="padding:10px 12px;background:var(--bg);border-radius:6px;margin-bottom:8px;border-left:3px solid '+uc+'">'+
+      '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">'+
+        '<span style="font-family:var(--mono);font-size:8px;color:'+uc+'">'+e.urgency+'</span>'+
+        '<span style="font-family:var(--mono);font-size:7px;color:var(--text3)">'+new Date(e.ts).toLocaleDateString('en-GB',{day:'numeric',month:'short'})+(e.source?' · '+e.source:'')+'</span>'+
+      '</div>'+
+      '<div style="font-size:12px;color:var(--text2)">'+e.insight+'</div></div>';
+  }).join('');
+}
+
+function addWatchItem(){
+  var inp=document.getElementById('watch-input');
+  var val=inp.value.trim();
+  if(!val)return;
+  var list=JSON.parse(localStorage.getItem('pai_watchlist')||'[]');
+  list.push({term:val,added:new Date().toISOString()});
+  localStorage.setItem('pai_watchlist',JSON.stringify(list));
+  inp.value='';
+  renderWatchlist();
+}
+
+function renderWatchlist(){
+  var el=document.getElementById('watchlist-items');
+  if(!el)return;
+  var list=JSON.parse(localStorage.getItem('pai_watchlist')||'[]');
+  if(!list.length){el.innerHTML='<div style="font-family:var(--mono);font-size:9px;color:var(--text3)">No items on watchlist yet</div>';return;}
+  el.innerHTML=list.map(function(item,i){
+    return '<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;background:var(--bg);border-radius:6px;margin-bottom:6px">'+
+      '<span style="font-size:12px;color:var(--text2)">'+item.term+'</span>'+
+      '<button onclick="removeWatch('+i+')" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:12px;padding:0 4px">×</button>'+
+    '</div>';
+  }).join('');
+}
+
+function removeWatch(i){
+  var list=JSON.parse(localStorage.getItem('pai_watchlist')||'[]');
+  list.splice(i,1);
+  localStorage.setItem('pai_watchlist',JSON.stringify(list));
+  renderWatchlist();
+}
 </script>
 </body>
 </html>
