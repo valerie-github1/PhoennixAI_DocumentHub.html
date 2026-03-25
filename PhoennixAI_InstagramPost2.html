@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PhoennixAI — Instagram Post 2</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: #1a1a2e;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px 20px;
+  font-family: 'DM Sans', sans-serif;
+  gap: 32px;
+}
+
+/* ── SQUARE POST (1080x1080 ratio) ── */
+.post {
+  width: 540px;
+  height: 540px;
+  background: #060A18;
+  border-radius: 0;
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+/* radial glow */
+.post::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 50% at 50% 0%, rgba(0,229,255,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 40% at 85% 85%, rgba(0,85,170,0.10) 0%, transparent 50%);
+  z-index: 0;
+}
+
+/* subtle grid */
+.post::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0,229,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,229,255,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  z-index: 0;
+}
+
+.post-inner {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  padding: 36px 38px 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* top bar */
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.logo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 15px;
+  letter-spacing: 4px;
+}
+.logo span:first-child { color: #00E5FF; }
+.logo span:last-child  { color: rgba(255,255,255,0.3); }
+.eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+}
+
+/* headline */
+.headline {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 58px;
+  line-height: 0.93;
+  letter-spacing: 1px;
+  color: #fff;
+  margin-bottom: 4px;
+  flex-shrink: 0;
+}
+.headline .cyan  { color: #00E5FF; }
+.headline .ghost { color: rgba(255,255,255,0.18); }
+
+.sub {
+  font-size: 11.5px;
+  color: rgba(255,255,255,0.55);
+  line-height: 1.65;
+  max-width: 320px;
+  margin-bottom: 18px;
+  flex-shrink: 0;
+}
+
+/* agent grid */
+.agents {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 7px;
+  margin-bottom: 18px;
+}
+.agent-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 6px;
+  padding: 6px 9px;
+}
+.a-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.a-name {
+  font-family: 'DM Mono', monospace;
+  font-size: 8.5px;
+  letter-spacing: 1.5px;
+  color: rgba(255,255,255,0.65);
+  text-transform: uppercase;
+}
+.a-role {
+  font-size: 8px;
+  color: rgba(255,255,255,0.3);
+  margin-left: auto;
+  font-family: 'DM Mono', monospace;
+  display: none;
+}
+
+/* bottom row */
+.bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+.cta-line {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.cta-main {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 14px;
+  letter-spacing: 3px;
+  color: #00E5FF;
+}
+.cta-sub {
+  font-family: 'DM Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,0.3);
+}
+.beta-badge {
+  background: rgba(0,229,255,0.10);
+  border: 1px solid rgba(0,229,255,0.25);
+  border-radius: 6px;
+  padding: 8px 14px;
+  text-align: center;
+}
+.bb-date {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 16px;
+  letter-spacing: 2px;
+  color: #00E5FF;
+  line-height: 1;
+}
+.bb-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 7px;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,0.3);
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+/* ── CAPTION PANEL ── */
+.caption-panel {
+  width: 540px;
+  background: #0F1628;
+  border: 1px solid rgba(0,229,255,0.12);
+  border-radius: 12px;
+  padding: 28px 28px 24px;
+}
+.cap-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: rgba(0,229,255,0.6);
+  margin-bottom: 16px;
+}
+.cap-text {
+  font-size: 13px;
+  color: rgba(255,255,255,0.75);
+  line-height: 1.85;
+  white-space: pre-line;
+}
+.cap-text .hashtags {
+  color: rgba(0,229,255,0.55);
+  margin-top: 12px;
+  display: block;
+  font-size: 12px;
+  line-height: 1.8;
+}
+.copy-btn {
+  margin-top: 16px;
+  background: rgba(0,229,255,0.08);
+  border: 1px solid rgba(0,229,255,0.2);
+  border-radius: 6px;
+  padding: 8px 18px;
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: #00E5FF;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-transform: uppercase;
+}
+.copy-btn:hover { background: rgba(0,229,255,0.15); }
+.copy-btn.done { color: #22C55E; border-color: rgba(34,197,94,0.3); }
+
+.instructions {
+  width: 540px;
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: rgba(255,255,255,0.3);
+  text-align: center;
+  line-height: 2;
+}
+</style>
+</head>
+<body>
+
+<!-- THE POST VISUAL -->
+<div class="post">
+  <div class="post-inner">
+    <div>
+      <div class="top-bar">
+        <div class="logo"><span>PHOENNIX</span><span>AI</span></div>
+        <div class="eyebrow">Private Beta · 7 April 2026</div>
+      </div>
+
+      <div class="headline">
+        WHAT IF YOUR<br>
+        <span class="cyan">BUSINESS</span><br>
+        HAD A TEAM<br>
+        <span class="ghost">FROM DAY ONE?</span>
+      </div>
+
+      <div class="sub">Not software. A team of 22 AI agents — each with a name, a role, and a colour.</div>
+    </div>
+
+    <div class="agents">
+      <div class="agent-chip">
+        <div class="a-dot" style="background:#00E5FF"></div>
+        <div class="a-name">ARIA</div>
+      </div>
+      <div class="agent-chip">
+        <div class="a-dot" style="background:#F43F5E"></div>
+        <div class="a-name">PA</div>
+      </div>
+      <div class="agent-chip">
+        <div class="a-dot" style="background:#215CAE"></div>
+        <div class="a-name">GRID</div>
+      </div>
+      <div class="agent-chip">
+        <div class="a-dot" style="background:#FFB830"></div>
+        <div class="a-name">LEDGER</div>
+      </div>
+      <div class="agent-chip">
+        <div class="a-dot" style="background:#A78BFA"></div>
+        <div class="a-name">PULSE</div>
+      </div>
+      <div class="agent-chip">
+        <div class="a-dot" style="background:#C49A6C"></div>
+        <div class="a-name">SCRIBE</div>
+      </div>
+      <div class="agent-chip">
+        <div class="a-dot" style="background:#FB923C"></div>
+        <div class="a-name">RELAY</div>
+      </div>
+      <div class="agent-chip">
+        <div class="a-dot" style="background:#22C55E"></div>
+        <div class="a-name">SCOUT</div>
+      </div>
+      <div class="agent-chip">
+        <div class="a-dot" style="background:#DC2626"></div>
+        <div class="a-name">FORGE</div>
+      </div>
+    </div>
+
+    <div class="bottom">
+      <div class="cta-line">
+        <div class="cta-main">10 SPOTS. LINK IN BIO.</div>
+        <div class="cta-sub">Beta opens 7 April · Full access · 30 days</div>
+      </div>
+      <div class="beta-badge">
+        <div class="bb-date">7 APR</div>
+        <div class="bb-label">Beta Opens</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CAPTION PANEL -->
+<div class="caption-panel">
+  <div class="cap-label">Instagram Caption — Post 2 · Copy and paste</div>
+  <div class="cap-text" id="caption-text">What if your business had a team that never called in sick, never needed a performance review, and worked 24 hours a day?
+
+That is not a hypothetical. That is what we built.
+
+PhoennixAI is now in private beta. Limited access. Real AI agents. Real results.
+
+ARIA briefs you every morning.
+PA plans your day.
+GRID tracks your projects.
+LEDGER watches your money.
+SCRIBE owns your documents.
+PULSE runs your social media.
+
+This is not software. This is a team.
+
+Beta opens 7 April. 10 founding slots. Waitlist is open now.
+
+🔗 Link in bio to apply.
+
+<span class="hashtags">#PhoennixAI #AIAgents #BusinessOS #FounderLife #AITeam #AutomateYourBusiness #StartupLife #SmallBusiness #Founders #ArtificialIntelligence #BusinessAutomation #RiseAutomateDominate</span></div>
+  <button class="copy-btn" id="copy-btn" onclick="copyCaption()">Copy Caption</button>
+</div>
+
+<div class="instructions">
+  SCREENSHOT THE POST ABOVE · CROP TO SQUARE · POST AT 9AM<br>
+  PASTE CAPTION · FIRST LINE IS THE HOOK — STOP THE SCROLL<br>
+  TAG: @phoennix_ai_agency · LINK IN BIO: waitlist page
+</div>
+
+<script>
+function copyCaption(){
+  var text = document.getElementById('caption-text').innerText;
+  navigator.clipboard.writeText(text).then(function(){
+    var btn = document.getElementById('copy-btn');
+    btn.textContent = 'Copied!';
+    btn.classList.add('done');
+    setTimeout(function(){ btn.textContent = 'Copy Caption'; btn.classList.remove('done'); }, 2000);
+  }).catch(function(){
+    alert('Select the caption text manually and copy.');
+  });
+}
+</script>
+</body>
+</html>
