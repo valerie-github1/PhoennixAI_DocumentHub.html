@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PULSE — Internal Operations Manual v1.0</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Barlow+Condensed:wght@600;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --violet: #A78BFA;
+  --violet-dark: #7C3AED;
+  --cyan: #00E5FF;
+  --dark: #0D0B14;
+  --dark2: #13101F;
+  --dark3: #1A1630;
+  --white: #FFFFFF;
+  --muted: rgba(255,255,255,0.55);
+  --border: rgba(167,139,250,0.15);
+  --green: #10B981;
+  --orange: #F59E0B;
+  --red: #EF4444;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body { background: var(--dark); color: var(--white); font-family: 'Inter', sans-serif; font-size: 14px; line-height: 1.7; }
+
+.cover {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0D0B14 0%, #1E0A35 50%, #0D0B14 100%);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 60px 40px; text-align: center; position: relative; overflow: hidden;
+}
+.cover::before {
+  content:''; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+  width:700px; height:700px;
+  background: radial-gradient(circle, rgba(167,139,250,0.1) 0%, transparent 65%);
+  pointer-events:none;
+}
+.cover-restricted {
+  position: absolute; top: 24px; right: 30px;
+  background: rgba(239,68,68,0.12); border: 1px solid rgba(239,68,68,0.3);
+  border-radius: 4px; padding: 5px 14px;
+  font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 3px;
+  color: var(--red); text-transform: uppercase;
+}
+.cover-logo { font-family:'Space Mono',monospace; font-size:10px; letter-spacing:5px; color:var(--violet); opacity:0.7; margin-bottom:30px; text-transform:uppercase; }
+.cover-icon {
+  width:90px; height:90px;
+  background: linear-gradient(135deg, #4C1D95, #7C3AED);
+  border-radius:22px; display:flex; align-items:center; justify-content:center;
+  margin:0 auto 28px; box-shadow:0 0 60px rgba(124,58,237,0.5);
+}
+.cover h1 { font-family:'Barlow Condensed',sans-serif; font-size:72px; font-weight:900; letter-spacing:4px; color:var(--violet); text-shadow:0 0 60px rgba(167,139,250,0.4); margin-bottom:8px; }
+.cover-subtitle { font-size:18px; color:rgba(255,255,255,0.65); margin-bottom:6px; font-weight:300; }
+.cover-tagline { font-family:'Space Mono',monospace; font-size:10px; letter-spacing:3px; color:var(--violet); opacity:0.6; margin-bottom:30px; text-transform:uppercase; }
+.cover-warning {
+  background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.25);
+  border-radius:8px; padding:12px 24px; margin-bottom:30px;
+  font-size:12px; color:var(--orange); max-width:500px;
+}
+.cover-meta { display:flex; gap:16px; justify-content:center; flex-wrap:wrap; }
+.meta-pill { background:rgba(167,139,250,0.08); border:1px solid var(--border); border-radius:20px; padding:6px 16px; font-size:11px; color:var(--violet); font-family:'Space Mono',monospace; letter-spacing:1px; }
+
+.container { max-width: 860px; margin: 0 auto; padding: 0 40px; }
+
+.toc-section { background:var(--dark2); border-bottom:1px solid var(--border); padding:60px 0; }
+.toc-title { font-family:'Space Mono',monospace; font-size:10px; letter-spacing:4px; color:var(--violet); opacity:0.7; margin-bottom:30px; text-transform:uppercase; }
+.toc-grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.toc-item { display:flex; align-items:center; gap:12px; padding:12px 16px; background:rgba(167,139,250,0.05); border:1px solid var(--border); border-radius:8px; text-decoration:none; color:rgba(255,255,255,0.7); font-size:13px; transition:all 0.2s; }
+.toc-item:hover { background:rgba(167,139,250,0.12); color:var(--white); }
+.toc-num { font-family:'Space Mono',monospace; font-size:10px; color:var(--violet); opacity:0.6; min-width:24px; }
+
+.section { padding:70px 0; border-bottom:1px solid rgba(167,139,250,0.08); }
+.section-eyebrow { font-family:'Space Mono',monospace; font-size:9px; letter-spacing:4px; color:var(--violet); opacity:0.6; margin-bottom:10px; text-transform:uppercase; }
+.section-title { font-family:'Barlow Condensed',sans-serif; font-size:38px; font-weight:700; color:var(--white); margin-bottom:6px; letter-spacing:0.5px; }
+.section-subtitle { font-size:15px; color:var(--muted); margin-bottom:40px; max-width:600px; }
+h3 { font-size:16px; font-weight:600; color:var(--violet); margin:32px 0 12px; }
+p { color:rgba(255,255,255,0.72); margin-bottom:14px; }
+
+.callout { border-radius:10px; padding:18px 20px; margin:20px 0; display:flex; gap:14px; align-items:flex-start; }
+.callout-icon { font-size:18px; flex-shrink:0; margin-top:1px; }
+.callout-body { flex:1; }
+.callout-title { font-weight:600; margin-bottom:4px; font-size:13px; }
+.callout p { margin:0; font-size:13px; }
+.callout-tip { background:rgba(167,139,250,0.08); border:1px solid rgba(167,139,250,0.2); }
+.callout-tip .callout-title { color:var(--violet); }
+.callout-note { background:rgba(0,229,255,0.06); border:1px solid rgba(0,229,255,0.15); }
+.callout-note .callout-title { color:var(--cyan); }
+.callout-warn { background:rgba(245,158,11,0.08); border:1px solid rgba(245,158,11,0.2); }
+.callout-warn .callout-title { color:var(--orange); }
+.callout-success { background:rgba(16,185,129,0.08); border:1px solid rgba(16,185,129,0.2); }
+.callout-success .callout-title { color:var(--green); }
+.callout-red { background:rgba(239,68,68,0.08); border:1px solid rgba(239,68,68,0.2); }
+.callout-red .callout-title { color:var(--red); }
+
+.steps { margin:20px 0; }
+.step { display:flex; gap:16px; margin-bottom:16px; align-items:flex-start; }
+.step-num { background:linear-gradient(135deg,#7C3AED,#A78BFA); color:var(--white); width:26px; height:26px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; flex-shrink:0; margin-top:2px; }
+.step-body { flex:1; }
+.step-body strong { color:var(--white); display:block; margin-bottom:3px; font-size:14px; }
+.step-body p { margin:0; font-size:13px; }
+
+.table-wrap { overflow-x:auto; margin:20px 0; }
+table { width:100%; border-collapse:collapse; font-size:13px; }
+th { background:rgba(167,139,250,0.1); color:var(--violet); font-weight:600; padding:10px 14px; text-align:left; font-size:11px; letter-spacing:1px; text-transform:uppercase; border-bottom:1px solid var(--border); }
+td { padding:10px 14px; color:rgba(255,255,255,0.7); border-bottom:1px solid rgba(255,255,255,0.04); vertical-align:top; }
+tr:last-child td { border-bottom:none; }
+
+.badge { display:inline-flex; align-items:center; gap:5px; padding:3px 10px; border-radius:20px; font-size:11px; font-weight:500; }
+.badge-violet { background:rgba(167,139,250,0.12); border:1px solid rgba(167,139,250,0.25); color:var(--violet); }
+.badge-green { background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.25); color:var(--green); }
+.badge-orange { background:rgba(245,158,11,0.1); border:1px solid rgba(245,158,11,0.25); color:var(--orange); }
+.badge-cyan { background:rgba(0,229,255,0.08); border:1px solid rgba(0,229,255,0.2); color:var(--cyan); }
+.badge-red { background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.25); color:var(--red); }
+
+.screen { background:var(--dark2); border:1px solid var(--border); border-radius:12px; overflow:hidden; margin:20px 0; }
+.screen-bar { background:rgba(167,139,250,0.08); border-bottom:1px solid var(--border); padding:10px 16px; display:flex; align-items:center; gap:8px; }
+.screen-dot { width:8px; height:8px; border-radius:50%; }
+.dot-red { background:#EF4444; } .dot-yellow { background:#F59E0B; } .dot-green { background:#10B981; }
+.screen-title { font-family:'Space Mono',monospace; font-size:9px; letter-spacing:2px; color:var(--muted); margin-left:8px; }
+.screen-body { padding:24px; }
+
+/* Architecture diagram */
+.arch-diagram {
+  background: var(--dark2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 30px;
+  margin: 20px 0;
+}
+
+.arch-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+.arch-box {
+  padding: 10px 16px;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+  position: relative;
+}
+.arch-arrow {
+  font-size: 18px;
+  color: rgba(167,139,250,0.4);
+  padding: 0 8px;
+  flex-shrink: 0;
+}
+.arch-center { background: linear-gradient(135deg, rgba(124,58,237,0.3), rgba(167,139,250,0.15)); border: 1px solid rgba(167,139,250,0.4); color: var(--violet); }
+.arch-agent { background: rgba(0,229,255,0.08); border: 1px solid rgba(0,229,255,0.2); color: var(--cyan); }
+.arch-data { background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.2); color: var(--green); }
+.arch-platform { background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.2); color: var(--orange); }
+.arch-sub { font-size:10px; font-weight:400; opacity:0.7; display:block; margin-top:2px; }
+
+/* Checklist */
+.checklist { list-style:none; margin:16px 0; }
+.checklist li { display:flex; gap:10px; align-items:flex-start; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.04); font-size:13px; color:rgba(255,255,255,0.7); }
+.checklist li:last-child { border-bottom:none; }
+.check { color:var(--green); font-size:14px; flex-shrink:0; margin-top:2px; }
+.check-todo { color:rgba(255,255,255,0.3); font-size:14px; flex-shrink:0; margin-top:2px; }
+
+/* Phase timeline */
+.timeline { margin:24px 0; }
+.timeline-item { display:flex; gap:20px; margin-bottom:0; }
+.timeline-left { display:flex; flex-direction:column; align-items:center; width:40px; flex-shrink:0; }
+.timeline-dot { width:14px; height:14px; border-radius:50%; flex-shrink:0; margin-top:4px; }
+.dot-done { background:var(--green); }
+.dot-active { background:var(--violet); box-shadow:0 0 12px rgba(167,139,250,0.5); }
+.dot-upcoming { background:rgba(255,255,255,0.2); }
+.timeline-line { width:2px; flex:1; background:rgba(167,139,250,0.15); min-height:30px; margin-top:4px; }
+.timeline-content { flex:1; padding-bottom:28px; }
+.timeline-label { font-family:'Space Mono',monospace; font-size:9px; letter-spacing:2px; opacity:0.6; margin-bottom:4px; text-transform:uppercase; }
+.timeline-title { font-weight:600; color:var(--white); margin-bottom:4px; font-size:14px; }
+.timeline-desc { font-size:12.5px; color:var(--muted); }
+
+code { background:rgba(167,139,250,0.1); border:1px solid rgba(167,139,250,0.2); border-radius:4px; padding:2px 7px; font-family:'Space Mono',monospace; font-size:11px; color:var(--violet); }
+
+.doc-footer { background:var(--dark2); border-top:1px solid var(--border); padding:40px 0; text-align:center; }
+.footer-logo { font-family:'Barlow Condensed',sans-serif; font-size:22px; font-weight:900; color:var(--violet); letter-spacing:2px; margin-bottom:8px; }
+.footer-sub { font-size:12px; color:var(--muted); }
+.footer-tagline { font-family:'Space Mono',monospace; font-size:9px; letter-spacing:3px; color:var(--violet); opacity:0.5; margin-top:12px; text-transform:uppercase; }
+
+.kpi-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin:20px 0; }
+.kpi { background:rgba(167,139,250,0.06); border:1px solid var(--border); border-radius:10px; padding:16px; text-align:center; }
+.kpi-val { font-family:'Barlow Condensed',sans-serif; font-size:30px; font-weight:700; display:block; color:var(--violet); }
+.kpi-label { font-size:11px; color:var(--muted); margin-top:4px; }
+
+.two-col { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin:20px 0; }
+</style>
+</head>
+<body>
+
+<!-- ═══════ COVER ═══════ -->
+<div class="cover">
+  <div class="cover-restricted">INTERNAL — PHOENNIXAI TEAM ONLY</div>
+  <div class="cover-logo">PhoennixAI — BL-024 — Internal Operations</div>
+  <div class="cover-icon">
+    <svg viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M8 36 L23 8 L38 36 Z" stroke="white" stroke-width="2.5" fill="none"/>
+      <circle cx="23" cy="24" r="5" fill="white" opacity="0.9"/>
+      <path d="M13 30 Q23 18 33 30" stroke="white" stroke-width="1.5" fill="none" opacity="0.5"/>
+    </svg>
+  </div>
+  <h1>PULSE</h1>
+  <div class="cover-subtitle">Internal Operations Manual</div>
+  <div class="cover-tagline">For PhoennixAI Team · Not for Distribution</div>
+  <div class="cover-warning">
+    ⚠️ This document contains internal product architecture, agent governance rules, SLAs, escalation protocols, and operational procedures. For internal PhoennixAI team use only.
+  </div>
+  <div class="cover-meta">
+    <span class="meta-pill">AGENT 003</span>
+    <span class="meta-pill">BL-024</span>
+    <span class="meta-pill">PAI-JD-003</span>
+    <span class="meta-pill">INTERNAL v1.0</span>
+  </div>
+</div>
+
+
+<!-- ═══════ TOC ═══════ -->
+<div class="toc-section">
+  <div class="container">
+    <div class="toc-title">Table of Contents</div>
+    <div class="toc-grid">
+      <a href="#overview" class="toc-item"><span class="toc-num">01</span> Product Overview & Architecture</a>
+      <a href="#agent-profile" class="toc-item"><span class="toc-num">02</span> PULSE Agent Profile (PAI-JD-003)</a>
+      <a href="#intelligence" class="toc-item"><span class="toc-num">03</span> Intelligence Standard & Mandate</a>
+      <a href="#features" class="toc-item"><span class="toc-num">04</span> Full Feature Specification</a>
+      <a href="#workflows" class="toc-item"><span class="toc-num">05</span> Operational Workflows</a>
+      <a href="#content-ops" class="toc-item"><span class="toc-num">06</span> Content Operations Playbook</a>
+      <a href="#agent-partners" class="toc-item"><span class="toc-num">07</span> Agent Partner Integrations</a>
+      <a href="#phase-roadmap" class="toc-item"><span class="toc-num">08</span> Phase Roadmap (Alpha → Beta)</a>
+      <a href="#kpis" class="toc-item"><span class="toc-num">09</span> KPIs, SLAs & Quality Standards</a>
+      <a href="#escalation" class="toc-item"><span class="toc-num">10</span> Escalation & Governance Protocol</a>
+      <a href="#beta-ops" class="toc-item"><span class="toc-num">11</span> Beta Tester Ops (7 April)</a>
+      <a href="#maintenance" class="toc-item"><span class="toc-num">12</span> Maintenance & Update Protocol</a>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════ 01 OVERVIEW ═══════ -->
+<div class="section" id="overview">
+  <div class="container">
+    <div class="section-eyebrow">Section 01</div>
+    <div class="section-title">Product Overview & Architecture</div>
+    <div class="section-subtitle">What PULSE is, how it is built, and how it sits in the PhoennixAI ecosystem.</div>
+
+    <p>PULSE is PhoennixAI Product 3 — a Social Media Command Centre and content intelligence platform built on the Anthropic API, with Supabase backend integration, and deployed via GitHub Pages. It is operated by Agent 003 (PULSE) under CLAUDE's strategic oversight.</p>
+
+    <h3>Position in the Ecosystem</h3>
+    <div class="arch-diagram">
+      <div style="text-align:center;font-family:'Space Mono',monospace;font-size:9px;color:var(--violet);letter-spacing:3px;margin-bottom:24px;opacity:0.7;">PULSE ECOSYSTEM ARCHITECTURE</div>
+
+      <div class="arch-row" style="margin-bottom:6px;">
+        <div class="arch-box arch-center">CLAUDE <span class="arch-sub">Strategic Oversight</span></div>
+      </div>
+      <div style="text-align:center;color:rgba(167,139,250,0.3);font-size:20px;margin-bottom:6px;">↓</div>
+      <div class="arch-row" style="gap:12px;margin-bottom:6px;">
+        <div class="arch-box arch-center">PULSE · Agent 003 <span class="arch-sub">Social Media Command</span></div>
+        <div class="arch-box arch-agent">GRID · Agent 009 <span class="arch-sub">PM · BL-035 Retrospective</span></div>
+      </div>
+      <div style="text-align:center;color:rgba(167,139,250,0.3);font-size:20px;margin-bottom:6px;">↓</div>
+      <div class="arch-row" style="gap:12px;margin-bottom:6px;">
+        <div class="arch-box arch-agent">SIGNAL · 010 <span class="arch-sub">Market Intelligence</span></div>
+        <div class="arch-box arch-agent">LEDGER · 006 <span class="arch-sub">CAC, ROAS, LTV</span></div>
+        <div class="arch-box arch-agent">UI/UX · 019 <span class="arch-sub">Visual Production</span></div>
+        <div class="arch-box arch-agent">Manga · 020 <span class="arch-sub">Brand Character Art</span></div>
+      </div>
+      <div style="text-align:center;color:rgba(167,139,250,0.3);font-size:20px;margin-bottom:6px;">↓</div>
+      <div class="arch-row" style="gap:12px;">
+        <div class="arch-box arch-platform">Instagram</div>
+        <div class="arch-box arch-platform">LinkedIn</div>
+        <div class="arch-box arch-platform">X (Twitter)</div>
+      </div>
+      <div style="text-align:center;color:rgba(167,139,250,0.3);font-size:20px;margin:6px 0;"></div>
+      <div class="arch-row" style="gap:12px;">
+        <div class="arch-box arch-data">Supabase Backend <span class="arch-sub">Data persistence</span></div>
+        <div class="arch-box arch-data">Anthropic API <span class="arch-sub">Claude Sonnet</span></div>
+        <div class="arch-box arch-data">GitHub Pages <span class="arch-sub">Deployment</span></div>
+      </div>
+    </div>
+
+    <h3>Technical Stack</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Layer</th><th>Technology</th><th>Purpose</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>Frontend</td><td>HTML / CSS / Vanilla JS</td><td>App interface, all tabs, UI components</td><td><span class="badge badge-green">Live</span></td></tr>
+          <tr><td>Deployment</td><td>GitHub Pages (valerie-github1)</td><td>Public hosting, zero-cost deployment</td><td><span class="badge badge-green">Live</span></td></tr>
+          <tr><td>Backend</td><td>Supabase (London region)</td><td>Post storage, analytics, user data</td><td><span class="badge badge-green">Live — Phase 2 Unlock 1</span></td></tr>
+          <tr><td>AI Layer</td><td>Anthropic API — Claude Sonnet</td><td>Content generation, caption writing, strategy</td><td><span class="badge badge-orange">Phase 2</span></td></tr>
+          <tr><td>Social APIs</td><td>Instagram Graph, LinkedIn, X API</td><td>Live analytics + direct publishing</td><td><span class="badge badge-orange">Phase 2</span></td></tr>
+          <tr><td>Image Gen</td><td>Replicate (Flux/SDXL)</td><td>Social media visual generation</td><td><span class="badge badge-orange">Phase 2</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout callout-note">
+      <div class="callout-icon">🗄️</div>
+      <div class="callout-body">
+        <div class="callout-title">Supabase credentials</div>
+        <p>Project: <code>phoennixai-backend</code> · URL: <code>erfvunwhpsdbyyayzdimz.supabase.co</code> · Region: London · Project ID: <code>erfvunwhpsdbyyayzdimz</code>. Full credentials stored in secure credential vault — do not share externally.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════ 02 AGENT PROFILE ═══════ -->
+<div class="section" id="agent-profile">
+  <div class="container">
+    <div class="section-eyebrow">Section 02</div>
+    <div class="section-title">PULSE Agent Profile</div>
+    <div class="section-subtitle">Full profile per PAI-JD-003 and PAI-CV-003.</div>
+
+    <div class="screen">
+      <div class="screen-bar">
+        <div class="screen-dot dot-red"></div><div class="screen-dot dot-yellow"></div><div class="screen-dot dot-green"></div>
+        <span class="screen-title">AGENT PROFILE — PULSE · 003 · SIGNED 21 MARCH 2026</span>
+      </div>
+      <div class="screen-body">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+          <div>
+            <div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--violet);letter-spacing:2px;opacity:0.6;margin-bottom:8px;">IDENTITY</div>
+            <table style="font-size:12px;">
+              <tr><td style="color:var(--muted);padding:4px 0;padding-right:16px;border:none;">Agent ID</td><td style="color:var(--white);border:none;">003</td></tr>
+              <tr><td style="color:var(--muted);padding:4px 0;padding-right:16px;border:none;">JD Reference</td><td style="color:var(--white);border:none;">PAI-JD-003</td></tr>
+              <tr><td style="color:var(--muted);padding:4px 0;padding-right:16px;border:none;">CV Reference</td><td style="color:var(--white);border:none;">PAI-CV-003</td></tr>
+              <tr><td style="color:var(--muted);padding:4px 0;padding-right:16px;border:none;">Signed</td><td style="color:var(--white);border:none;">21 March 2026</td></tr>
+              <tr><td style="color:var(--muted);padding:4px 0;padding-right:16px;border:none;">Colour Code</td><td style="color:var(--violet);border:none;">Soft Violet #A78BFA</td></tr>
+              <tr><td style="color:var(--muted);padding:4px 0;padding-right:16px;border:none;">Status</td><td style="border:none;"><span class="badge badge-green">Active</span></td></tr>
+            </table>
+          </div>
+          <div>
+            <div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--violet);letter-spacing:2px;opacity:0.6;margin-bottom:8px;">FUNCTION</div>
+            <table style="font-size:12px;">
+              <tr><td style="color:var(--muted);padding:4px 0;padding-right:16px;border:none;">Role</td><td style="color:var(--white);border:none;">Social Media & Content Intelligence</td></tr>
+              <tr><td style="color:var(--muted);padding:4px 0;padding-right:16px;border:none;">Product</td><td style="color:var(--white);border:none;">PULSE — BL-024</td></tr>
+              <tr><td style="color:var(--muted);padding:4px 0;padding-right:16px;border:none;">Reports to</td><td style="color:var(--white);border:none;">Founder / CLAUDE</td></tr>
+              <tr><td style="color:var(--muted);padding:4px 0;padding-right:16px;border:none;">Automation</td><td style="color:var(--white);border:none;">100% Automated</td></tr>
+              <tr><td style="color:var(--muted);padding:4px 0;padding-right:16px;border:none;">Platforms</td><td style="color:var(--white);border:none;">Instagram · LinkedIn · X</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h3>Core Responsibilities</h3>
+    <ul class="checklist">
+      <li><span class="check">✦</span>Plans content calendars — 7 posts per week, structured across all content pillars</li>
+      <li><span class="check">✦</span>Writes captions in Founder voice — direct, confident, personal, never corporate</li>
+      <li><span class="check">✦</span>Schedules posts across Instagram, LinkedIn, and X with correct timing per platform</li>
+      <li><span class="check">✦</span>Tracks and logs engagement metrics — manual in Phase 1, API-automated in Phase 2</li>
+      <li><span class="check">✦</span>Detects market trends and competitor signals via SIGNAL integration</li>
+      <li><span class="check">✦</span>Generates strategic content recommendations when market gaps are detected</li>
+      <li><span class="check">✦</span>Maintains Mood Board as living creative brief for design agent team</li>
+      <li><span class="check">✦</span>Manages Whiteboard for campaign brainstorming and storyboarding</li>
+      <li><span class="check">✦</span>Produces weekly Midjourney image prompts for every scheduled post</li>
+    </ul>
+
+    <h3>Value Delivered</h3>
+    <div class="kpi-grid">
+      <div class="kpi"><span class="kpi-val">£35k</span><div class="kpi-label">Social Media Mgr saved p/yr</div></div>
+      <div class="kpi"><span class="kpi-val">£40k</span><div class="kpi-label">Graphic Designer saved p/yr</div></div>
+      <div class="kpi"><span class="kpi-val">£45k</span><div class="kpi-label">Market Researcher saved p/yr</div></div>
+      <div class="kpi"><span class="kpi-val">£120k</span><div class="kpi-label">Total annual saving</div></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════ 03 INTELLIGENCE STANDARD ═══════ -->
+<div class="section" id="intelligence">
+  <div class="container">
+    <div class="section-eyebrow">Section 03</div>
+    <div class="section-title">Intelligence Standard & Mandate</div>
+    <div class="section-subtitle">The AGI-level standard embedded in PULSE's operating code.</div>
+
+    <div class="callout callout-red">
+      <div class="callout-icon">🔒</div>
+      <div class="callout-body">
+        <div class="callout-title">Non-negotiable standard</div>
+        <p>This intelligence standard is tattooed into PULSE's genetic code. It applies to every caption, every campaign, every post, every analysis, every recommendation. The standard is not good. The standard is the best in the world.</p>
+      </div>
+    </div>
+
+    <p>PULSE is not a social media scheduler. PULSE is AGI-level Social Media, Marketing, and Design Intelligence — a subject matter expert across every domain of digital marketing, from content strategy and brand storytelling to conversion funnel architecture, paid advertising, audience psychology, visual identity, and predictive market intelligence.</p>
+
+    <p>PULSE thinks at the level of a Wieden+Kennedy Creative Director combined with a McKinsey digital strategy principal and a data-driven growth hacker with a decade of platform-native expertise. It does not retrieve templates. It synthesises original, brand-specific, market-informed content. It does not produce generic output. It produces precision-crafted communications that are compelling, engaging, persuasive, and uniquely PhoennixAI.</p>
+
+    <h3>Quality Standards Applied to Every Output</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Output Type</th><th>Standard Required</th></tr></thead>
+        <tbody>
+          <tr><td>Captions</td><td>Written in Founder voice. Specific, direct, personal. No filler. No corporate language. Reads like a human wrote it on a Tuesday morning because they had something real to say.</td></tr>
+          <tr><td>Hashtags</td><td>Researched and relevant. No spam. Niche-targeted. Mix of broad reach and specific community tags.</td></tr>
+          <tr><td>Midjourney Prompts</td><td>Brand-specific. Consistent aesthetic direction. References Soft Violet palette, dark backgrounds, and PhoennixAI visual identity.</td></tr>
+          <tr><td>Market Intelligence</td><td>Actionable within 48 hours. Includes source, pain point, gap, and recommended content response.</td></tr>
+          <tr><td>Strategy Updates</td><td>Evidence-based. References performance data, market signals, and platform algorithm changes. Flags to Founder + CLAUDE for review before implementation.</td></tr>
+          <tr><td>Weekly Plan</td><td>7 posts covering all 4 content pillars. Platform-optimised. Varies format — image, carousel, text, reel prompt — to maximise algorithmic distribution.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════ 04 FEATURE SPEC ═══════ -->
+<div class="section" id="features">
+  <div class="container">
+    <div class="section-eyebrow">Section 04</div>
+    <div class="section-title">Full Feature Specification</div>
+    <div class="section-subtitle">Every module in PULSE — what it does, how it works, and its current status.</div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Module</th><th>Tab</th><th>Function</th><th>Phase</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>Dashboard</td><td>📊 Dashboard</td>
+            <td>Weekly post count, posted vs scheduled, platform summary, week label. Tick-to-post functionality updates counts in real time.</td>
+            <td>1</td><td><span class="badge badge-green">Live</span></td>
+          </tr>
+          <tr>
+            <td>Schedule</td><td>📅 Schedule</td>
+            <td>Chronological 7-post weekly view. Each row shows title, platform, date/time, status. Checkbox marks posted. Week reference (W01, W02...) top-labelled.</td>
+            <td>1</td><td><span class="badge badge-green">Live</span></td>
+          </tr>
+          <tr>
+            <td>All Posts</td><td>✍️ All Posts</td>
+            <td>Filterable post library with full captions, hashtags, Midjourney prompts, copy buttons. Filters: All, Instagram, LinkedIn, X, Scheduled, Posted.</td>
+            <td>1</td><td><span class="badge badge-green">Live</span></td>
+          </tr>
+          <tr>
+            <td>Compose</td><td>➕ Compose</td>
+            <td>New post drafting form. Fields: date, time, title, platforms (multi-select), caption, hashtags, status (Draft/Scheduled). Saves to queue.</td>
+            <td>1</td><td><span class="badge badge-green">Live</span></td>
+          </tr>
+          <tr>
+            <td>Analytics</td><td>📈 Analytics</td>
+            <td>Manual engagement tracker. Charts: posts by platform, posts by status, weekly schedule. Phase 2: live API data from Instagram Graph API, LinkedIn API, X API.</td>
+            <td>1 manual / 2 API</td><td><span class="badge badge-orange">Manual live · API Phase 2</span></td>
+          </tr>
+          <tr>
+            <td>Lead Intelligence</td><td>🎯 Lead Intel</td>
+            <td>Market gap logger. Fields: source, pain point, gap, urgency. Intelligence log table. PULSE mandate panel. Feeds to strategy recommendations.</td>
+            <td>1</td><td><span class="badge badge-green">Live</span></td>
+          </tr>
+          <tr>
+            <td>Mood Board</td><td>🎨 Mood Board</td>
+            <td>Image grid (click-to-upload). Creative direction notes text field. Save Creative Brief button. Feeds design agents (019, 020).</td>
+            <td>1</td><td><span class="badge badge-green">Live</span></td>
+          </tr>
+          <tr>
+            <td>Whiteboard</td><td>🖊️ Whiteboard</td>
+            <td>HTML5 canvas. Tools: Select, Pen, Sticky Note, Text, Arrow. Colour picker. Stroke width options. Clear and Save PNG.</td>
+            <td>1</td><td><span class="badge badge-green">Live</span></td>
+          </tr>
+          <tr>
+            <td>Strategy</td><td>🧠 Strategy</td>
+            <td>Campaign objectives (primary/secondary), voice guide, CTA rule, 4 content pillars, platform-specific rules.</td>
+            <td>1</td><td><span class="badge badge-green">Live</span></td>
+          </tr>
+          <tr>
+            <td>About PULSE</td><td>💜 About</td>
+            <td>Full agent profile: JD, CV reference, intelligence standard, value proposition, target audience, pain solved, agent partners.</td>
+            <td>1</td><td><span class="badge badge-green">Live</span></td>
+          </tr>
+          <tr>
+            <td>Direct Publishing</td><td>Auto-post</td>
+            <td>Posts publish directly to Instagram, LinkedIn, X via APIs. No manual copy-paste required.</td>
+            <td>2</td><td><span class="badge badge-violet">Phase 2</span></td>
+          </tr>
+          <tr>
+            <td>AI Caption Generation</td><td>Compose</td>
+            <td>Anthropic API generates caption in real time based on brief, platform, and content pillar. One-click draft.</td>
+            <td>2</td><td><span class="badge badge-violet">Phase 2</span></td>
+          </tr>
+          <tr>
+            <td>Live Analytics</td><td>Analytics</td>
+            <td>Real-time data from Instagram Graph API, LinkedIn API, X API. Auto-populates all metrics.</td>
+            <td>2</td><td><span class="badge badge-violet">Phase 2</span></td>
+          </tr>
+          <tr>
+            <td>Image Generation</td><td>Compose</td>
+            <td>Replicate API (Flux/SDXL) generates social media visuals from Midjourney-style prompts inline.</td>
+            <td>2</td><td><span class="badge badge-violet">Phase 2</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════ 05 OPERATIONAL WORKFLOWS ═══════ -->
+<div class="section" id="workflows">
+  <div class="container">
+    <div class="section-eyebrow">Section 05</div>
+    <div class="section-title">Operational Workflows</div>
+    <div class="section-subtitle">How PULSE operates week by week during Alpha.</div>
+
+    <h3>Weekly Content Cycle (Alpha — Phase 1)</h3>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <strong>Monday — Content Plan Finalised</strong>
+          <p>PULSE generates the 7-post weekly schedule. All captions, hashtags, and Midjourney prompts are pre-loaded into All Posts. The founder reviews and approves or edits before the week begins.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <strong>Tuesday–Sunday — Daily Posting</strong>
+          <p>The founder copies each day's caption from the All Posts tab, generates the visual using the Midjourney prompt, and posts to the relevant platform. Tick the checkbox in Schedule immediately after posting.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <strong>Daily — Engagement Logging</strong>
+          <p>After 24 hours, log likes, comments, shares, reach, and impressions manually in Analytics. Takes 5 minutes per post.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body">
+          <strong>Friday — Market Intelligence Review</strong>
+          <p>Review the Lead Intelligence log. Add any new market signals spotted during the week. PULSE flags strategic recommendations for Founder + CLAUDE review.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-body">
+          <strong>Sunday — Weekly Close</strong>
+          <p>All 7 posts should be ticked as Posted. Analytics updated. Dashboard shows full week performance. GRID's BL-035 retrospective includes PULSE metrics.</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>Incoming beta tester onboarding flow</h3>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body"><strong>Tester joins waitlist</strong><p>Via the beta waitlist landing page or Instagram DM.</p></div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body"><strong>PhoennixAI sends access link</strong><p>PULSE app URL sent directly. No login required in Phase 1.</p></div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body"><strong>Tester receives User Manual</strong><p>The User Manual (PULSE-MAN-USR-001) is shared alongside access. This document is not shared.</p></div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body"><strong>Weekly check-in call</strong><p>PhoennixAI team runs a weekly 20-minute check-in with each alpha tester. Feedback logged to product backlog.</p></div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-body"><strong>Tester completes feedback form</strong><p>After 2 weeks, testers complete a structured feedback form. Results feed directly into Phase 2 build prioritisation.</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════ 06 CONTENT OPS ═══════ -->
+<div class="section" id="content-ops">
+  <div class="container">
+    <div class="section-eyebrow">Section 06</div>
+    <div class="section-title">Content Operations Playbook</div>
+    <div class="section-subtitle">How the team manages content quality, approval, and publishing.</div>
+
+    <h3>Content Approval Chain</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Stage</th><th>Owner</th><th>Action</th><th>Turnaround</th></tr></thead>
+        <tbody>
+          <tr><td>Generation</td><td>PULSE</td><td>Writes all 7 captions, hashtags, Midjourney prompts for the week</td><td>Monday morning</td></tr>
+          <tr><td>Review</td><td>Founder</td><td>Read every caption. Edit anything that needs adjusting. Approve the plan.</td><td>Monday by noon</td></tr>
+          <tr><td>Escalation (if needed)</td><td>CLAUDE</td><td>Strategic review if a post conflicts with brand positioning or timing</td><td>Within 2 hours</td></tr>
+          <tr><td>Visual creation</td><td>Founder / UI/UX · 019</td><td>Generate Midjourney visuals or pass prompt to the UI/UX Designer agent</td><td>Day before post date</td></tr>
+          <tr><td>Publishing</td><td>Founder</td><td>Copy caption and post. Tick checkbox in Schedule.</td><td>On scheduled day/time</td></tr>
+          <tr><td>Analytics logging</td><td>Founder</td><td>Log engagement numbers in Analytics tracker after 24 hours</td><td>Daily</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>CTA Rule — Enforced at All Times</h3>
+    <div class="callout callout-red">
+      <div class="callout-icon">🚫</div>
+      <div class="callout-body">
+        <div class="callout-title">One CTA per post — non-negotiable</div>
+        <p>Every post has exactly one call to action. Either link in bio OR direct DM — never both in the same post. Posts with multiple CTAs dilute conversion. PULSE enforces this rule in every caption it generates. The team enforces it in every edit.</p>
+      </div>
+    </div>
+
+    <h3>Voice Enforcement</h3>
+    <ul class="checklist">
+      <li><span class="check">✓</span> Direct and specific. No vague language. "I built a company with 22 AI agents in 14 days" — not "AI can help your business grow".</li>
+      <li><span class="check">✓</span> First person. Valerie speaks. Not "PhoennixAI" or "we" — "I".</li>
+      <li><span class="check">✓</span> Builds on real experience. NHS background, 17 years. Authentic, not manufactured.</li>
+      <li><span class="check">✓</span> No corporate jargon. No "leverage", "synergy", "disruptive". Real words only.</li>
+      <li><span class="check">✓</span> Ends with a clear next step. DM BRAVE. Apply at phoennixai.com. Never just trail off.</li>
+    </ul>
+  </div>
+</div>
+
+
+<!-- ═══════ 07 AGENT PARTNERS ═══════ -->
+<div class="section" id="agent-partners">
+  <div class="container">
+    <div class="section-eyebrow">Section 07</div>
+    <div class="section-title">Agent Partner Integrations</div>
+    <div class="section-subtitle">How PULSE connects to the wider agent ecosystem.</div>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Agent</th><th>ID</th><th>Relationship to PULSE</th><th>Data Flow</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>SIGNAL</strong></td><td>010</td>
+            <td>Market intelligence partner. SIGNAL feeds trend data, competitor signals, and audience pain points directly into PULSE's Lead Intelligence module.</td>
+            <td>SIGNAL → PULSE</td>
+          </tr>
+          <tr>
+            <td><strong>LEDGER</strong></td><td>006</td>
+            <td>Financial performance partner. Tracks CAC, ROAS, LTV, and ad spend ROI. PULSE feeds content performance data to LEDGER for attribution analysis.</td>
+            <td>PULSE → LEDGER</td>
+          </tr>
+          <tr>
+            <td><strong>UI/UX Designer</strong></td><td>019</td>
+            <td>Visual production partner. Receives Mood Board creative brief and Midjourney prompts from PULSE. Returns brand-consistent visuals for scheduling.</td>
+            <td>PULSE → 019 → PULSE</td>
+          </tr>
+          <tr>
+            <td><strong>Manga/Anime Designer</strong></td><td>020</td>
+            <td>Brand character art partner. Creates agent character visuals (GRID, SCOUT, PULSE, etc.) for brand storytelling content. Uses Mood Board as brief.</td>
+            <td>PULSE → 020 → PULSE</td>
+          </tr>
+          <tr>
+            <td><strong>CLAUDE</strong></td><td>Strategic Partner</td>
+            <td>Strategic oversight. Reviews flagged content conflicts, approves strategy updates, governs intelligence mandate compliance. Final authority on brand positioning.</td>
+            <td>PULSE ↔ CLAUDE</td>
+          </tr>
+          <tr>
+            <td><strong>GRID</strong></td><td>009</td>
+            <td>PM oversight. PULSE metrics feed into GRID's weekly BL-035 retrospective. GRID flags delivery delays or missed post targets.</td>
+            <td>PULSE → GRID</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout callout-warn">
+      <div class="callout-icon">⚙️</div>
+      <div class="callout-body">
+        <div class="callout-title">Third-party dependency policy</div>
+        <p>PhoennixAI builds in-house wherever possible. Approved external dependencies for PULSE are Anthropic, Supabase, and Replicate only. No ManyChat, Hootsuite, Buffer, or other SaaS tools. PULSE owns all content automation in-house.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════ 08 PHASE ROADMAP ═══════ -->
+<div class="section" id="phase-roadmap">
+  <div class="container">
+    <div class="section-eyebrow">Section 08</div>
+    <div class="section-title">Phase Roadmap</div>
+    <div class="section-subtitle">PULSE development from Alpha through to full Beta launch.</div>
+
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-left">
+          <div class="timeline-dot dot-done"></div>
+          <div class="timeline-line"></div>
+        </div>
+        <div class="timeline-content">
+          <div class="timeline-label" style="color:var(--green);">COMPLETE · March 2026</div>
+          <div class="timeline-title">Phase 1 — Alpha Build</div>
+          <div class="timeline-desc">Full app built and deployed on GitHub Pages. All 10 modules live. Supabase backend connected. 4 alpha testers onboarded 24 March. Weekly plan pre-loaded (W01). User Manual completed.</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-left">
+          <div class="timeline-dot dot-active"></div>
+          <div class="timeline-line"></div>
+        </div>
+        <div class="timeline-content">
+          <div class="timeline-label" style="color:var(--violet);">ACTIVE · NOW — 6 April</div>
+          <div class="timeline-title">Alpha Testing Period</div>
+          <div class="timeline-desc">4 testers using PULSE live. Weekly check-ins. Feedback collected. Bug fixes deployed same-day. Analytics logged manually. Intelligence layer being stress-tested. Content quality reviewed weekly.</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-left">
+          <div class="timeline-dot dot-upcoming"></div>
+          <div class="timeline-line"></div>
+        </div>
+        <div class="timeline-content">
+          <div class="timeline-label" style="color:var(--orange);">7 APRIL 2026</div>
+          <div class="timeline-title">Phase 2 — Beta Launch</div>
+          <div class="timeline-desc">10 beta testers onboarded. Stripe payment integration live (3 pricing tiers). Anthropic API for real-time caption generation. Analytics API connections. Replicate image generation. Direct publishing pipeline begins build.</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-left">
+          <div class="timeline-dot dot-upcoming"></div>
+          <div class="timeline-line"></div>
+        </div>
+        <div class="timeline-content">
+          <div class="timeline-label">Q2 2026</div>
+          <div class="timeline-title">Phase 3 — Full Automation</div>
+          <div class="timeline-desc">Direct publishing to all 3 platforms. Full API data pipeline. Perplexity integration for market research. Multi-model orchestration. PULSE becomes fully autonomous — zero manual posting required for clients.</div>
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-left">
+          <div class="timeline-dot dot-upcoming"></div>
+        </div>
+        <div class="timeline-content">
+          <div class="timeline-label">Q3 2026</div>
+          <div class="timeline-title">Phase 4 — Scale</div>
+          <div class="timeline-desc">Multi-client support. Agency tier. Kimi integration for multi-language content. PULSE manages social presence for 100+ businesses simultaneously.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════ 09 KPIs ═══════ -->
+<div class="section" id="kpis">
+  <div class="container">
+    <div class="section-eyebrow">Section 09</div>
+    <div class="section-title">KPIs, SLAs & Quality Standards</div>
+    <div class="section-subtitle">How we measure PULSE performance internally.</div>
+
+    <h3>Alpha KPIs (24 March — 6 April)</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>KPI</th><th>Target</th><th>Measurement Method</th></tr></thead>
+        <tbody>
+          <tr><td>Posts published per week</td><td>7 of 7 (100%)</td><td>Dashboard checkbox count</td></tr>
+          <tr><td>Tester retention rate</td><td>4/4 testers active</td><td>Weekly check-in attendance</td></tr>
+          <tr><td>Feedback items collected</td><td>Minimum 10 per tester</td><td>Feedback log</td></tr>
+          <tr><td>Waitlist signups (Alpha)</td><td>10 beta testers by 6 April</td><td>Waitlist form submissions</td></tr>
+          <tr><td>DMs received via BRAVE</td><td>Track every one</td><td>Instagram DM log</td></tr>
+          <tr><td>Caption approval rate</td><td>>80% approved without edit</td><td>Founder review log</td></tr>
+          <tr><td>App uptime</td><td>99.9%</td><td>GitHub Pages / Supabase status</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>SLAs</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Service</th><th>SLA</th></tr></thead>
+        <tbody>
+          <tr><td>Weekly content plan available</td><td>Every Monday by 09:00 UK time</td></tr>
+          <tr><td>Bug fix — critical (app down)</td><td>Same day, within 4 hours</td></tr>
+          <tr><td>Bug fix — non-critical (feature broken)</td><td>Within 48 hours</td></tr>
+          <tr><td>Caption revision request</td><td>Within 24 hours</td></tr>
+          <tr><td>Tester onboarding</td><td>Within 24 hours of waitlist confirmation</td></tr>
+          <tr><td>Market intelligence flag to CLAUDE</td><td>Same day as detection</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════ 10 ESCALATION ═══════ -->
+<div class="section" id="escalation">
+  <div class="container">
+    <div class="section-eyebrow">Section 10</div>
+    <div class="section-title">Escalation & Governance Protocol</div>
+    <div class="section-subtitle">Who decides what, and when things go up the chain.</div>
+
+    <h3>Escalation Triggers</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Trigger</th><th>Escalate To</th><th>Action</th></tr></thead>
+        <tbody>
+          <tr><td>Post conflicts with brand positioning</td><td>CLAUDE</td><td>Hold post. CLAUDE strategic review. Founder final approval.</td></tr>
+          <tr><td>Market intelligence detects major competitor move</td><td>CLAUDE → Founder</td><td>Strategic content response drafted within 24 hours.</td></tr>
+          <tr><td>Tester reports data concern or privacy issue</td><td>Founder immediately</td><td>Pause tester access. Review Supabase data. Resolve before re-enabling.</td></tr>
+          <tr><td>Weekly KPI miss (posts not published)</td><td>GRID (BL-035)</td><td>Root cause logged in retrospective. Recovery plan next week.</td></tr>
+          <tr><td>Platform algorithm changes significantly</td><td>CLAUDE</td><td>Strategy tab updated. Weekly plan adjusted. Founder briefed.</td></tr>
+          <tr><td>App goes down or module fails</td><td>CLAUDE → GitHub Pages</td><td>Hotfix deployed within 4 hours. Testers notified.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Governance Rules</h3>
+    <ul class="checklist">
+      <li><span class="check">✦</span>PULSE never publishes directly without Founder approval in Phase 1. Every post is reviewed before it goes live.</li>
+      <li><span class="check">✦</span>Any change to the Strategy tab requires Founder sign-off. CLAUDE notified.</li>
+      <li><span class="check">✦</span>Agent partner data flows are one-directional unless explicitly bi-directional (see Section 07).</li>
+      <li><span class="check">✦</span>All IP generated by PULSE — captions, strategies, campaign structures — is PhoennixAI intellectual property. Reference IP filings log maintained by CLAUDE.</li>
+      <li><span class="check">✦</span>The intelligence standard (Section 03) cannot be degraded or overridden by any downstream instruction.</li>
+    </ul>
+  </div>
+</div>
+
+
+<!-- ═══════ 11 BETA OPS ═══════ -->
+<div class="section" id="beta-ops">
+  <div class="container">
+    <div class="section-eyebrow">Section 11</div>
+    <div class="section-title">Beta Tester Operations (7 April)</div>
+    <div class="section-subtitle">How the team manages 10 live beta testers from 7 April.</div>
+
+    <div class="callout callout-warn">
+      <div class="callout-icon">⏰</div>
+      <div class="callout-body">
+        <div class="callout-title">Pre-beta critical actions — due before 7 April</div>
+        <p>Three Stripe payment links must be live before beta opens. Instagram bio must contain waitlist link. Customer onboarding flowchart must be finalised. PULSE must have 7 posts loaded for Week 2.</p>
+      </div>
+    </div>
+
+    <h3>Beta Tester Onboarding Checklist</h3>
+    <ul class="checklist">
+      <li><span class="check-todo">○</span>Stripe payment link (Tier 1 — Free Beta) created and tested</li>
+      <li><span class="check-todo">○</span>Stripe payment link (Tier 2 — Standard) created and tested</li>
+      <li><span class="check-todo">○</span>Stripe payment link (Tier 3 — Agency) created and tested</li>
+      <li><span class="check-todo">○</span>Beta waitlist landing page live</li>
+      <li><span class="check-todo">○</span>Instagram bio updated with waitlist link</li>
+      <li><span class="check-todo">○</span>Customer onboarding flowchart completed and shared with marketing team</li>
+      <li><span class="check-todo">○</span>User Manual (PULSE-MAN-USR-001) finalised and ready to send</li>
+      <li><span class="check-todo">○</span>Week 2 content plan (W02) pre-loaded in PULSE</li>
+      <li><span class="check-todo">○</span>Weekly check-in template created</li>
+      <li><span class="check-todo">○</span>Feedback form built and tested</li>
+    </ul>
+
+    <h3>Beta Pricing Structure (to be finalised)</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Tier</th><th>Audience</th><th>Included</th><th>Price</th></tr></thead>
+        <tbody>
+          <tr><td>Free Beta</td><td>Alpha testers converting to beta</td><td>Full access, 30 days, feedback required</td><td>£0</td></tr>
+          <tr><td>Standard</td><td>Solo founders, SMEs under 5 people</td><td>Full PULSE + weekly check-in</td><td>TBD</td></tr>
+          <tr><td>Agency</td><td>Agencies managing multiple clients</td><td>Multi-account + priority support</td><td>TBD</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════ 12 MAINTENANCE ═══════ -->
+<div class="section" id="maintenance">
+  <div class="container">
+    <div class="section-eyebrow">Section 12</div>
+    <div class="section-title">Maintenance & Update Protocol</div>
+    <div class="section-subtitle">How PULSE is updated, maintained, and improved over time.</div>
+
+    <h3>Update process</h3>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-body"><strong>Change is identified</strong><p>By Founder feedback, tester feedback, bug report, or strategic decision from CLAUDE.</p></div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-body"><strong>CLAUDE reviews and scopes the change</strong><p>Full audit of the affected file before any change. All impacted sections listed with old and new values confirmed before execution.</p></div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-body"><strong>Change is executed in a single pass</strong><p>No partial updates. All changes made together, checked against current ecosystem state, and declared done only after full verification.</p></div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-body"><strong>Deployed to GitHub Pages</strong><p>File pushed to the repository. Live within minutes. Change logged in the Document Hub.</p></div>
+      </div>
+      <div class="step">
+        <div class="step-num">5</div>
+        <div class="step-body"><strong>Testers notified if relevant</strong><p>If the update affects the user experience, testers are notified with a brief changelog note via email or DM.</p></div>
+      </div>
+    </div>
+
+    <h3>Document Hub Registration</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Document</th><th>Doc ID</th><th>Section in Hub</th></tr></thead>
+        <tbody>
+          <tr><td>PULSE User Manual</td><td>PULSE-MAN-USR-001</td><td>User Manuals</td></tr>
+          <tr><td>PULSE Internal Manual</td><td>PULSE-MAN-INT-001</td><td>Internal Manuals</td></tr>
+          <tr><td>PULSE Agent JD</td><td>PAI-JD-003</td><td>Agent Contracts</td></tr>
+          <tr><td>PULSE Agent CV</td><td>PAI-CV-003</td><td>Agent Contracts</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout callout-tip">
+      <div class="callout-icon">📌</div>
+      <div class="callout-body">
+        <div class="callout-title">SCRIBE Duplicate Check Rule</div>
+        <p>Before any document is added to the Document Hub, SCRIBE must scan all existing cards for a matching title, URL, or reference. If a duplicate is found, update the existing card. Never create a new card for something that already exists. This rule applies every session, every file, no exceptions.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════ FOOTER ═══════ -->
+<div class="doc-footer">
+  <div class="container">
+    <div class="footer-logo">PULSE</div>
+    <div class="footer-sub">Internal Operations Manual · BL-024 · Agent 003 · PhoennixAI</div>
+    <div class="footer-tagline">Created to Create. Intelligent by nature.</div>
+    <div style="margin-top:20px;font-size:11px;color:rgba(255,255,255,0.2);">Internal Manual v1.0 · RESTRICTED · Alpha Launch March 2026 · Document Hub: PULSE-MAN-INT-001</div>
+  </div>
+</div>
+
+
+<!-- ═══ BACK TO TOP ═══ -->
+<button id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Back to top">↑</button>
+
+<style>
+#backToTop {
+  position: fixed; bottom: 32px; right: 32px;
+  width: 48px; height: 48px;
+  background: linear-gradient(135deg, #7C3AED, #A78BFA);
+  color: #fff; border: none; border-radius: 50%;
+  font-size: 20px; font-weight: 700; cursor: pointer;
+  box-shadow: 0 4px 24px rgba(124,58,237,0.5);
+  opacity: 0; transform: translateY(16px);
+  transition: opacity 0.3s, transform 0.3s;
+  z-index: 9999; display: flex; align-items: center; justify-content: center;
+}
+#backToTop.visible { opacity: 1; transform: translateY(0); }
+#backToTop:hover { background: linear-gradient(135deg, #6D28D9, #C4B5FD); transform: translateY(-2px); }
+.toc-item.active { background: rgba(167,139,250,0.18) !important; border-color: rgba(167,139,250,0.5) !important; color: var(--white) !important; }
+.toc-item.active .toc-num { opacity: 1 !important; font-weight: 700; }
+.section { scroll-margin-top: 20px; }
+</style>
+
+<script>
+const btn = document.getElementById('backToTop');
+window.addEventListener('scroll', () => {
+  btn.classList.toggle('visible', window.scrollY > 400);
+});
+const sections = document.querySelectorAll('.section[id]');
+const tocLinks = document.querySelectorAll('.toc-item[href^="#"]');
+const obs = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const id = e.target.getAttribute('id');
+      tocLinks.forEach(l => {
+        l.classList.toggle('active', l.getAttribute('href') === '#' + id);
+      });
+    }
+  });
+}, { rootMargin: '-20% 0px -70% 0px' });
+sections.forEach(s => obs.observe(s));
+tocLinks.forEach(link => {
+  link.addEventListener('click', (e) => {
+    e.preventDefault();
+    const target = document.querySelector(link.getAttribute('href'));
+    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+</script>
+</body>
+</html>
