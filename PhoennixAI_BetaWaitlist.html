@@ -221,8 +221,21 @@ document.getElementById('form').addEventListener('submit',function(e){
   var btn = document.getElementById('sub-btn');
   btn.disabled = true;
   btn.querySelector('span').textContent = 'Sending…';
-  fetch(this.action,{method:'POST',body:new FormData(this),headers:{Accept:'application/json'}})
+
+  var formData = new FormData(this);
+
+  // Fire to Formspree (email notification)
+  fetch(this.action,{method:'POST',body:formData,headers:{Accept:'application/json'}})
     .then(function(){show();}).catch(function(){show();});
+
+  // Also fire to Zapier webhook (Google Sheets)
+  var zapData = {};
+  formData.forEach(function(value, key){ zapData[key] = value; });
+  zapData['submitted_at'] = new Date().toLocaleString('en-GB');
+  fetch('https://hooks.zapier.com/hooks/catch/25240332/unts9j1/', {
+    method:'POST',
+    body: JSON.stringify(zapData)
+  }).catch(function(){});
 });
 function show(){
   document.getElementById('page').style.display='none';
