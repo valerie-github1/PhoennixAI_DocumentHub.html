@@ -223,19 +223,22 @@ document.getElementById('form').addEventListener('submit',function(e){
   btn.querySelector('span').textContent = 'Sending…';
 
   var formData = new FormData(this);
-
-  // Fire to Formspree (email notification)
-  fetch(this.action,{method:'POST',body:formData,headers:{Accept:'application/json'}})
-    .then(function(){show();}).catch(function(){show();});
-
-  // Fire to Google Apps Script (Google Sheets — PhoennixAI owned, no third party)
   var params = new URLSearchParams();
   formData.forEach(function(value, key){ params.append(key, value); });
   params.append('submitted_at', new Date().toLocaleString('en-GB'));
-  fetch('https://script.google.com/macros/s/AKfycbxwcJ7dC6to58Qenl27qKpwt0dKVJsRaR7tPlNUUuKW0XB26gYLmeWVZ1ksWaLmhlu1/exec?' + params.toString(), {
-    method: 'GET',
-    mode: 'no-cors'
-  }).catch(function(){});
+
+  var scriptURL = 'https://script.google.com/macros/s/AKfycbxwcJ7dC6to58Qenl27qKpwt0dKVJsRaR7tPlNUUuKW0XB26gYLmeWVZ1ksWaLmhlu1/exec';
+
+  // Submit to Google Apps Script via image trick (bypasses CORS completely)
+  var img = new Image();
+  img.src = scriptURL + '?' + params.toString();
+
+  // Also send to Formspree for email notification
+  fetch('https://formspree.io/f/xdawrbgr', {
+    method:'POST',
+    body: formData,
+    headers:{Accept:'application/json'}
+  }).then(function(){show();}).catch(function(){show();});
 });
 function show(){
   document.getElementById('page').style.display='none';
