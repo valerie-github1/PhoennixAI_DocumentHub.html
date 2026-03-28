@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PhoennixAI — Beta Tester NDA</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@300;400&family=DM+Sans:wght@300;400;500&family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#060A18;--card:#0C1428;--border:rgba(255,255,255,0.06);
+  --blue:#3B82F6;--blue2:#60A5FA;--cyan:#00E5FF;--fire:#FF6B2B;
+  --text:#F0F6FF;--text2:#8BA4C8;--text3:#3A5070;
+  --mono:'DM Mono',monospace;--display:'Bebas Neue',sans-serif;
+  --body:'DM Sans',sans-serif;--serif:'Cormorant Garamond',serif;
+}
+body{background:var(--bg);color:var(--text);font-family:var(--body);min-height:100vh;padding:0}
+
+/* HEADER */
+.header{background:var(--card);border-bottom:1px solid var(--border);padding:20px 40px;display:flex;align-items:center;justify-content:space-between}
+.header-brand{font-family:var(--display);font-size:22px;letter-spacing:4px;color:var(--cyan)}
+.header-doc{font-family:var(--mono);font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--text3)}
+
+/* PROGRESS */
+.progress-bar{background:rgba(59,130,246,0.08);border-bottom:1px solid var(--border);padding:16px 40px;display:flex;gap:0;align-items:center}
+.step{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--text3);position:relative}
+.step.active{color:var(--blue2)}
+.step.done{color:#22C55E}
+.step-num{width:22px;height:22px;border-radius:50%;border:1px solid currentColor;display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0}
+.step-line{width:40px;height:1px;background:var(--border);margin:0 8px}
+@media(max-width:600px){.step-line{width:16px}.step-label{display:none}}
+
+/* LAYOUT */
+.layout{display:grid;grid-template-columns:1fr 340px;min-height:calc(100vh - 120px)}
+@media(max-width:900px){.layout{grid-template-columns:1fr}}
+
+/* DOC PANEL */
+.doc-panel{padding:40px;border-right:1px solid var(--border);overflow-y:auto;max-height:calc(100vh - 120px)}
+.doc-title{font-family:var(--display);font-size:36px;letter-spacing:3px;color:var(--text);margin-bottom:4px}
+.doc-ref{font-family:var(--mono);font-size:8px;letter-spacing:3px;color:var(--text3);text-transform:uppercase;margin-bottom:32px}
+.doc-section{margin-bottom:28px}
+.doc-section h3{font-family:var(--mono);font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--blue);margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid rgba(59,130,246,0.15)}
+.doc-section p{font-size:13px;color:var(--text2);line-height:1.8;margin-bottom:10px}
+.doc-section ol,.doc-section ul{margin-left:20px;color:var(--text2);font-size:13px;line-height:2}
+.highlight-box{background:rgba(59,130,246,0.05);border:1px solid rgba(59,130,246,0.15);border-left:3px solid var(--blue);padding:16px 20px;margin:16px 0;border-radius:0 6px 6px 0}
+.highlight-box p{color:var(--text2);font-size:13px;line-height:1.8;margin:0}
+.parties-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:16px 0}
+.party-card{background:rgba(255,255,255,0.02);border:1px solid var(--border);padding:16px}
+.party-label{font-family:var(--mono);font-size:7px;letter-spacing:3px;text-transform:uppercase;color:var(--text3);margin-bottom:8px}
+.party-name{font-size:14px;font-weight:500;color:var(--text);margin-bottom:4px}
+.party-detail{font-size:12px;color:var(--text3)}
+@media(max-width:600px){.parties-grid{grid-template-columns:1fr}}
+
+/* SIGNATURE PANEL */
+.sig-panel{padding:32px;background:var(--card);display:flex;flex-direction:column;gap:20px;overflow-y:auto;max-height:calc(100vh - 120px)}
+.sig-title{font-family:var(--display);font-size:24px;letter-spacing:2px;color:var(--text)}
+.sig-sub{font-family:var(--serif);font-size:14px;font-style:italic;color:var(--text2);line-height:1.6}
+.field{display:flex;flex-direction:column;gap:6px}
+.field-label{font-family:var(--mono);font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--text3)}
+.field input{padding:12px 14px;background:rgba(255,255,255,0.03);border:1px solid rgba(59,130,246,0.15);color:var(--text);font-family:var(--body);font-size:14px;outline:none;transition:border-color 0.2s;border-radius:4px}
+.field input:focus{border-color:var(--blue)}
+.field input::placeholder{color:var(--text3)}
+
+/* SIGNATURE CANVAS */
+.sig-area{background:rgba(255,255,255,0.02);border:1px solid rgba(59,130,246,0.15);border-radius:6px;overflow:hidden;position:relative}
+.sig-area-label{font-family:var(--mono);font-size:7px;letter-spacing:2px;text-transform:uppercase;color:var(--text3);padding:8px 14px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.sig-clear{font-family:var(--mono);font-size:7px;letter-spacing:1px;color:var(--fire);cursor:pointer;background:none;border:none;padding:0}
+.sig-clear:hover{color:#FF8C5A}
+canvas#sigPad{display:block;width:100%;height:120px;cursor:crosshair;touch-action:none}
+
+/* FONT SIGS */
+.font-sig-label{font-family:var(--mono);font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-bottom:8px;display:block}
+.font-sigs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.font-sig{padding:12px 8px;border:1px solid var(--border);cursor:pointer;text-align:center;transition:all 0.2s;border-radius:4px}
+.font-sig:hover,.font-sig.selected{border-color:var(--blue);background:rgba(59,130,246,0.08)}
+.font-sig span{color:var(--text2);font-size:18px}
+
+/* CHECKBOX */
+.check-row{display:flex;align-items:flex-start;gap:12px;cursor:pointer}
+.check-box{width:20px;height:20px;border:1px solid rgba(59,130,246,0.3);border-radius:3px;flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
+.check-box.checked{background:var(--blue);border-color:var(--blue)}
+.check-box.checked::after{content:'✓';color:#fff;font-size:12px}
+.check-label{font-size:12px;color:var(--text2);line-height:1.6}
+.check-label a{color:var(--blue2)}
+
+/* SUBMIT */
+.submit-btn{padding:18px;background:var(--blue);color:#fff;border:none;border-radius:6px;font-family:var(--mono);font-size:10px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;transition:all 0.2s;box-shadow:0 0 30px rgba(59,130,246,0.2)}
+.submit-btn:hover:not(:disabled){background:var(--blue2);transform:translateY(-1px)}
+.submit-btn:disabled{opacity:0.5;cursor:not-allowed}
+
+/* SUCCESS */
+.success-overlay{display:none;position:fixed;inset:0;background:rgba(6,10,24,0.96);z-index:100;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px}
+.success-overlay.show{display:flex}
+.success-check{font-size:64px;margin-bottom:24px}
+.success-title{font-family:var(--display);font-size:52px;letter-spacing:4px;color:var(--text);margin-bottom:8px}
+.success-title span{color:var(--cyan)}
+.success-sub{font-family:var(--serif);font-size:18px;font-style:italic;color:var(--text2);margin-bottom:32px;max-width:480px;line-height:1.8}
+.success-ref{font-family:var(--mono);font-size:9px;letter-spacing:2px;color:var(--text3)}
+.success-next{display:inline-flex;align-items:center;gap:8px;padding:16px 32px;background:var(--blue);color:#fff;text-decoration:none;border-radius:6px;font-family:var(--mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;margin-bottom:16px;transition:all 0.2s}
+.success-next:hover{background:var(--blue2)}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-brand">PhoennixAI</div>
+  <div class="header-doc">PAI-NDA-001 · Beta Tester NDA · Confidential</div>
+</div>
+
+<!-- PROGRESS -->
+<div class="progress-bar">
+  <div class="step done"><div class="step-num">✓</div><span class="step-label">Application</span></div>
+  <div class="step-line"></div>
+  <div class="step active"><div class="step-num">2</div><span class="step-label">NDA</span></div>
+  <div class="step-line"></div>
+  <div class="step"><div class="step-num">3</div><span class="step-label">Payment</span></div>
+  <div class="step-line"></div>
+  <div class="step"><div class="step-num">4</div><span class="step-label">Onboarding</span></div>
+</div>
+
+<!-- LAYOUT -->
+<div class="layout">
+
+  <!-- DOCUMENT -->
+  <div class="doc-panel">
+    <div class="doc-title">Non-Disclosure Agreement</div>
+    <div class="doc-ref">PAI-NDA-001 · Beta Testing Programme · PhoennixAI · March 2026</div>
+
+    <div class="highlight-box">
+      <p>This agreement is between you (the Beta Tester) and PhoennixAI. By signing below, you agree to keep all information about PhoennixAI's products, technology, and business confidential during and after your participation in the beta programme.</p>
+    </div>
+
+    <div class="parties-grid">
+      <div class="party-card">
+        <div class="party-label">Disclosing Party</div>
+        <div class="party-name">PhoennixAI</div>
+        <div class="party-detail">Wilcox Ecosystem · London, UK</div>
+        <div class="party-detail">valerie@phoennixai.com</div>
+      </div>
+      <div class="party-card">
+        <div class="party-label">Receiving Party</div>
+        <div class="party-name">Beta Tester</div>
+        <div class="party-detail">As identified by name and email in the signature section below</div>
+      </div>
+    </div>
+
+    <div class="doc-section">
+      <h3>1. Definitions</h3>
+      <p><strong>Confidential Information</strong> means all non-public information disclosed by PhoennixAI to the Beta Tester in connection with the beta testing programme, including but not limited to:</p>
+      <ul>
+        <li>Product features, functionality, design, and user interface</li>
+        <li>AI agent architecture, names, roles, and operational logic</li>
+        <li>Business strategy, roadmap, pricing, and go-to-market plans</li>
+        <li>Technical infrastructure, APIs, and data structures</li>
+        <li>Unreleased features, prototypes, and experimental capabilities</li>
+        <li>User data, research findings, and beta testing results</li>
+        <li>Any information marked as confidential or that a reasonable person would understand to be confidential given the context</li>
+      </ul>
+    </div>
+
+    <div class="doc-section">
+      <h3>2. Obligations of the Beta Tester</h3>
+      <p>The Beta Tester agrees to:</p>
+      <ol>
+        <li>Keep all Confidential Information strictly confidential and not disclose it to any third party without PhoennixAI's prior written consent</li>
+        <li>Use Confidential Information solely for the purpose of participating in the beta programme and providing feedback to PhoennixAI</li>
+        <li>Not reproduce, copy, screenshot, record, or distribute any part of the PhoennixAI platform or materials without express permission</li>
+        <li>Not reverse engineer, decompile, or attempt to derive the source code of any PhoennixAI product or AI agent</li>
+        <li>Promptly notify PhoennixAI of any unauthorised disclosure or use of Confidential Information</li>
+        <li>Apply at least the same degree of care to protecting Confidential Information as they apply to their own confidential information, and no less than reasonable care</li>
+      </ol>
+    </div>
+
+    <div class="doc-section">
+      <h3>3. Feedback and Intellectual Property</h3>
+      <p>Any feedback, suggestions, ideas, or improvements the Beta Tester provides to PhoennixAI during the beta programme ("Feedback") shall become the exclusive property of PhoennixAI. The Beta Tester assigns all rights, title, and interest in such Feedback to PhoennixAI and waives any moral rights therein.</p>
+      <p>Nothing in this agreement grants the Beta Tester any licence or right to use PhoennixAI's intellectual property, trademarks, agent names, or brand assets.</p>
+    </div>
+
+    <div class="doc-section">
+      <h3>4. Exceptions</h3>
+      <p>The obligations in this agreement do not apply to information that:</p>
+      <ul>
+        <li>Was already in the Beta Tester's possession before disclosure, without any obligation of confidentiality</li>
+        <li>Is or becomes publicly available through no breach of this agreement by the Beta Tester</li>
+        <li>Is received from a third party without restriction and without breach of any obligation of confidentiality</li>
+        <li>Is required to be disclosed by law, regulation, or court order — provided the Beta Tester gives PhoennixAI prompt written notice and cooperates to seek a protective order</li>
+      </ul>
+    </div>
+
+    <div class="doc-section">
+      <h3>5. Term</h3>
+      <p>This agreement commences on the date of signing and continues for a period of two (2) years following the conclusion of the Beta Tester's participation in the PhoennixAI beta programme, or until the information is made publicly available by PhoennixAI, whichever is earlier.</p>
+    </div>
+
+    <div class="doc-section">
+      <h3>6. Remedies</h3>
+      <p>The Beta Tester acknowledges that any breach of this agreement may cause irreparable harm to PhoennixAI for which monetary damages would be an inadequate remedy. PhoennixAI shall be entitled to seek injunctive relief and any other equitable remedies available to it in addition to all other remedies available at law.</p>
+    </div>
+
+    <div class="doc-section">
+      <h3>7. General</h3>
+      <p>This agreement is governed by the laws of England and Wales. The parties submit to the exclusive jurisdiction of the courts of England and Wales. This agreement constitutes the entire agreement between the parties with respect to its subject matter and supersedes all prior discussions and agreements. If any provision is found invalid or unenforceable, the remaining provisions shall remain in full force.</p>
+    </div>
+
+    <div class="highlight-box">
+      <p><strong>By signing below, you confirm that you have read, understood, and agree to be bound by all terms of this Non-Disclosure Agreement.</strong> Your electronic signature has the same legal effect as a handwritten signature.</p>
+    </div>
+  </div>
+
+  <!-- SIGNATURE PANEL -->
+  <div class="sig-panel">
+    <div class="sig-title">Sign the NDA</div>
+    <p class="sig-sub">Complete all fields below. Your electronic signature is legally binding under the Electronic Communications Act 2000.</p>
+
+    <div class="field">
+      <span class="field-label">Full Legal Name *</span>
+      <input type="text" id="sigName" placeholder="Your full name" autocomplete="name">
+    </div>
+
+    <div class="field">
+      <span class="field-label">Email Address *</span>
+      <input type="email" id="sigEmail" placeholder="Your email address" autocomplete="email">
+    </div>
+
+    <div class="field">
+      <span class="field-label">Company / Business (optional)</span>
+      <input type="text" id="sigCompany" placeholder="Your business name">
+    </div>
+
+    <!-- DRAW SIGNATURE -->
+    <div>
+      <span class="font-sig-label">Draw Your Signature</span>
+      <div class="sig-area">
+        <div class="sig-area-label">
+          <span>Sign in the box below</span>
+          <button class="sig-clear" onclick="clearCanvas()">Clear</button>
+        </div>
+        <canvas id="sigPad" width="340" height="120"></canvas>
+      </div>
+    </div>
+
+    <!-- OR FONT SIGNATURE -->
+    <div>
+      <span class="font-sig-label">Or Choose a Signature Style</span>
+      <div class="font-sigs">
+        <div class="font-sig" onclick="selectFont(this,'Pinyon Script')" style="font-family:'Pinyon Script',cursive"><span id="fs1">Sign</span></div>
+        <div class="font-sig" onclick="selectFont(this,'Dancing Script')" style="font-family:'Dancing Script',cursive"><span id="fs2">Sign</span></div>
+        <div class="font-sig" onclick="selectFont(this,'Great Vibes')" style="font-family:'Great Vibes',cursive"><span id="fs3">Sign</span></div>
+        <div class="font-sig" onclick="selectFont(this,'Pacifico')" style="font-family:'Pacifico',cursive"><span id="fs4">Sign</span></div>
+        <div class="font-sig" onclick="selectFont(this,'Sacramento')" style="font-family:'Sacramento',cursive"><span id="fs5">Sign</span></div>
+        <div class="font-sig" onclick="selectFont(this,'Satisfy')" style="font-family:'Satisfy',cursive"><span id="fs6">Sign</span></div>
+      </div>
+    </div>
+
+    <!-- DATE -->
+    <div class="field">
+      <span class="field-label">Date</span>
+      <input type="text" id="sigDate" readonly>
+    </div>
+
+    <!-- AGREEMENT CHECKBOX -->
+    <div class="check-row" onclick="toggleCheck()">
+      <div class="check-box" id="checkBox"></div>
+      <span class="check-label">I have read and agree to the PhoennixAI Beta Tester Non-Disclosure Agreement. I understand this is a legally binding document.</span>
+    </div>
+
+    <button class="submit-btn" id="submitBtn" onclick="submitNDA()" disabled>Sign & Submit NDA</button>
+
+    <div style="font-family:var(--mono);font-size:8px;color:var(--text3);line-height:1.8;text-align:center">
+      PAI-NDA-001 · Secured by PhoennixAI<br>
+      Electronic signature valid under Electronic Communications Act 2000
+    </div>
+  </div>
+</div>
+
+<!-- SUCCESS -->
+<div class="success-overlay" id="successOverlay">
+  <div class="success-check">🔥</div>
+  <div class="success-title">NDA <span>Signed</span></div>
+  <p class="success-sub">Your Non-Disclosure Agreement is signed and on file. Valerie will be in touch personally before 7 April 2026 with your beta access details.</p>
+  <a href="https://cal.com/phoennixai/beta-discovery" class="success-next">Book Your Discovery Call →</a>
+  <div class="success-ref" id="successRef">PAI-NDA-001 · Signed electronically · PhoennixAI</div>
+</div>
+
+<!-- FONT IMPORTS -->
+<link href="https://fonts.googleapis.com/css2?family=Pinyon+Script&family=Dancing+Script&family=Great+Vibes&family=Pacifico&family=Sacramento&family=Satisfy&display=swap" rel="stylesheet">
+
+<script>
+// DATE
+document.getElementById('sigDate').value = new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
+
+// CANVAS SIGNATURE
+const canvas = document.getElementById('sigPad');
+const ctx = canvas.getContext('2d');
+let drawing = false, hasSig = false;
+
+function getPos(e){
+  const rect = canvas.getBoundingClientRect();
+  const scaleX = canvas.width / rect.width;
+  const scaleY = canvas.height / rect.height;
+  if(e.touches) return {x:(e.touches[0].clientX-rect.left)*scaleX, y:(e.touches[0].clientY-rect.top)*scaleY};
+  return {x:(e.clientX-rect.left)*scaleX, y:(e.clientY-rect.top)*scaleY};
+}
+
+ctx.strokeStyle = '#60A5FA';
+ctx.lineWidth = 2;
+ctx.lineCap = 'round';
+ctx.lineJoin = 'round';
+
+canvas.addEventListener('mousedown', e=>{drawing=true; const p=getPos(e); ctx.beginPath(); ctx.moveTo(p.x,p.y)});
+canvas.addEventListener('mousemove', e=>{if(!drawing)return; const p=getPos(e); ctx.lineTo(p.x,p.y); ctx.stroke(); hasSig=true; selectedFont=null; document.querySelectorAll('.font-sig').forEach(el=>el.classList.remove('selected')); updateBtn()});
+canvas.addEventListener('mouseup', ()=>drawing=false);
+canvas.addEventListener('mouseleave', ()=>drawing=false);
+canvas.addEventListener('touchstart', e=>{e.preventDefault(); drawing=true; const p=getPos(e); ctx.beginPath(); ctx.moveTo(p.x,p.y)},{passive:false});
+canvas.addEventListener('touchmove', e=>{e.preventDefault(); if(!drawing)return; const p=getPos(e); ctx.lineTo(p.x,p.y); ctx.stroke(); hasSig=true; selectedFont=null; document.querySelectorAll('.font-sig').forEach(el=>el.classList.remove('selected')); updateBtn()},{passive:false});
+canvas.addEventListener('touchend', ()=>drawing=false);
+
+function clearCanvas(){ctx.clearRect(0,0,canvas.width,canvas.height); hasSig=false; updateBtn()}
+
+// FONT SIGNATURE
+let selectedFont = null;
+function selectFont(el, font){
+  document.querySelectorAll('.font-sig').forEach(e=>e.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedFont = font;
+  hasSig = false;
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  // Draw font sig on canvas
+  const name = document.getElementById('sigName').value || 'Your Name';
+  ctx.font = `48px '${font}'`;
+  ctx.fillStyle = '#60A5FA';
+  ctx.fillText(name, 20, 75);
+  updateBtn();
+}
+
+// Update font sig when name changes
+document.getElementById('sigName').addEventListener('input', function(){
+  if(selectedFont){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.font = `48px '${selectedFont}'`;
+    ctx.fillStyle = '#60A5FA';
+    ctx.fillText(this.value||'Your Name', 20, 75);
+  }
+  // Update font preview labels
+  ['fs1','fs2','fs3','fs4','fs5','fs6'].forEach(id=>{
+    document.getElementById(id).textContent = this.value || 'Sign';
+  });
+  updateBtn();
+});
+
+// CHECKBOX
+let checked = false;
+function toggleCheck(){
+  checked = !checked;
+  document.getElementById('checkBox').classList.toggle('checked', checked);
+  updateBtn();
+}
+
+// BUTTON STATE
+function updateBtn(){
+  const name = document.getElementById('sigName').value.trim();
+  const email = document.getElementById('sigEmail').value.trim();
+  const hasSignature = hasSig || selectedFont;
+  document.getElementById('submitBtn').disabled = !(name && email && hasSignature && checked);
+}
+
+document.getElementById('sigEmail').addEventListener('input', updateBtn);
+
+// SUBMIT
+function submitNDA(){
+  const name = document.getElementById('sigName').value.trim();
+  const email = document.getElementById('sigEmail').value.trim();
+  const company = document.getElementById('sigCompany').value.trim();
+  const date = document.getElementById('sigDate').value;
+  const ref = 'PAI-NDA-' + Date.now().toString(36).toUpperCase();
+
+  // Store record
+  const record = {ref, name, email, company, date, signedAt: new Date().toISOString(), doc:'PAI-NDA-001'};
+  try{localStorage.setItem('phoennixai_nda_' + ref, JSON.stringify(record))}catch(e){}
+
+  document.getElementById('successRef').textContent = ref + ' · Signed electronically · ' + date;
+  document.getElementById('successOverlay').classList.add('show');
+}
+</script>
+</body>
+</html>
