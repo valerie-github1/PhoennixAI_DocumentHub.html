@@ -1,0 +1,84 @@
+# PhoennixAI Mission Control — .gitignore
+# Generated: security review, April 2025
+
+# -----------------------------------------------
+# SECRETS & CREDENTIALS
+# -----------------------------------------------
+config.js
+.env
+.env.local
+.env.production
+.env.staging
+.env*.local
+*.pem
+*.key
+*.p12
+*.pfx
+secrets/
+credentials/
+
+# -----------------------------------------------
+# STRIPE — never commit payment/auth files
+# -----------------------------------------------
+stripe_backup_code.txt
+stripe_backup_codes.txt
+stripe*.txt
+stripe*.json
+*.backup_code*
+
+# -----------------------------------------------
+# PERSONAL INVITATION FILES
+# -----------------------------------------------
+PhoennixAI_Invitation_*.html
+PhoennixAI_Invitation_Dilpreet.html
+PhoennixAI_Invitation_Gbemi.html
+PhoennixAI_Invitation_Gbemisola.html
+PhoennixAI_Invitation_Mayah.html
+PhoennixAI_Invitation_Presh.html
+
+# -----------------------------------------------
+# INTERNAL SESSION DOCUMENTS
+# -----------------------------------------------
+PhoennixAI_Session*.html
+PAI-BRIEF-*.html
+PhoennixAI_MasterProjectBrief_Session*.html
+*_Session*.html
+
+# -----------------------------------------------
+# BUILD / DEPENDENCY ARTIFACTS
+# -----------------------------------------------
+node_modules/
+.next/
+dist/
+build/
+out/
+.vercel/
+.turbo/
+*.tsbuildinfo
+
+# -----------------------------------------------
+# OS & EDITOR FILES
+# -----------------------------------------------
+.DS_Store
+.DS_Store?
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.Spotlight-V100
+.Trashes
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# -----------------------------------------------
+# LOGS & TEMP
+# -----------------------------------------------
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.cache/
+tmp/
+temp/
