@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <rect width="32" height="32" rx="4" fill="#060A18"/>
+  <!-- Phoenix body -->
+  <path d="M16 18 C15 17 13 16 12 14 C11 12 12 10 14 10 C15 10 16 11 16 11 C16 11 17 10 18 10 C20 10 21 12 20 14 C19 16 17 17 16 18Z" fill="#00BFFF"/>
+  <!-- Left wing -->
+  <path d="M16 13 C14 11 11 9 8 10 C6 11 5 13 6 15 C7 16 9 16 11 15 C13 14 15 13 16 13Z" fill="#00E5FF" opacity="0.95"/>
+  <!-- Right wing -->
+  <path d="M16 13 C18 11 21 9 24 10 C26 11 27 13 26 15 C25 16 23 16 21 15 C19 14 17 13 16 13Z" fill="#00E5FF" opacity="0.95"/>
+  <!-- Left wing tip -->
+  <path d="M8 10 C6 8 4 8 3 9 C3 11 5 12 7 12 C8 12 9 11 8 10Z" fill="#00E5FF" opacity="0.7"/>
+  <!-- Right wing tip -->
+  <path d="M24 10 C26 8 28 8 29 9 C29 11 27 12 25 12 C24 12 23 11 24 10Z" fill="#00E5FF" opacity="0.7"/>
+  <!-- Tail feathers -->
+  <path d="M14 18 C13 21 11 24 12 27 C13 28 14 27 15 25 C15.5 23 16 21 16 20Z" fill="#00BFFF" opacity="0.85"/>
+  <path d="M18 18 C19 21 21 24 20 27 C19 28 18 27 17 25 C16.5 23 16 21 16 20Z" fill="#00BFFF" opacity="0.85"/>
+  <path d="M16 18 C16 21 16 24 16 27 C16.5 27 17 26 17 24 C17 22 16.5 20 16 18Z" fill="#00E5FF" opacity="0.9"/>
+  <!-- Head -->
+  <circle cx="16" cy="9" r="2.2" fill="#00E5FF"/>
+  <!-- Eye -->
+  <circle cx="16.5" cy="8.5" r="0.6" fill="#060A18"/>
+  <!-- Beak -->
+  <path d="M17.5 9.5 L19 10 L17.5 10.2Z" fill="#00BFFF"/>
+</svg>
