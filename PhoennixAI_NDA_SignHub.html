@@ -280,7 +280,7 @@ canvas#sigPad{display:block;width:100%;height:120px;cursor:crosshair;touch-actio
 <!-- SUCCESS -->
 <div class="success-overlay" id="successOverlay">
   <div class="success-title">NDA <span>Signed</span></div>
-  <p class="success-sub">Your Non-Disclosure Agreement is signed and on file. Valerie will be in touch personally before 7 April 2026 with your beta access details.</p>
+  <p class="success-sub">Your Non-Disclosure Agreement is signed and on file. Your beta access details will be sent to your email within 24 hours.</p>
   <a target="_blank" rel="noopener noreferrer" href="https://cal.com/phoennixai/beta-discovery" class="success-next" style="pointer-events:auto;cursor:pointer;position:relative;z-index:200">Book Your Discovery Call →</a>
   <div class="success-ref" id="successRef">PAI-NDA-001 · Signed electronically · PhoennixAI</div>
 </div>
@@ -381,6 +381,10 @@ async function submitNDA(){
   const date = document.getElementById('sigDate').value;
   const ref = 'PAI-NDA-' + Date.now().toString(36).toUpperCase();
   const signedAt = new Date().toISOString();
+  const btn = document.getElementById('submitBtn');
+
+  btn.disabled = true;
+  btn.textContent = 'Submitting...';
 
   // Capture signature data (canvas as base64)
   let sigData = '';
@@ -389,13 +393,15 @@ async function submitNDA(){
     sigData = c ? c.toDataURL('image/png') : '';
   } catch(e){}
 
-  // localStorage fallback (always write)
+  // localStorage — always write as local backup
   const record = {ref, name, email, company, date, signedAt, doc:'PAI-NDA-001'};
-  try{localStorage.setItem('phoennixai_nda_' + ref, JSON.stringify(record))}catch(e){}
+  let localOk = false;
+  try { localStorage.setItem('phoennixai_nda_' + ref, JSON.stringify(record)); localOk = true; } catch(e){}
 
   // Supabase insert into nda_records
+  let sbOk = false;
   try {
-    await fetch(NDA_SUPABASE_URL + '/rest/v1/nda_records', {
+    const res = await fetch(NDA_SUPABASE_URL + '/rest/v1/nda_records', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -410,7 +416,25 @@ async function submitNDA(){
         nda_version: 'PAI-NDA-001'
       })
     });
-  } catch(e){}
+    sbOk = res.ok || res.status === 201;
+    if (!sbOk) console.error('[NDA] Supabase insert failed — status:', res.status);
+  } catch(e){
+    console.error('[NDA] Supabase fetch error:', e);
+  }
+
+  // Only show success if at least one storage path succeeded
+  if (!sbOk && !localOk) {
+    btn.disabled = false;
+    btn.textContent = 'Sign & Submit NDA';
+    const errEl = document.getElementById('submitBtn');
+    errEl.insertAdjacentHTML('afterend', '<p style="color:#F43F5E;font-family:monospace;font-size:10px;margin-top:8px;letter-spacing:1px;">Submission failed — check your connection and try again.</p>');
+    return;
+  }
+
+  if (!sbOk && localOk) {
+    // Saved locally but not to server — show success but flag ref for manual follow-up
+    console.warn('[NDA] Saved to localStorage only. Ref:', ref, '— requires manual Supabase entry.');
+  }
 
   document.getElementById('successRef').textContent = ref + ' · Signed electronically · ' + date;
   document.getElementById('successOverlay').classList.add('show');
