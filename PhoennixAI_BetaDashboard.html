@@ -614,11 +614,25 @@
       .agents-grid { grid-template-columns: repeat(3, 1fr); }
       .metrics-grid { grid-template-columns: repeat(2, 1fr); }
     }
-    @media (max-width: 700px) {
+    @media (max-width: 768px) {
+      .page { padding: 16px 16px 40px; }
       .agents-grid { grid-template-columns: repeat(2, 1fr); }
+      .metrics-grid { grid-template-columns: repeat(2, 1fr); }
       .bottom-grid { grid-template-columns: 1fr; }
+      .logo-wordmark { font-size: 40px; }
+      .live-clock { font-size: 20px; }
+      .countdown-number { font-size: 36px; }
+      .countdown-bar { padding: 16px 14px; gap: 8px; }
+      .countdown-sep { font-size: 28px; }
+    }
+    @media (max-width: 480px) {
+      .metrics-grid { grid-template-columns: 1fr; }
+      .agents-grid { grid-template-columns: repeat(2, 1fr); }
+      .header { flex-direction: column; gap: 14px; align-items: flex-start; }
+      .header-right { align-items: flex-start; }
+      .countdown-target { margin-left: 0; margin-top: 8px; }
       .countdown-bar { flex-wrap: wrap; }
-      .countdown-target { margin-left: 0; }
+      .status-row { flex-wrap: wrap; gap: 10px; }
     }
   </style>
 </head>
@@ -676,7 +690,7 @@
 
     <!-- ── Countdown ── -->
     <section class="countdown-section">
-      <div class="countdown-label">// Beta Launch Countdown</div>
+      <div class="countdown-label">// Beta Launch Countdown &nbsp;&bull;&nbsp; <span style="color:var(--cyan);letter-spacing:0.12em;">BETA OPENS TOMORROW &mdash; 7 APRIL 2026</span></div>
       <div class="countdown-bar bracketed">
         <div class="countdown-block">
           <div class="countdown-number" id="cd-days">00</div>
@@ -712,9 +726,9 @@
         <div class="metric-sub">Live from Supabase</div>
       </div>
       <div class="metric-card bracketed">
-        <div class="metric-label">// Signed Agents</div>
-        <div class="metric-value">15</div>
-        <div class="metric-sub">Active and ready</div>
+        <div class="metric-label">// NDAs Signed</div>
+        <div class="metric-value is-cyan" id="metric-ndas">--</div>
+        <div class="metric-sub">Live from nda_records</div>
       </div>
       <div class="metric-card bracketed">
         <div class="metric-label">// Live Apps</div>
@@ -941,7 +955,7 @@
 
       startClock();
       startCountdown();
-      fetchRegistrants();
+      fetchCounts();
     }
 
     async function signOut() {
@@ -987,26 +1001,33 @@
       setInterval(tick, 1000);
     }
 
-    /* ── Live registrant count from Supabase ── */
-    async function fetchRegistrants() {
+    /* ── Live counts from Supabase ── */
+    async function fetchCounts() {
+      const headers = {
+        'apikey':        _SB_KEY,
+        'Authorization': 'Bearer ' + _SB_KEY,
+        'Prefer':        'count=exact',
+        'Range':         '0-0'
+      };
+
       try {
-        const res = await fetch(
-          _SB_URL + '/rest/v1/beta_waitlist?select=id',
-          {
-            headers: {
-              'apikey':        _SB_KEY,
-              'Authorization': 'Bearer ' + _SB_KEY,
-              'Prefer':        'count=exact',
-              'Range':         '0-0'
-            }
-          }
-        );
+        const res = await fetch(_SB_URL + '/rest/v1/beta_waitlist?select=id', { headers });
         const cr  = res.headers.get('content-range') || '';
-        const match = cr.match(/\/(\d+)$/);
-        const count = match ? parseInt(match[1], 10) : 0;
-        document.getElementById('metric-registrants').textContent = count;
+        const m   = cr.match(/\/(\d+)$/);
+        document.getElementById('metric-registrants').textContent = m ? parseInt(m[1], 10) : 0;
       } catch (e) {
+        console.error('[Dashboard] beta_waitlist fetch error:', e);
         document.getElementById('metric-registrants').textContent = '--';
+      }
+
+      try {
+        const res = await fetch(_SB_URL + '/rest/v1/nda_records?select=id', { headers });
+        const cr  = res.headers.get('content-range') || '';
+        const m   = cr.match(/\/(\d+)$/);
+        document.getElementById('metric-ndas').textContent = m ? parseInt(m[1], 10) : 0;
+      } catch (e) {
+        console.error('[Dashboard] nda_records fetch error:', e);
+        document.getElementById('metric-ndas').textContent = '--';
       }
     }
 

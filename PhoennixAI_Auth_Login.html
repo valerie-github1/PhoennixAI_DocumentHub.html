@@ -527,18 +527,28 @@ body::after {
     submitBtn.classList.add('loading');
     submitBtn.disabled = true;
 
-    const { error } = await _sb.auth.signInWithOtp({
-      email,
-      options: {
-        emailRedirectTo: 'https://phoennixai-mission-control-eight.vercel.app/PhoennixAI_BetaDashboard.html'
-      }
-    });
+    let _err = null;
+    try {
+      console.log('[Auth] Calling signInWithOtp for:', email);
+      const { error } = await _sb.auth.signInWithOtp({
+        email,
+        options: {
+          emailRedirectTo: 'https://phoennixai-mission-control-eight.vercel.app/PhoennixAI_BetaDashboard.html'
+        }
+      });
+      _err = error;
+      if (error) console.error('[Auth] signInWithOtp error:', error);
+      else console.log('[Auth] Magic link sent successfully.');
+    } catch (fetchErr) {
+      console.error('[Auth] Failed to fetch — network or CORS error:', fetchErr);
+      _err = { message: 'Network error — could not reach authentication server. Check your connection and try again.' };
+    }
 
     submitBtn.classList.remove('loading');
     submitBtn.disabled = false;
 
-    if (error) {
-      errorText.textContent = error.message || 'Something went wrong. Please try again.';
+    if (_err) {
+      errorText.textContent = _err.message || 'Something went wrong. Please try again.';
       errorBanner.classList.add('visible');
       return;
     }
