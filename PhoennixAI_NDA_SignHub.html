@@ -369,17 +369,48 @@ function updateBtn(){
 
 document.getElementById('sigEmail').addEventListener('input', updateBtn);
 
+// SUPABASE
+const NDA_SUPABASE_URL = 'https://erfvunwhpsdbyyayzdimz.supabase.co';
+const NDA_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVyZnZ1bndocHNkYnlheXpkam16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQxMDEzODQsImV4cCI6MjA4OTY3NzM4NH0.JdoYnDufRjOc2p4wVz0hgZql9-eZyo0-BHongtORhKo';
+
 // SUBMIT
-function submitNDA(){
+async function submitNDA(){
   const name = document.getElementById('sigName').value.trim();
   const email = document.getElementById('sigEmail').value.trim();
   const company = document.getElementById('sigCompany').value.trim();
   const date = document.getElementById('sigDate').value;
   const ref = 'PAI-NDA-' + Date.now().toString(36).toUpperCase();
+  const signedAt = new Date().toISOString();
 
-  // Store record
-  const record = {ref, name, email, company, date, signedAt: new Date().toISOString(), doc:'PAI-NDA-001'};
+  // Capture signature data (canvas as base64)
+  let sigData = '';
+  try {
+    const c = document.getElementById('sigPad');
+    sigData = c ? c.toDataURL('image/png') : '';
+  } catch(e){}
+
+  // localStorage fallback (always write)
+  const record = {ref, name, email, company, date, signedAt, doc:'PAI-NDA-001'};
   try{localStorage.setItem('phoennixai_nda_' + ref, JSON.stringify(record))}catch(e){}
+
+  // Supabase insert into nda_records
+  try {
+    await fetch(NDA_SUPABASE_URL + '/rest/v1/nda_records', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': NDA_ANON_KEY,
+        'Authorization': 'Bearer ' + NDA_ANON_KEY,
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify({
+        user_email: email,
+        signed_at: signedAt,
+        signature_data: sigData,
+        nda_version: 'PAI-NDA-001'
+      })
+    });
+  } catch(e){}
 
   document.getElementById('successRef').textContent = ref + ' · Signed electronically · ' + date;
   document.getElementById('successOverlay').classList.add('show');
