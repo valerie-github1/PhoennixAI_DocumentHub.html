@@ -492,12 +492,6 @@ body::after {
     &copy; 2025 PhoennixAI. All rights reserved.
   </div>
 
-  <!-- TEMP TEST BUTTON — remove before launch -->
-  <div style="text-align:center;margin-top:16px;">
-    <button id="supabase-health-btn" style="font-family:monospace;font-size:11px;padding:6px 14px;background:rgba(0,229,255,0.08);color:#00E5FF;border:1px solid rgba(0,229,255,0.3);cursor:pointer;letter-spacing:.1em;">
-      TEST SUPABASE CONNECTION
-    </button>
-  </div>
 
 </div>
 
@@ -570,13 +564,6 @@ body::after {
     errorBanner.classList.remove('visible');
   });
 
-  // TEMP TEST — remove before launch
-  document.getElementById('supabase-health-btn').addEventListener('click', function() {
-    fetch('https://erfvunwhpsdbyayzdjmz.supabase.co/auth/v1/health')
-      .then(r => r.json())
-      .then(d => alert(JSON.stringify(d)))
-      .catch(e => alert('FETCH ERROR: ' + e.message));
-  });
 </script>
 </body>
 </html>
