@@ -809,8 +809,8 @@ tbody tr:hover td{background:rgba(33,92,174,0.04)}
             </div>
             <div style="font-family:var(--display);font-size:22px;color:var(--text3)">VS</div>
             <div style="text-align:center;flex:1;padding:16px;background:var(--card2);border-radius:8px;border:1px solid rgba(34,197,94,0.15)">
-              <div style="font-family:var(--display);font-size:32px;color:var(--green)">£497</div>
-              <div style="font-family:var(--mono);font-size:8px;color:var(--text3);margin-top:4px">PHOENNIXAI T1 / MONTH</div>
+              <div style="font-family:var(--display);font-size:32px;color:var(--green)">£297</div>
+              <div style="font-family:var(--mono);font-size:8px;color:var(--text3);margin-top:4px">PHOENNIXAI PRO FOUNDING / MONTH</div>
             </div>
           </div>
           <div style="text-align:center;padding:16px;background:rgba(34,197,94,0.05);border:1px solid rgba(34,197,94,0.15);border-radius:8px">
@@ -937,7 +937,7 @@ tbody tr:hover td{background:rgba(33,92,174,0.04)}
       <div class="pain-card"><div class="pain-num">05</div><div><div class="pain-title">Drowning in notifications and admin</div><div class="pain-desc">Email, Slack, requests, interruptions. Constant context switching. Zero deep work. Decisions delayed by noise.</div><div class="pain-solved">✓ ARIA — intelligent filter, only 7 alert types ever reach the founder</div></div></div>
       <div class="pain-card"><div class="pain-num">06</div><div><div class="pain-title">No consistent lead pipeline</div><div class="pain-desc">Revenue unpredictable. Feast or famine cycle. No automated system to generate, nurture, and convert leads.</div><div class="pain-solved">✓ SCOUT + RELAY — fully automated lead-to-client pipeline</div></div></div>
       <div class="pain-card"><div class="pain-num">07</div><div><div class="pain-title">Social media burnout</div><div class="pain-desc">Cannot post consistently. Algorithm demands always-on presence. Vanity metrics, low conversion, high effort.</div><div class="pain-solved">✓ PULSE — always on, never tired, built for conversion not likes</div></div></div>
-      <div class="pain-card"><div class="pain-num">08</div><div><div class="pain-title">Cannot afford a full team</div><div class="pain-desc">Stuck at solopreneur ceiling. £80k–£150k/year in salaries to operate at scale. Not viable at early stage.</div><div class="pain-solved">✓ 22 AI agents at £497–£4,997/month · 46× ROI documented</div></div></div>
+      <div class="pain-card"><div class="pain-num">08</div><div><div class="pain-title">Cannot afford a full team</div><div class="pain-desc">Stuck at solopreneur ceiling. £80k–£150k/year in salaries to operate at scale. Not viable at early stage.</div><div class="pain-solved">✓ 22 AI agents at £297–£1,997/month · 46× ROI documented</div></div></div>
       <div class="pain-card"><div class="pain-num">09</div><div><div class="pain-title">Decisions made on gut, not data</div><div class="pain-desc">Wrong turns, wasted spend, missed pivots. No analytics layer to validate strategy before committing resources.</div><div class="pain-solved">✓ SAGE — data analysis and scenario modelling before every decision</div></div></div>
       <div class="pain-card"><div class="pain-num">10</div><div><div class="pain-title">No proof of growth or progress</div><div class="pain-desc">Imposter syndrome. No investor story. No way to show what the AI team has actually done for the business.</div><div class="pain-solved">✓ Insight Visual Board — transformation score, live, always current</div></div></div>
     </div>
@@ -1113,7 +1113,7 @@ async function runLedger(){
   var q=document.getElementById('ledger-q');
   var question=q?q.value.trim():'';
   out.innerHTML='<span style="font-family:var(--mono);font-size:10px;color:var(--gold);letter-spacing:2px">LEDGER ANALYSING…</span>';
-  var sys='You are LEDGER, Agent 006 of PhoennixAI. AGI-level financial super intelligence. Goldman Sachs MD + JPMorgan quant + Big Four CFO. Precision only. No estimates. No hedging. Advisory only — never execute. Human sign-off mandatory.\n\nContext: PhoennixAI beta opens 7 April 2026. 10 founding slots. T1 £497, T2 £1,497, T3 £4,997. Annual target £252,470. One booking confirmed. Stripe pending. UK inflation 3.1%. BoE rate 4.50%.\n\nDeliver 3-4 institutional-grade paragraphs. No bullet points. State financial reality clearly. Advise the single most important action.';
+  var sys='You are LEDGER, Agent 006 of PhoennixAI. AGI-level financial super intelligence. Goldman Sachs MD + JPMorgan quant + Big Four CFO. Precision only. No estimates. No hedging. Advisory only — never execute. Human sign-off mandatory.\n\nContext: PhoennixAI beta opens 7 April 2026. 10 founding slots. Pro founding £297/mo, Agency founding £997/mo, Agency public £1,997/mo. Annual target £252,470. One booking confirmed. Stripe pending. UK inflation 3.1%. BoE rate 4.50%.\n\nDeliver 3-4 institutional-grade paragraphs. No bullet points. State financial reality clearly. Advise the single most important action.';
   var user=question||'Provide a standing financial intelligence brief. Cover: current position, the most important financial action before 7 April, and the exact risk if Stripe payment links are not live when beta opens.';
   try{
     var r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,system:sys,messages:[{role:'user',content:user}]})});

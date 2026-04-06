@@ -170,7 +170,17 @@ Anthropic (Claude), Manus, Supabase, Kimi, Perplexity, Replicate. No additional 
 
 ---
 
-## 6. Key Contacts
+## 6. Pricing -- Single Source of Truth
+
+Founding Member: £0 (alpha only, closed)
+Pro: £297/mo founding · £697/mo public
+Agency: £997/mo founding · £1,997/mo public
+
+Rule: No other prices may appear in code, Stripe, or public-facing copy unless LEDGER signs off a new pricing decision. Invalid numbers to search and destroy: £497, £1,497, £4,997.
+
+---
+
+## 7. Key Contacts
 
 - **Valerie Wilcox** — Founder and Visionary
 - **Dilpreet Kaur** — Director/CTO

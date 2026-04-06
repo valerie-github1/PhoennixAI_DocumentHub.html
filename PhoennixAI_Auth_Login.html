@@ -504,7 +504,7 @@ body::after {
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
   const _sb = supabase.createClient(
-    'https://erfvunwhpsdbyyayzdimz.supabase.co',
+    'https://erfvunwhpsdbyayzdjmz.supabase.co',
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVyZnZ1bndocHNkYnlheXpkam16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQxMDEzODQsImV4cCI6MjA4OTY3NzM4NH0.JdoYnDufRjOc2p4wVz0hgZql9-eZyo0-BHongtORhKo'
   );
 
@@ -572,7 +572,7 @@ body::after {
 
   // TEMP TEST — remove before launch
   document.getElementById('supabase-health-btn').addEventListener('click', function() {
-    fetch('https://erfvunwhpsdbyyayzdimz.supabase.co/auth/v1/health')
+    fetch('https://erfvunwhpsdbyayzdjmz.supabase.co/auth/v1/health')
       .then(r => r.json())
       .then(d => alert(JSON.stringify(d)))
       .catch(e => alert('FETCH ERROR: ' + e.message));

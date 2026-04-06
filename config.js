@@ -5,7 +5,7 @@
 
 window.PHOENNIXAI_CONFIG = {
   supabase: {
-    url: 'https://erfvunwhpsdbyyayzdimz.supabase.co',
+    url: 'https://erfvunwhpsdbyayzdjmz.supabase.co',
     anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVyZnZ1bndocHNkYnlheXpkam16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQxMDEzODQsImV4cCI6MjA4OTY3NzM4NH0.JdoYnDufRjOc2p4wVz0hgZql9-eZyo0-BHongtORhKo'
   }
 };

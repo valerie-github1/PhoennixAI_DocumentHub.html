@@ -45,7 +45,7 @@ Run at the start of every session:
 
 - Project: `phoennixai-backend`
 - Region: London
-- URL: `https://erfvunwhpsdbyyayzdimz.supabase.co`
+- URL: `https://erfvunwhpsdbyayzdjmz.supabase.co`
 - 12 tables: events, tasks, notes, agents, products, schedule, agent_log, documents, backlog, sessions, notifications, revenue
 - Phase 0: manual entry. Phase 2: automatic agent logging.
 
