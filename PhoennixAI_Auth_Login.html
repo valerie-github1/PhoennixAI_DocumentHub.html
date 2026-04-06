@@ -541,7 +541,7 @@ body::after {
       else console.log('[Auth] Magic link sent successfully.');
     } catch (fetchErr) {
       console.error('[Auth] Failed to fetch — network or CORS error:', fetchErr);
-      _err = { message: 'Network error — could not reach authentication server. Check your connection and try again.' };
+      _err = { message: fetchErr.message || fetchErr.toString() };
     }
 
     submitBtn.classList.remove('loading');
