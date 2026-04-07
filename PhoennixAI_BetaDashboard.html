@@ -542,7 +542,7 @@
       try {
         console.log('[NDA] Checking for email:', email);
         const ndaRes = await fetch(
-          _URL + '/rest/v1/nda_records?user_email=eq.' + encodeURIComponent(email) + '&select=id',
+          _URL + '/rest/v1/nda_records?user_email=eq.' + encodeURIComponent(email) + '&status=eq.signed&select=id',
           { headers: { 'apikey': _KEY, 'Authorization': 'Bearer ' + _KEY } }
         );
         console.log('[NDA] Response status:', ndaRes.status);
@@ -550,7 +550,7 @@
         console.log('[NDA] Response data:', ndaData);
 
         if (!ndaData || ndaData.length === 0) {
-          console.log('[NDA] No NDA found, showing sign link');
+          console.log('[NDA] No signed NDA found, showing sign link');
           document.getElementById('nda-checking').innerHTML =
             '<div style="color:#FF6B2B;font-size:13px;margin-bottom:12px;">NDA required to continue.</div>' +
             '<a href="./PhoennixAI_NDA_SignHub.html" style="color:#00E5FF;font-size:13px;' +
@@ -558,7 +558,7 @@
             '</div>';
           return;
         }
-        console.log('[NDA] NDA found, granting access');
+        console.log('[NDA] Signed NDA found, granting access');
       } catch (e) {
         console.error('[NDA] Error:', e.message);
         // Fail open — log but allow access
