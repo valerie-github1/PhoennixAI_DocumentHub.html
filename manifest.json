@@ -1,14 +1,17 @@
 {
-  "name": "PhoennixAI Mission Control",
-  "short_name": "PhoennixAI",
-  "description": "The world's first AI-human co-led company. 22 agents. One founder.",
-  "start_url": "/phoennixai-mission-control/",
-  "scope": "/phoennixai-mission-control/",
+  "name": "Phoenix AI BOS",
+  "short_name": "Phoenix AI",
+  "description": "Phoenix AI Business Operating System \u2014 22 agents, one founder.",
+  "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "orientation": "portrait-primary",
   "background_color": "#060A18",
   "theme_color": "#3B82F6",
-  "categories": ["business", "productivity"],
+  "categories": [
+    "business",
+    "productivity"
+  ],
   "icons": [
     {
       "src": "PhoennixAI.jpg",
