@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PhoennixAI Beta — NDA</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:ital,wght@0,400;0,500;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --midnight: #060A18;
+      --fire: #FF6B2B;
+      --electric: #00E5FF;
+      --gold: #FFB830;
+      --sapphire: #46ABD7;
+      --royal: #215CAE;
+      --surface: #0D1220;
+      --text: #E8E8E8;
+      --text2: rgba(255, 255, 255, 0.55);
+      --text3: rgba(255, 255, 255, 0.28);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--midnight);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* GRID NOISE OVERLAY */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0, 229, 255, 0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 229, 255, 0.025) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* GLOW ORBS */
+    body::after {
+      content: '';
+      position: fixed;
+      top: -200px;
+      right: -200px;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(255, 107, 43, 0.08) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .glow-bottom {
+      position: fixed;
+      bottom: -200px;
+      left: -100px;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(0, 229, 255, 0.06) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    main {
+      position: relative;
+      z-index: 1;
+      flex: 1;
+      width: 100%;
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+    }
+
+    /* HEADER */
+    header {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 28px 24px;
+      max-width: 760px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 26px;
+      letter-spacing: 0.12em;
+      color: var(--text);
+      text-decoration: none;
+      line-height: 1;
+    }
+
+    .logo span {
+      color: var(--fire);
+    }
+
+    .beta-badge {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--electric);
+      border: 1px solid rgba(0, 229, 255, 0.35);
+      background: rgba(0, 229, 255, 0.06);
+      padding: 5px 12px;
+      border-radius: 4px;
+    }
+
+    /* HERO */
+    .hero {
+      padding: 56px 0 40px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      margin-bottom: 48px;
+    }
+
+    .hero-eyebrow {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--fire);
+      margin-bottom: 20px;
+    }
+
+    .hero h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(32px, 5vw, 52px);
+      line-height: 1.05;
+      letter-spacing: 0.04em;
+      color: var(--text);
+      margin-bottom: 20px;
+      max-width: 580px;
+    }
+
+    .hero h1 em {
+      color: var(--electric);
+      font-style: normal;
+    }
+
+    .hero p {
+      font-size: 16px;
+      color: var(--text2);
+      max-width: 480px;
+      line-height: 1.7;
+    }
+
+    /* NDA BOX */
+    .nda-section {
+      margin-bottom: 48px;
+    }
+
+    .section-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text3);
+      margin-bottom: 14px;
+    }
+
+    .nda-scroll {
+      background: rgba(13, 18, 32, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      padding: 28px 28px;
+      height: 340px;
+      overflow-y: auto;
+      font-family: 'DM Mono', monospace;
+      font-size: 13px;
+      line-height: 1.85;
+      color: var(--text2);
+      scroll-padding: 16px;
+      position: relative;
+    }
+
+    .nda-scroll::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .nda-scroll::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.04);
+      border-radius: 4px;
+    }
+
+    .nda-scroll::-webkit-scrollbar-thumb {
+      background: rgba(0, 229, 255, 0.3);
+      border-radius: 4px;
+    }
+
+    .nda-scroll::-webkit-scrollbar-thumb:hover {
+      background: rgba(0, 229, 255, 0.5);
+    }
+
+    .nda-scroll h3 {
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text);
+      margin-bottom: 16px;
+      margin-top: 28px;
+    }
+
+    .nda-scroll h3:first-child {
+      margin-top: 0;
+    }
+
+    .nda-scroll p {
+      margin-bottom: 14px;
+    }
+
+    .nda-scroll ol {
+      padding-left: 20px;
+      margin-bottom: 14px;
+    }
+
+    .nda-scroll ol li {
+      margin-bottom: 10px;
+    }
+
+    .scroll-hint {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 10px;
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--text3);
+    }
+
+    .scroll-hint svg {
+      opacity: 0.5;
+      flex-shrink: 0;
+    }
+
+    /* FORM */
+    .form-section {
+      margin-bottom: 48px;
+    }
+
+    .form-section .section-label {
+      margin-bottom: 24px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .form-group.full {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text2);
+      letter-spacing: 0.01em;
+    }
+
+    label .optional {
+      font-size: 11px;
+      color: var(--text3);
+      font-weight: 400;
+      margin-left: 4px;
+    }
+
+    label .required {
+      color: var(--fire);
+      margin-left: 2px;
+    }
+
+    input[type="text"],
+    input[type="email"] {
+      background: var(--surface);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 6px;
+      padding: 12px 16px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+      width: 100%;
+      -webkit-appearance: none;
+    }
+
+    input[type="text"]::placeholder,
+    input[type="email"]::placeholder {
+      color: var(--text3);
+    }
+
+    input[type="text"]:focus,
+    input[type="email"]:focus {
+      border-color: rgba(0, 229, 255, 0.4);
+      box-shadow: 0 0 0 3px rgba(0, 229, 255, 0.08);
+    }
+
+    input[type="text"].error,
+    input[type="email"].error {
+      border-color: rgba(255, 107, 43, 0.5);
+      box-shadow: 0 0 0 3px rgba(255, 107, 43, 0.08);
+    }
+
+    input[readonly] {
+      background: rgba(13, 18, 32, 0.5);
+      color: var(--text3);
+      cursor: default;
+      border-color: rgba(255, 255, 255, 0.06);
+    }
+
+    .sig-field {
+      font-family: 'DM Mono', monospace;
+      font-size: 15px;
+      letter-spacing: 0.03em;
+    }
+
+    .field-note {
+      font-size: 11px;
+      color: var(--text3);
+      margin-top: -4px;
+    }
+
+    /* CHECKBOX */
+    .checkbox-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .checkbox-group {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 20px;
+      background: rgba(0, 229, 255, 0.03);
+      border: 1px solid rgba(0, 229, 255, 0.1);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .checkbox-group:hover {
+      border-color: rgba(0, 229, 255, 0.2);
+      background: rgba(0, 229, 255, 0.05);
+    }
+
+    .checkbox-group.error-box {
+      border-color: rgba(255, 107, 43, 0.4);
+      background: rgba(255, 107, 43, 0.04);
+    }
+
+    .custom-checkbox {
+      width: 20px;
+      height: 20px;
+      min-width: 20px;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 1px;
+      transition: all 0.2s ease;
+      background: transparent;
+    }
+
+    .custom-checkbox.checked {
+      background: var(--electric);
+      border-color: var(--electric);
+    }
+
+    .custom-checkbox svg {
+      display: none;
+    }
+
+    .custom-checkbox.checked svg {
+      display: block;
+    }
+
+    .checkbox-label {
+      font-size: 14px;
+      color: var(--text2);
+      line-height: 1.5;
+      user-select: none;
+    }
+
+    /* SUBMIT */
+    .submit-btn {
+      width: 100%;
+      padding: 17px 32px;
+      background: var(--fire);
+      color: #fff;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 20px;
+      letter-spacing: 0.1em;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+      margin-top: 8px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .submit-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .submit-btn:hover:not(:disabled) {
+      background: #ff7d42;
+      box-shadow: 0 8px 32px rgba(255, 107, 43, 0.35);
+      transform: translateY(-1px);
+    }
+
+    .submit-btn:active:not(:disabled) {
+      transform: translateY(0);
+      box-shadow: 0 4px 16px rgba(255, 107, 43, 0.25);
+    }
+
+    .submit-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* ERROR MESSAGES */
+    .field-error {
+      font-size: 12px;
+      color: var(--fire);
+      display: none;
+    }
+
+    .field-error.visible {
+      display: block;
+    }
+
+    .form-error-summary {
+      background: rgba(255, 107, 43, 0.08);
+      border: 1px solid rgba(255, 107, 43, 0.25);
+      border-radius: 6px;
+      padding: 14px 18px;
+      font-size: 14px;
+      color: var(--fire);
+      margin-bottom: 20px;
+      display: none;
+    }
+
+    .form-error-summary.visible {
+      display: block;
+    }
+
+    /* CONFIRMATION */
+    .confirmation {
+      display: none;
+      text-align: center;
+      padding: 72px 32px;
+    }
+
+    .confirmation.visible {
+      display: block;
+    }
+
+    .confirmation-icon {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: rgba(0, 229, 255, 0.08);
+      border: 2px solid rgba(0, 229, 255, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 32px;
+      animation: pulse-ring 2.5s ease-in-out infinite;
+    }
+
+    @keyframes pulse-ring {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(0, 229, 255, 0.15); }
+      50% { box-shadow: 0 0 0 16px rgba(0, 229, 255, 0); }
+    }
+
+    .confirmation h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 42px;
+      letter-spacing: 0.06em;
+      color: var(--text);
+      margin-bottom: 16px;
+      line-height: 1.1;
+    }
+
+    .confirmation p {
+      font-size: 16px;
+      color: var(--text2);
+      max-width: 420px;
+      margin: 0 auto 12px;
+      line-height: 1.7;
+    }
+
+    .confirmation .signed-detail {
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      color: var(--text3);
+      margin-top: 24px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    /* DIVIDER */
+    .divider {
+      height: 1px;
+      background: rgba(255, 255, 255, 0.06);
+      margin: 40px 0;
+    }
+
+    /* FOOTER */
+    footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 24px;
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      color: var(--text3);
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 540px) {
+      header {
+        padding: 20px 20px;
+      }
+
+      main {
+        padding: 0 20px 60px;
+      }
+
+      .hero {
+        padding: 40px 0 32px;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .form-group.full {
+        grid-column: 1;
+      }
+
+      .nda-scroll {
+        padding: 20px;
+        height: 280px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="glow-bottom" aria-hidden="true"></div>
+
+<!-- HEADER -->
+<header>
+  <a href="#" class="logo">Phoenn<span>ix</span>AI</a>
+  <span class="beta-badge">Beta NDA</span>
+</header>
+
+<!-- MAIN -->
+<main>
+
+  <!-- HERO -->
+  <section class="hero">
+    <p class="hero-eyebrow">Confidentiality Agreement</p>
+    <h1>Before you see what we're building, you agree to keep it <em>confidential.</em></h1>
+    <p>Read the agreement below. Sign it. Then we'll give you access. No paperwork. No delays.</p>
+  </section>
+
+  <!-- NDA TEXT -->
+  <section class="nda-section">
+    <p class="section-label">// Non-Disclosure Agreement</p>
+    <div class="nda-scroll" id="ndaBox" tabindex="0" role="region" aria-label="NDA Agreement Text">
+
+      <h3>Non-Disclosure Agreement</h3>
+      <p>This Non-Disclosure Agreement ("Agreement") is entered into as of the date electronically signed below (the "Effective Date") between PhoennixAI Ltd, a company registered in England and Wales ("Disclosing Party"), and the individual signing this Agreement ("Receiving Party").</p>
+
+      <h3>1. Purpose</h3>
+      <p>The Disclosing Party is developing a proprietary AI-powered Business Operating System and related products, features, and services (collectively, the "Confidential Information"). The Receiving Party is being granted access to the PhoennixAI Beta Programme, which involves exposure to Confidential Information not available to the public.</p>
+
+      <h3>2. Definition of Confidential Information</h3>
+      <p>"Confidential Information" means any and all information disclosed by PhoennixAI to the Receiving Party in connection with the Beta Programme, whether disclosed orally, in writing, visually, electronically, or by any other means, including but not limited to:</p>
+      <ol>
+        <li>Product features, functionality, and user interface designs;</li>
+        <li>Technical architecture, code, algorithms, and data models;</li>
+        <li>Product roadmap, strategy, and development timelines;</li>
+        <li>Business model, pricing structures, and go-to-market plans;</li>
+        <li>Internal processes, workflows, and operational methods;</li>
+        <li>Any beta feedback sessions, demos, or communications.</li>
+      </ol>
+
+      <h3>3. Obligations of the Receiving Party</h3>
+      <p>The Receiving Party agrees to:</p>
+      <ol>
+        <li>Hold all Confidential Information in strict confidence using no less than the same degree of care used to protect their own confidential information, and in any event no less than reasonable care;</li>
+        <li>Not disclose, publish, transmit, or make available any Confidential Information to any third party without the prior written consent of PhoennixAI;</li>
+        <li>Use Confidential Information solely for the purpose of participating in the PhoennixAI Beta Programme;</li>
+        <li>Not reverse engineer, decompile, or attempt to derive source code or underlying structures from any Confidential Information;</li>
+        <li>Promptly notify PhoennixAI upon becoming aware of any actual or suspected unauthorised disclosure.</li>
+      </ol>
+
+      <h3>4. Exclusions</h3>
+      <p>The obligations in Section 3 do not apply to information that: (a) is or becomes publicly available through no breach of this Agreement by the Receiving Party; (b) was already known to the Receiving Party prior to disclosure; (c) is independently developed by the Receiving Party without reference to Confidential Information; or (d) is required to be disclosed by law or court order, provided the Receiving Party gives PhoennixAI prompt written notice.</p>
+
+      <h3>5. Term</h3>
+      <p>This Agreement commences on the Effective Date and the confidentiality obligations shall remain in effect for a period of two (2) years from the date of signing, unless terminated earlier in writing by mutual agreement of both parties.</p>
+
+      <h3>6. Ownership</h3>
+      <p>All Confidential Information remains the exclusive property of PhoennixAI. Nothing in this Agreement grants the Receiving Party any licence, right, title, or interest in or to any Confidential Information, intellectual property, or other assets of PhoennixAI.</p>
+
+      <h3>7. No Warranty</h3>
+      <p>All Confidential Information is provided "as is". PhoennixAI makes no representation or warranty as to its accuracy, completeness, or fitness for any particular purpose.</p>
+
+      <h3>8. Remedies</h3>
+      <p>The Receiving Party acknowledges that any breach of this Agreement may cause irreparable harm to PhoennixAI for which monetary damages may be inadequate, and that PhoennixAI shall be entitled to seek equitable relief, including injunction and specific performance, in addition to any other remedies available at law.</p>
+
+      <h3>9. Electronic Signature</h3>
+      <p>The Receiving Party agrees that typing their full name in the signature field and submitting this form constitutes a legally binding electronic signature for the purposes of this Agreement, equivalent to a handwritten signature, in accordance with applicable electronic communications legislation in England and Wales.</p>
+
+      <h3>10. Governing Law &amp; Jurisdiction</h3>
+      <p>This Agreement shall be governed by and construed in accordance with the laws of England and Wales. Both parties submit to the exclusive jurisdiction of the courts of England and Wales to settle any dispute arising out of or in connection with this Agreement.</p>
+
+      <h3>11. Entire Agreement</h3>
+      <p>This Agreement constitutes the entire agreement between the parties with respect to its subject matter and supersedes all prior representations, understandings, or agreements, whether oral or written. This Agreement may only be amended in writing signed by both parties.</p>
+
+    </div>
+    <div class="scroll-hint">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M7 2V12M7 12L3 8M7 12L11 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Scroll to read the full agreement before signing
+    </div>
+  </section>
+
+  <!-- SIGNATURE FORM -->
+  <section class="form-section" id="formSection">
+    <p class="section-label">// Your Signature</p>
+
+    <div class="form-error-summary" id="formErrorSummary" role="alert">
+      Please fill in all required fields before signing.
+    </div>
+
+    <form id="ndaForm" novalidate>
+      <div class="form-grid">
+
+        <div class="form-group">
+          <label for="fullName">Full Name <span class="required">*</span></label>
+          <input
+            type="text"
+            id="fullName"
+            name="fullName"
+            placeholder="Jane Smith"
+            autocomplete="name"
+            required
+          />
+          <span class="field-error" id="fullNameError">Your full name is required.</span>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email Address <span class="required">*</span></label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="jane@example.com"
+            autocomplete="email"
+            required
+          />
+          <span class="field-error" id="emailError">A valid email address is required.</span>
+        </div>
+
+        <div class="form-group full">
+          <label for="company">Company <span class="optional">(optional)</span></label>
+          <input
+            type="text"
+            id="company"
+            name="company"
+            placeholder="Your company name"
+            autocomplete="organization"
+          />
+        </div>
+
+        <div class="form-group full">
+          <label for="signature">Type your full name as your signature <span class="required">*</span></label>
+          <input
+            type="text"
+            id="signature"
+            name="signature"
+            placeholder="Type your full legal name"
+            class="sig-field"
+            autocomplete="off"
+            required
+          />
+          <span class="field-note">By typing your name here, you are signing this agreement electronically.</span>
+          <span class="field-error" id="signatureError">Please type your full name as your signature.</span>
+        </div>
+
+        <div class="form-group full">
+          <label for="signDate">Date</label>
+          <input
+            type="text"
+            id="signDate"
+            name="signDate"
+            readonly
+          />
+        </div>
+
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="checkbox-wrapper">
+        <div class="checkbox-group" id="checkboxGroup" role="checkbox" aria-checked="false" tabindex="0" aria-labelledby="checkboxLabelText">
+          <span class="custom-checkbox" id="customCheckbox" aria-hidden="true">
+            <svg width="12" height="9" viewBox="0 0 12 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M1 4L4.5 7.5L11 1" stroke="#060A18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          <span class="checkbox-label" id="checkboxLabelText">I have read and agree to the terms of this Non-Disclosure Agreement. I understand my signature above is legally binding.</span>
+        </div>
+        <span class="field-error" id="checkError">You must read and agree to the terms before signing.</span>
+      </div>
+
+      <div style="margin-top: 28px;">
+        <button type="submit" class="submit-btn" id="submitBtn">Sign &amp; Continue</button>
+      </div>
+
+    </form>
+  </section>
+
+  <!-- CONFIRMATION -->
+  <section class="confirmation" id="confirmation" aria-live="polite">
+    <div class="confirmation-icon">
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M6 16L12.5 22.5L26 9" stroke="var(--electric)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <h2>You're in.</h2>
+    <p>NDA signed. Valerie will be in touch with your beta access link within 24 hours.</p>
+    <p style="font-size: 14px;">Check your inbox — including spam, just in case.</p>
+    <div class="signed-detail" id="signedDetail"></div>
+  </section>
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+  &copy; 2026 PhoennixAI &nbsp;&middot;&nbsp; Confidential &nbsp;&middot;&nbsp; All rights reserved
+</footer>
+
+<script>
+  (function () {
+    'use strict';
+
+    // Set today's date
+    var dateInput = document.getElementById('signDate');
+    var today = new Date();
+    var formatted = today.toLocaleDateString('en-GB', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    });
+    dateInput.value = formatted;
+
+    // DOM refs
+    var form = document.getElementById('ndaForm');
+    var fullNameInput = document.getElementById('fullName');
+    var emailInput = document.getElementById('email');
+    var signatureInput = document.getElementById('signature');
+    var checkboxGroup = document.getElementById('checkboxGroup');
+    var customCheckbox = document.getElementById('customCheckbox');
+    var formSection = document.getElementById('formSection');
+    var confirmation = document.getElementById('confirmation');
+    var signedDetail = document.getElementById('signedDetail');
+    var formErrorSummary = document.getElementById('formErrorSummary');
+    var submitBtn = document.getElementById('submitBtn');
+
+    // Error refs
+    var fullNameError = document.getElementById('fullNameError');
+    var emailError = document.getElementById('emailError');
+    var signatureError = document.getElementById('signatureError');
+    var checkError = document.getElementById('checkError');
+
+    // Checkbox state
+    var isChecked = false;
+
+    function toggleCheckbox() {
+      isChecked = !isChecked;
+      checkboxGroup.setAttribute('aria-checked', String(isChecked));
+      if (isChecked) {
+        customCheckbox.classList.add('checked');
+        checkboxGroup.classList.remove('error-box');
+        checkError.classList.remove('visible');
+      } else {
+        customCheckbox.classList.remove('checked');
+      }
+    }
+
+    checkboxGroup.addEventListener('click', toggleCheckbox);
+    checkboxGroup.addEventListener('keydown', function (e) {
+      if (e.key === ' ' || e.key === 'Enter') {
+        e.preventDefault();
+        toggleCheckbox();
+      }
+    });
+
+    // Validation helpers
+    function isValidEmail(val) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(val.trim());
+    }
+
+    function clearErrors() {
+      [fullNameInput, emailInput, signatureInput].forEach(function (el) {
+        el.classList.remove('error');
+      });
+      [fullNameError, emailError, signatureError, checkError].forEach(function (el) {
+        el.classList.remove('visible');
+      });
+      checkboxGroup.classList.remove('error-box');
+      formErrorSummary.classList.remove('visible');
+    }
+
+    function validate() {
+      clearErrors();
+      var valid = true;
+
+      if (!fullNameInput.value.trim()) {
+        fullNameInput.classList.add('error');
+        fullNameError.classList.add('visible');
+        valid = false;
+      }
+
+      if (!emailInput.value.trim() || !isValidEmail(emailInput.value)) {
+        emailInput.classList.add('error');
+        emailError.classList.add('visible');
+        valid = false;
+      }
+
+      if (!signatureInput.value.trim()) {
+        signatureInput.classList.add('error');
+        signatureError.classList.add('visible');
+        valid = false;
+      }
+
+      if (!isChecked) {
+        checkboxGroup.classList.add('error-box');
+        checkError.classList.add('visible');
+        valid = false;
+      }
+
+      if (!valid) {
+        formErrorSummary.classList.add('visible');
+      }
+
+      return valid;
+    }
+
+    // Clear individual field errors on input
+    fullNameInput.addEventListener('input', function () {
+      if (fullNameInput.value.trim()) {
+        fullNameInput.classList.remove('error');
+        fullNameError.classList.remove('visible');
+      }
+    });
+
+    emailInput.addEventListener('input', function () {
+      if (isValidEmail(emailInput.value)) {
+        emailInput.classList.remove('error');
+        emailError.classList.remove('visible');
+      }
+    });
+
+    signatureInput.addEventListener('input', function () {
+      if (signatureInput.value.trim()) {
+        signatureInput.classList.remove('error');
+        signatureError.classList.remove('visible');
+      }
+    });
+
+    // Submit
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      if (!validate()) {
+        var firstError = form.querySelector('.error');
+        if (!firstError) firstError = checkboxGroup.classList.contains('error-box') ? checkboxGroup : null;
+        if (firstError) {
+          firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Signing\u2026';
+
+      var payload = {
+        fullName: fullNameInput.value.trim(),
+        email: emailInput.value.trim(),
+        company: document.getElementById('company').value.trim() || null,
+        signature: signatureInput.value.trim(),
+        signedAt: new Date().toISOString(),
+        signedDate: dateInput.value,
+        agreedToTerms: true
+      };
+
+      // Log to console — Supabase will be wired later
+      console.log('[PhoennixAI NDA] Signature captured:', payload);
+
+      // Show confirmation
+      formSection.style.display = 'none';
+      confirmation.classList.add('visible');
+
+      signedDetail.innerHTML =
+        'Signed by: ' + payload.fullName +
+        (payload.company ? ' &middot; ' + payload.company : '') +
+        '<br>' + payload.email +
+        '<br>Date: ' + payload.signedDate;
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+  })();
+</script>
+</body>
+</html>
