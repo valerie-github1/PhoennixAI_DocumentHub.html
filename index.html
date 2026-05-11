@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PhoennixAI — Client Intelligence Intake</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Agdasima:wght@400;700&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Fira+Code:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --slate:     #556970;
+  --slate-d:   #3E4F55;
+  --slate-l:   #7A9098;
+  --olive:     #ABA944;
+  --olive-d:   #8A8835;
+  --olive-l:   #C9C877;
+  --off-white: #F7F6F2;
+  --fog:       #EFF0EA;
+  --ink:       #1F2426;
+  --ink2:      #3D4447;
+  --ink3:      #6B7477;
+  --ink4:      #9BA4A7;
+  --border:    rgba(85,105,112,0.12);
+  --border2:   rgba(85,105,112,0.22);
+  --font-d:    'Agdasima', sans-serif;
+  --font-b:    'Source Serif 4', Georgia, serif;
+  --font-m:    'Fira Code', monospace;
+  --success:   #3E7A5A;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+html{scroll-behavior:smooth}
+
+body{
+  background:var(--off-white);
+  color:var(--ink);
+  font-family:var(--font-b);
+  font-size:15px;
+  line-height:1.65;
+  min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ── TOPBAR ── */
+.topbar{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 32px;height:52px;
+  background:rgba(247,246,242,0.92);
+  border-bottom:0.5px solid var(--border);
+  backdrop-filter:blur(12px);
+}
+.tb-brand{display:flex;align-items:baseline;gap:10px}
+.tb-logo{font-family:var(--font-d);font-size:18px;font-weight:700;letter-spacing:.04em;color:var(--ink)}
+.tb-logo .ol{color:var(--olive)}
+.tb-dot{width:5px;height:5px;border-radius:50%;background:var(--olive);opacity:0.5;align-self:center}
+.tb-label{font-family:var(--font-m);font-size:8.5px;letter-spacing:2.5px;text-transform:uppercase;color:var(--ink4)}
+.tb-badge{font-family:var(--font-m);font-size:8px;letter-spacing:1.5px;text-transform:uppercase;padding:4px 12px;border-radius:100px;background:rgba(171,169,68,0.1);border:0.5px solid rgba(171,169,68,0.3);color:var(--olive-d)}
+
+/* ── LAYOUT ── */
+.page{max-width:760px;margin:0 auto;padding:88px 24px 80px}
+
+/* ── HEADER ── */
+.hdr{margin-bottom:52px;padding-bottom:36px;border-bottom:0.5px solid var(--border)}
+.hdr-eyebrow{font-family:var(--font-m);font-size:8.5px;letter-spacing:3px;text-transform:uppercase;color:var(--ink4);margin-bottom:16px;display:flex;align-items:center;gap:12px}
+.hdr-eyebrow::after{content:'';flex:1;height:0.5px;background:var(--border)}
+.hdr-title{font-family:var(--font-d);font-size:42px;font-weight:700;letter-spacing:.02em;line-height:1.05;color:var(--ink);margin-bottom:8px}
+.hdr-title em{font-style:italic;font-weight:400;color:var(--olive-d)}
+.hdr-sub{font-family:var(--font-b);font-size:15px;color:var(--ink3);line-height:1.75;max-width:560px;margin-bottom:20px}
+.hdr-note{display:flex;gap:10px;align-items:flex-start;padding:14px 16px;background:var(--fog);border:0.5px solid var(--border2);border-radius:6px;font-family:var(--font-m);font-size:9px;letter-spacing:1px;color:var(--ink4);line-height:1.6}
+.hdr-note-icon{flex-shrink:0;width:14px;height:14px;border-radius:50%;background:rgba(171,169,68,0.2);border:0.5px solid rgba(171,169,68,0.4);display:flex;align-items:center;justify-content:center;font-size:8px;margin-top:1px}
+
+/* ── SECTIONS ── */
+.section{margin-bottom:48px}
+.section-title{font-family:var(--font-m);font-size:8.5px;letter-spacing:3px;text-transform:uppercase;color:var(--ink4);margin-bottom:24px;display:flex;align-items:center;gap:12px}
+.section-title::after{content:'';flex:1;height:0.5px;background:var(--border)}
+.section-num{width:20px;height:20px;border-radius:50%;border:0.5px solid var(--border2);display:flex;align-items:center;justify-content:center;font-family:var(--font-m);font-size:9px;color:var(--olive-d);flex-shrink:0}
+
+/* ── FORM FIELDS ── */
+.field{margin-bottom:22px}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:22px}
+@media(max-width:560px){.field-row{grid-template-columns:1fr}}
+
+label{
+  display:block;
+  font-family:var(--font-m);
+  font-size:8.5px;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  color:var(--slate);
+  margin-bottom:7px;
+}
+label .req{color:var(--olive-d);margin-left:2px}
+
+input[type=text],input[type=email],input[type=tel],input[type=url],
+select,textarea{
+  width:100%;
+  background:#fff;
+  border:0.5px solid var(--border2);
+  border-radius:5px;
+  padding:11px 14px;
+  color:var(--ink);
+  font-family:var(--font-b);
+  font-size:14px;
+  line-height:1.5;
+  outline:none;
+  transition:border-color .18s,box-shadow .18s;
+  -webkit-appearance:none;
+  appearance:none;
+}
+input:focus,select:focus,textarea:focus{
+  border-color:var(--olive);
+  box-shadow:0 0 0 3px rgba(171,169,68,0.1);
+}
+input::placeholder,textarea::placeholder{color:var(--ink4)}
+textarea{resize:vertical;min-height:90px}
+
+select{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239BA4A7' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;
+  background-position:right 14px center;
+  padding-right:36px;
+  cursor:pointer;
+}
+
+/* ── CHECKBOX GROUP ── */
+.check-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media(max-width:480px){.check-grid{grid-template-columns:1fr}}
+
+.check-item{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:10px 12px;
+  background:#fff;
+  border:0.5px solid var(--border);
+  border-radius:5px;
+  cursor:pointer;
+  transition:border-color .15s,background .15s;
+}
+.check-item:hover{border-color:var(--border2)}
+.check-item input{
+  width:15px;height:15px;
+  border:0.5px solid var(--border2);
+  border-radius:3px;
+  accent-color:var(--olive-d);
+  flex-shrink:0;
+  margin-top:2px;
+  cursor:pointer;
+}
+.check-item.checked{border-color:rgba(171,169,68,0.35);background:rgba(171,169,68,0.04)}
+.check-label{font-family:var(--font-b);font-size:13px;color:var(--ink2);line-height:1.4}
+.check-sub{font-family:var(--font-m);font-size:8.5px;color:var(--ink4);letter-spacing:.5px;margin-top:2px}
+
+/* ── SCALE ── */
+.scale-row{display:flex;gap:8px;align-items:center}
+.scale-btn{
+  flex:1;height:38px;border-radius:4px;border:0.5px solid var(--border2);
+  background:#fff;cursor:pointer;
+  font-family:var(--font-m);font-size:11px;color:var(--ink3);
+  transition:all .15s;
+}
+.scale-btn:hover{border-color:var(--olive);color:var(--olive-d)}
+.scale-btn.active{background:var(--olive-d);border-color:var(--olive-d);color:#fff}
+.scale-labels{display:flex;justify-content:space-between;margin-top:6px;font-family:var(--font-m);font-size:8px;letter-spacing:.5px;color:var(--ink4)}
+
+/* ── RADIO PILLS ── */
+.radio-pills{display:flex;flex-wrap:wrap;gap:8px}
+.rpill{
+  padding:8px 16px;border-radius:100px;border:0.5px solid var(--border2);
+  background:#fff;cursor:pointer;
+  font-family:var(--font-m);font-size:9px;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--ink3);transition:all .15s;
+}
+.rpill:hover{border-color:var(--olive);color:var(--olive-d)}
+.rpill.active{background:var(--ink);border-color:var(--ink);color:#fff}
+.rpill input{display:none}
+
+/* ── DIVIDER ── */
+.divider{height:0.5px;background:var(--border);margin:8px 0 32px}
+
+/* ── SUBMIT ── */
+.submit-area{padding-top:32px;border-top:0.5px solid var(--border)}
+.submit-row{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.submit-btn{
+  font-family:var(--font-m);font-size:9px;letter-spacing:2.5px;text-transform:uppercase;
+  padding:14px 36px;border-radius:5px;border:none;cursor:pointer;
+  background:var(--ink);color:var(--off-white);
+  transition:all .2s;
+}
+.submit-btn:hover{background:var(--slate-d)}
+.submit-btn:active{transform:scale(.98)}
+.submit-btn:disabled{opacity:.4;cursor:not-allowed}
+.submit-note{font-family:var(--font-m);font-size:8.5px;color:var(--ink4);letter-spacing:.5px;line-height:1.6}
+
+/* ── SUCCESS ── */
+#success-state{display:none;text-align:center;padding:64px 24px}
+.success-icon{width:56px;height:56px;border-radius:50%;background:rgba(62,122,90,0.1);border:0.5px solid rgba(62,122,90,0.3);display:flex;align-items:center;justify-content:center;margin:0 auto 24px;font-size:22px}
+.success-title{font-family:var(--font-d);font-size:32px;font-weight:700;color:var(--ink);margin-bottom:8px}
+.success-sub{font-family:var(--font-b);font-size:15px;color:var(--ink3);max-width:440px;margin:0 auto 28px}
+.success-ref{font-family:var(--font-m);font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--ink4);padding:10px 18px;border:0.5px solid var(--border2);border-radius:4px;display:inline-block}
+
+/* ── FOOTER ── */
+.footer{margin-top:64px;padding-top:24px;border-top:0.5px solid var(--border);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.footer-brand{font-family:var(--font-d);font-size:15px;font-weight:700;letter-spacing:.04em;color:var(--ink)}
+.footer-brand .ol{color:var(--olive)}
+.footer-tag{font-family:var(--font-m);font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--ink4)}
+
+/* ── PROGRESS ── */
+.progress-bar{position:fixed;top:52px;left:0;right:0;height:2px;background:var(--border);z-index:99}
+.progress-fill{height:100%;background:var(--olive);width:0%;transition:width .3s}
+
+/* ── FIELD HINT ── */
+.field-hint{font-family:var(--font-m);font-size:8.5px;color:var(--ink4);letter-spacing:.5px;margin-top:6px;line-height:1.5}
+
+/* animations */
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.section{animation:fadeUp .5s ease both}
+.section:nth-child(2){animation-delay:.05s}
+.section:nth-child(3){animation-delay:.10s}
+.section:nth-child(4){animation-delay:.15s}
+.section:nth-child(5){animation-delay:.20s}
+.section:nth-child(6){animation-delay:.25s}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="tb-brand">
+    <div class="tb-logo">Phoenn<span class="ol">ix</span>AI</div>
+    <div class="tb-dot"></div>
+    <div class="tb-label">Client Intelligence Intake</div>
+  </div>
+  <div class="tb-badge">Confidential</div>
+</div>
+
+<!-- PROGRESS -->
+<div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+
+<div class="page">
+
+<!-- FORM STATE -->
+<div id="form-state">
+
+<!-- HEADER -->
+<div class="hdr">
+  <div class="hdr-eyebrow">PhoennixAI · New Client Onboarding · 2026</div>
+  <h1 class="hdr-title">Tell us about<br><em>your business.</em></h1>
+  <p class="hdr-sub">This intake form helps us understand your organisation, your current challenges, and where you want to be. Your answers shape how we configure your PhoennixAI operating system. Takes 8-10 minutes.</p>
+  <div class="hdr-note">
+    <div class="hdr-note-icon">⚿</div>
+    Your responses are confidential and used only to configure your PhoennixAI experience. We do not share this data with third parties.
+  </div>
+</div>
+
+<!-- BOOKING STRIP -->
+<div style="background:var(--fog);border:0.5px solid var(--border2);border-radius:8px;padding:16px 20px;margin-bottom:28px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px">
+  <div>
+    <div style="font-family:var(--font-m);font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--ink4);margin-bottom:4px">Prefer to talk first?</div>
+    <div style="font-family:var(--font-b);font-size:14px;color:var(--ink)">Book a free 20-minute discovery call instead</div>
+  </div>
+  <a href="https://cal.com/phoennixai/beta-discovery" target="_blank" style="font-family:var(--font-m);font-size:9px;letter-spacing:2px;text-transform:uppercase;padding:11px 22px;border-radius:5px;border:0.5px solid var(--border2);background:#fff;color:var(--ink);text-decoration:none;white-space:nowrap">Book a call →</a>
+</div>
+
+<form id="intake-form" novalidate>
+
+<!-- SECTION 1: CONTACT -->
+<div class="section">
+  <div class="section-title"><div class="section-num">1</div> About You</div>
+
+  <div class="field-row">
+    <div class="field">
+      <label for="f-name">Full Name <span class="req">*</span></label>
+      <input type="text" id="f-name" name="name" placeholder="Your full name" required>
+    </div>
+    <div class="field">
+      <label for="f-role">Your Role / Title <span class="req">*</span></label>
+      <input type="text" id="f-role" name="role" placeholder="Founder, CEO, Director…">
+    </div>
+  </div>
+
+  <div class="field-row">
+    <div class="field">
+      <label for="f-email">Email Address <span class="req">*</span></label>
+      <input type="email" id="f-email" name="email" placeholder="you@yourcompany.com" required>
+    </div>
+    <div class="field">
+      <label for="f-phone">Phone / WhatsApp</label>
+      <input type="tel" id="f-phone" name="phone" placeholder="+44 7700 000000">
+    </div>
+  </div>
+
+  <div class="field">
+    <label for="f-linkedin">LinkedIn Profile URL</label>
+    <input type="url" id="f-linkedin" name="linkedin" placeholder="https://linkedin.com/in/yourname">
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- SECTION 2: BUSINESS -->
+<div class="section">
+  <div class="section-title"><div class="section-num">2</div> Your Organisation</div>
+
+  <div class="field-row">
+    <div class="field">
+      <label for="f-company">Company / Organisation Name <span class="req">*</span></label>
+      <input type="text" id="f-company" name="company" placeholder="Your company name" required>
+    </div>
+    <div class="field">
+      <label for="f-website">Website</label>
+      <input type="url" id="f-website" name="website" placeholder="https://yourwebsite.com">
+    </div>
+  </div>
+
+  <div class="field-row">
+    <div class="field">
+      <label for="f-sector">Sector / Industry <span class="req">*</span></label>
+      <select id="f-sector" name="sector" required>
+        <option value="" disabled selected>Select your sector</option>
+        <option>AgriTech</option>
+        <option>ClimaTech / Sustainability</option>
+        <option>Creative Agency</option>
+        <option>EduTech</option>
+        <option>FinTech</option>
+        <option>Health &amp; Wellness</option>
+        <option>MedTech / Healthcare</option>
+        <option>NaturalHealth &amp; Biotech</option>
+        <option>Professional Services</option>
+        <option>Real Estate</option>
+        <option>Retail &amp; E-commerce</option>
+        <option>SaaS / Technology</option>
+        <option>Social Enterprise / Charity</option>
+        <option>Other</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="f-teamsize">Team Size</label>
+      <select id="f-teamsize" name="team_size">
+        <option value="" disabled selected>Select team size</option>
+        <option>Solo founder</option>
+        <option>2-5 people</option>
+        <option>6-15 people</option>
+        <option>16-50 people</option>
+        <option>51-100 people</option>
+        <option>100+ people</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="field">
+    <label for="f-stage">Business Stage</label>
+    <div class="radio-pills" id="stage-pills">
+      <label class="rpill"><input type="radio" name="stage" value="Pre-revenue"> Pre-revenue</label>
+      <label class="rpill"><input type="radio" name="stage" value="Early revenue"> Early revenue</label>
+      <label class="rpill"><input type="radio" name="stage" value="Growing"> Growing (£100k+)</label>
+      <label class="rpill"><input type="radio" name="stage" value="Scaling"> Scaling (£500k+)</label>
+      <label class="rpill"><input type="radio" name="stage" value="Established"> Established (£1M+)</label>
+    </div>
+  </div>
+
+  <div class="field">
+    <label for="f-model">Revenue Model <span class="req">*</span></label>
+    <select id="f-model" name="revenue_model" required>
+      <option value="" disabled selected>How do you make money?</option>
+      <option>Subscription / SaaS</option>
+      <option>Services / Retainer</option>
+      <option>Project-based / Per-deliverable</option>
+      <option>Product sales</option>
+      <option>Marketplace / Platform</option>
+      <option>Grants / Funding</option>
+      <option>Mixed</option>
+      <option>Not yet generating revenue</option>
+    </select>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- SECTION 3: CHALLENGES -->
+<div class="section">
+  <div class="section-title"><div class="section-num">3</div> Current Challenges</div>
+
+  <div class="field">
+    <label>Where are you feeling the most pressure right now? <span class="req">*</span></label>
+    <p style="font-family:var(--font-m);font-size:8.5px;color:var(--ink4);letter-spacing:.5px;margin-bottom:12px">Select all that apply</p>
+    <div class="check-grid" id="pain-grid">
+      <label class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox" name="pain" value="Too much admin, not enough strategy">
+        <div><div class="check-label">Too much admin</div><div class="check-sub">Not enough time for strategy</div></div>
+      </label>
+      <label class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox" name="pain" value="No systems or processes">
+        <div><div class="check-label">No systems or processes</div><div class="check-sub">Everything is in my head</div></div>
+      </label>
+      <label class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox" name="pain" value="Revenue unpredictable">
+        <div><div class="check-label">Unpredictable revenue</div><div class="check-sub">Cash flow is a constant worry</div></div>
+      </label>
+      <label class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox" name="pain" value="Can't scale without hiring">
+        <div><div class="check-label">Can't scale without hiring</div><div class="check-sub">Growth requires more people</div></div>
+      </label>
+      <label class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox" name="pain" value="Content and marketing inconsistent">
+        <div><div class="check-label">Inconsistent content</div><div class="check-sub">Marketing is sporadic</div></div>
+      </label>
+      <label class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox" name="pain" value="No visibility on business performance">
+        <div><div class="check-label">No performance visibility</div><div class="check-sub">Flying blind on metrics</div></div>
+      </label>
+      <label class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox" name="pain" value="Client delivery disorganised">
+        <div><div class="check-label">Disorganised delivery</div><div class="check-sub">Client work is hard to manage</div></div>
+      </label>
+      <label class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox" name="pain" value="No time for innovation or new ideas">
+        <div><div class="check-label">No time to innovate</div><div class="check-sub">Always reactive, never proactive</div></div>
+      </label>
+    </div>
+  </div>
+
+  <div class="field" style="margin-top:22px">
+    <label for="f-challenge">In your own words — what is the one thing that would change everything for you? <span class="req">*</span></label>
+    <textarea id="f-challenge" name="biggest_challenge" placeholder="Be as specific as you like. The more context you give us, the better we can configure your AI operating system." rows="4" required></textarea>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- SECTION 4: AI READINESS -->
+<div class="section">
+  <div class="section-title"><div class="section-num">4</div> AI & Technology Readiness</div>
+
+  <div class="field">
+    <label>How would you describe your current use of AI in your business?</label>
+    <div class="radio-pills">
+      <label class="rpill"><input type="radio" name="ai_use" value="Not using AI"> Not using it yet</label>
+      <label class="rpill"><input type="radio" name="ai_use" value="Experimenting"> Experimenting casually</label>
+      <label class="rpill"><input type="radio" name="ai_use" value="Using a few tools"> Using a few tools</label>
+      <label class="rpill"><input type="radio" name="ai_use" value="Actively integrating"> Actively integrating AI</label>
+      <label class="rpill"><input type="radio" name="ai_use" value="AI-first"> Already AI-first</label>
+    </div>
+  </div>
+
+  <div class="field" style="margin-top:22px">
+    <label>How comfortable is your team with new technology?</label>
+    <div class="scale-row" id="tech-scale">
+      <button type="button" class="scale-btn" data-val="1" onclick="setScale('tech-scale',1,'tech_comfort')">1</button>
+      <button type="button" class="scale-btn" data-val="2" onclick="setScale('tech-scale',2,'tech_comfort')">2</button>
+      <button type="button" class="scale-btn" data-val="3" onclick="setScale('tech-scale',3,'tech_comfort')">3</button>
+      <button type="button" class="scale-btn" data-val="4" onclick="setScale('tech-scale',4,'tech_comfort')">4</button>
+      <button type="button" class="scale-btn" data-val="5" onclick="setScale('tech-scale',5,'tech_comfort')">5</button>
+    </div>
+    <div class="scale-labels"><span>Not comfortable at all</span><span>Extremely comfortable</span></div>
+    <input type="hidden" name="tech_comfort" id="tech_comfort">
+  </div>
+
+  <div class="field" style="margin-top:22px">
+    <label for="f-tools">What tools and software do you currently use? (list as many as you like)</label>
+    <textarea id="f-tools" name="current_tools" placeholder="e.g. Notion, Slack, Xero, Mailchimp, Canva, HubSpot, Zapier…" rows="3"></textarea>
+    <div class="field-hint">This helps us avoid duplication and find integration opportunities.</div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- SECTION 5: GOALS -->
+<div class="section">
+  <div class="section-title"><div class="section-num">5</div> Goals & Expectations</div>
+
+  <div class="field">
+    <label>What does success look like for you in 90 days? <span class="req">*</span></label>
+    <textarea id="f-success" name="success_90_days" placeholder="Describe the outcome. What will have changed in your business?" rows="3" required></textarea>
+  </div>
+
+  <div class="field">
+    <label>Which PhoennixAI capability excites you most right now?</label>
+    <div class="check-grid">
+      <label class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox" name="interest" value="AI agent workforce">
+        <div><div class="check-label">AI agent workforce</div><div class="check-sub">22 specialist agents running my ops</div></div>
+      </label>
+      <label class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox" name="interest" value="Mission Control">
+        <div><div class="check-label">Mission Control</div><div class="check-sub">Single command layer for everything</div></div>
+      </label>
+      <label class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox" name="interest" value="Financial intelligence">
+        <div><div class="check-label">Financial intelligence</div><div class="check-sub">LEDGER — real-time financial oversight</div></div>
+      </label>
+      <label class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox" name="interest" value="Content automation">
+        <div><div class="check-label">Content automation</div><div class="check-sub">PULSE — brand voice at scale</div></div>
+      </label>
+      <label class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox" name="interest" value="Project governance">
+        <div><div class="check-label">Project governance</div><div class="check-sub">GRID — never miss a deadline</div></div>
+      </label>
+      <label class="check-item" onclick="toggleCheck(this)">
+        <input type="checkbox" name="interest" value="Research and intelligence">
+        <div><div class="check-label">Research &amp; intelligence</div><div class="check-sub">SAGE — insight on demand</div></div>
+      </label>
+    </div>
+  </div>
+
+  <div class="field" style="margin-top:22px">
+    <label>How did you hear about PhoennixAI?</label>
+    <select name="referral_source">
+      <option value="" disabled selected>Select one</option>
+      <option>Personal referral</option>
+      <option>LinkedIn</option>
+      <option>Instagram</option>
+      <option>X / Twitter</option>
+      <option>Google search</option>
+      <option>Podcast</option>
+      <option>Event / Conference</option>
+      <option>Valerie reached out directly</option>
+      <option>Other</option>
+    </select>
+  </div>
+
+  <div class="field">
+    <label for="f-anything">Anything else you want us to know before we connect?</label>
+    <textarea id="f-anything" name="anything_else" placeholder="Questions, concerns, non-negotiables, or context that will help us prepare…" rows="3"></textarea>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- SUBMIT -->
+<div class="submit-area">
+  <div class="submit-row">
+    <button type="submit" class="submit-btn" id="submit-btn">Submit Intelligence Brief →</button>
+    <div class="submit-note">
+      Your responses go directly to Valerie Wilcox at PhoennixAI.<br>
+      You will receive a confirmation and next steps within 24 hours.
+    </div>
+  </div>
+  <div id="form-err" style="display:none;margin-top:14px;font-family:var(--font-m);font-size:9px;color:#c43556;letter-spacing:.5px"></div>
+</div>
+
+</form>
+</div><!-- /form-state -->
+
+<!-- SUCCESS STATE -->
+<div id="success-state">
+  <div class="success-icon">✓</div>
+  <div class="success-title">Intelligence Received.</div>
+  <p class="success-sub">Your brief is ready. Your email app should have opened automatically. If it did not, click the button below to send your brief now.</p>
+  <div class="success-ref" id="ref-num">REF: PAI-2026-0001</div>
+  <div style="margin-top:28px">
+    <a id="send-btn-link" href="#" target="_blank"
+       onclick="if(this.getAttribute('data-mailto')){window.open(this.getAttribute('data-mailto'),'_blank');return false;}"
+       style="display:inline-block;font-family:var(--font-m);font-size:9px;letter-spacing:2.5px;text-transform:uppercase;padding:14px 32px;border-radius:5px;background:var(--ink);color:var(--off-white);text-decoration:none;margin-bottom:10px">
+      Send Your Brief →
+    </a>
+    <p style="font-family:var(--font-m);font-size:8.5px;color:var(--ink4);letter-spacing:.5px;margin-top:8px">
+      This opens your email app with your brief pre-filled. Click Send inside the email app to complete submission.
+    </p>
+  </div>
+  <p style="font-family:var(--font-m);font-size:9px;color:var(--ink4);letter-spacing:.5px;margin-top:16px">
+    Or book a call directly: <a href="https://cal.com/phoennixai/beta-discovery" target="_blank" style="color:var(--olive-d)">cal.com/phoennixai/beta-discovery</a>
+  </p>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="footer-brand">Phoenn<span class="ol">ix</span>AI</div>
+  <div class="footer-tag">Created to Create. Intelligent by nature.</div>
+</div>
+
+</div><!-- /page -->
+
+<script>
+// ── PILL RADIO ──
+document.querySelectorAll('.rpill').forEach(function(pill){
+  pill.addEventListener('click', function(){
+    var name = this.querySelector('input').name;
+    document.querySelectorAll('.rpill input[name="'+name+'"]').forEach(function(inp){
+      inp.closest('.rpill').classList.remove('active');
+    });
+    this.classList.add('active');
+    updateProgress();
+  });
+});
+
+// ── CHECKBOX TOGGLE ──
+function toggleCheck(el){
+  var cb = el.querySelector('input[type=checkbox]');
+  setTimeout(function(){
+    el.classList.toggle('checked', cb.checked);
+    updateProgress();
+  }, 0);
+}
+
+// ── SCALE ──
+var scaleValues = {};
+function setScale(groupId, val, fieldName){
+  scaleValues[fieldName] = val;
+  document.getElementById(fieldName).value = val;
+  document.querySelectorAll('#'+groupId+' .scale-btn').forEach(function(btn){
+    btn.classList.toggle('active', parseInt(btn.dataset.val) === val);
+  });
+  updateProgress();
+}
+
+// ── PROGRESS ──
+function updateProgress(){
+  var required = document.querySelectorAll('[required]');
+  var filled = 0;
+  required.forEach(function(el){
+    if(el.value.trim()) filled++;
+  });
+  var pct = Math.min(100, Math.round((filled / required.length) * 100));
+  document.getElementById('progress').style.width = pct + '%';
+}
+document.querySelectorAll('input,select,textarea').forEach(function(el){
+  el.addEventListener('input', updateProgress);
+  el.addEventListener('change', updateProgress);
+});
+
+// ── GENERATE REF ──
+function genRef(){
+  var d = new Date();
+  var yr = d.getFullYear();
+  var n = Math.floor(Math.random()*9000)+1000;
+  return 'PAI-'+yr+'-'+n;
+}
+
+// ── SUBMIT ──
+document.getElementById('intake-form').addEventListener('submit', function(e){
+  e.preventDefault();
+
+  // Basic validation
+  var required = this.querySelectorAll('[required]');
+  var missing = [];
+  required.forEach(function(el){
+    if(!el.value.trim()) missing.push(el);
+  });
+  if(missing.length){
+    missing[0].focus();
+    var errEl = document.getElementById('form-err');
+    errEl.style.display = 'block';
+    errEl.textContent = missing.length + ' required field'+(missing.length>1?'s are':' is')+' incomplete. Please review and submit again.';
+    missing[0].style.borderColor = '#c43556';
+    setTimeout(function(){ missing[0].style.borderColor = ''; errEl.style.display='none'; }, 3500);
+    return;
+  }
+
+  // Collect data
+  var data = {};
+  var fd = new FormData(this);
+  fd.forEach(function(v, k){
+    if(data[k]){
+      data[k] = Array.isArray(data[k]) ? data[k].concat(v) : [data[k], v];
+    } else {
+      data[k] = v;
+    }
+  });
+  data.submitted_at = new Date().toISOString();
+  data.ref = genRef();
+
+  // Build formatted email body
+  var lines = [];
+  lines.push('PhoennixAI — New Client Intelligence Brief');
+  lines.push('REF: ' + data.ref);
+  lines.push('Submitted: ' + new Date().toLocaleString('en-GB'));
+  lines.push('');
+  lines.push('━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+  lines.push('CONTACT');
+  lines.push('━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+  lines.push('Name:        ' + (data.name || '—'));
+  lines.push('Role:        ' + (data.role || '—'));
+  lines.push('Email:       ' + (data.email || '—'));
+  lines.push('Phone:       ' + (data.phone || '—'));
+  lines.push('LinkedIn:    ' + (data.linkedin || '—'));
+  lines.push('');
+  lines.push('━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+  lines.push('ORGANISATION');
+  lines.push('━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+  lines.push('Company:     ' + (data.company || '—'));
+  lines.push('Website:     ' + (data.website || '—'));
+  lines.push('Sector:      ' + (data.sector || '—'));
+  lines.push('Team Size:   ' + (data.team_size || '—'));
+  lines.push('Stage:       ' + (data.stage || '—'));
+  lines.push('Rev Model:   ' + (data.revenue_model || '—'));
+  lines.push('');
+  lines.push('━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+  lines.push('CHALLENGES');
+  lines.push('━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+  var pains = data.pain ? (Array.isArray(data.pain) ? data.pain.join(' | ') : data.pain) : '—';
+  lines.push('Pain Points: ' + pains);
+  lines.push('');
+  lines.push('In their own words:');
+  lines.push(data.biggest_challenge || '—');
+  lines.push('');
+  lines.push('━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+  lines.push('AI & TECHNOLOGY');
+  lines.push('━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+  lines.push('AI Use:      ' + (data.ai_use || '—'));
+  lines.push('Tech Comfort: ' + (data.tech_comfort ? data.tech_comfort + '/5' : '—'));
+  lines.push('Tools:       ' + (data.current_tools || '—'));
+  lines.push('');
+  lines.push('━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+  lines.push('GOALS');
+  lines.push('━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+  lines.push('90-day success:');
+  lines.push(data.success_90_days || '—');
+  lines.push('');
+  var interests = data.interest ? (Array.isArray(data.interest) ? data.interest.join(' | ') : data.interest) : '—';
+  lines.push('Interests:   ' + interests);
+  lines.push('Referral:    ' + (data.referral_source || '—'));
+  lines.push('');
+  lines.push('Additional notes:');
+  lines.push(data.anything_else || '—');
+  lines.push('');
+  lines.push('━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+  lines.push('PhoennixAI · Created to Create. Intelligent by nature.');
+
+  var subject = encodeURIComponent('New Client Brief — ' + (data.name || 'Unknown') + ' | ' + (data.company || '') + ' | REF: ' + data.ref);
+  var body = encodeURIComponent(lines.join('\n'));
+  var mailto = 'mailto:valerie@phoennixai.com?cc=phoenixdigitec3@gmail.com&subject=' + subject + '&body=' + body;
+
+  // Store mailto for the send button, then show success
+  document.getElementById('ref-num').textContent = 'REF: ' + data.ref;
+  document.getElementById('send-btn-link').href = mailto;
+  document.getElementById('send-btn-link').setAttribute('data-mailto', mailto);
+  document.getElementById('form-state').style.display = 'none';
+  document.getElementById('success-state').style.display = 'block';
+  document.getElementById('progress').style.width = '100%';
+  window.scrollTo({top:0, behavior:'smooth'});
+  // Auto-attempt open (works on desktop with email client configured)
+  setTimeout(function(){ window.open(mailto, '_blank'); }, 400);
+});
+</script>
+</body>
+</html>
